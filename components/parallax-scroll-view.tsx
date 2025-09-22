@@ -13,7 +13,7 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 
 const HEADER_HEIGHT = 250
 
-type Props = PropsWithChildren<{
+type ParallaxScrollViewProps = PropsWithChildren<{
     headerImage: ReactElement
     headerBackgroundColor: { dark: string; light: string }
 }>
@@ -22,7 +22,7 @@ const ParallaxScrollView = ({
     children,
     headerImage,
     headerBackgroundColor,
-}: Props) => {
+}: ParallaxScrollViewProps) => {
     const backgroundColor = useThemeColor({}, 'background')
     const colorScheme = useColorScheme() ?? 'light'
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
