@@ -22,10 +22,10 @@ const MainView = ({ children }: MainViewProps) => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        padding: 2,
     },
     scrollContainer: {
         flexGrow: 1,
+        gap: 16,
         padding: 16,
     },
 })
