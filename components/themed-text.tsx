@@ -3,12 +3,20 @@ import { StyleSheet, Text, type TextProps } from 'react-native'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 export type ThemedTextProps = TextProps & {
+    center?: boolean
     lightColor?: string
     darkColor?: string
-    type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link'
+    type?:
+        | 'center'
+        | 'default'
+        | 'title'
+        | 'defaultSemiBold'
+        | 'subtitle'
+        | 'link'
 }
 
 const ThemedText = ({
+    center = false,
     style,
     lightColor,
     darkColor,
@@ -21,6 +29,7 @@ const ThemedText = ({
         <Text
             style={[
                 { color },
+                center ? styles.center : undefined,
                 type === 'default' ? styles.default : undefined,
                 type === 'title' ? styles.title : undefined,
                 type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
@@ -34,6 +43,9 @@ const ThemedText = ({
 }
 
 const styles = StyleSheet.create({
+    center: {
+        textAlign: 'center',
+    },
     default: {
         fontSize: 16,
         lineHeight: 24,
@@ -46,7 +58,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold',
-        lineHeight: 32,
+        lineHeight: 40,
     },
     subtitle: {
         fontSize: 20,
