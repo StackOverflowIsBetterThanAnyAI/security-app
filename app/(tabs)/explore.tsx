@@ -9,7 +9,7 @@ import Collapsible from '@/components/ui/collapsible'
 import IconSymbol from '@/components/ui/icon-symbol'
 import { Fonts } from '@/constants/theme'
 
-const TabTwoScreen = () => {
+const ExploreScreen = () => {
     return (
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -127,4 +127,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default TabTwoScreen
+export default ExploreScreen
