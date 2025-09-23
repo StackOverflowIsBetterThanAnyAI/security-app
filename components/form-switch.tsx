@@ -31,7 +31,6 @@ const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
 const styles = StyleSheet.create({
     switchWrapper: {
         alignSelf: 'center',
-        backgroundColor: '#007AFF',
         borderRadius: 12,
         display: 'flex',
         flexDirection: 'row',
