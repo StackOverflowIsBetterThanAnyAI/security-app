@@ -15,7 +15,7 @@ const Form = () => {
     return (
         <>
             <ThemedText center type="title">
-                Login
+                {isSigningUp ? 'Signup' : 'Login'}
             </ThemedText>
             <ThemedText center>
                 All fields marked with{' '}
