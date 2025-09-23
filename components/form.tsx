@@ -1,7 +1,7 @@
+import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { useState } from 'react'
-import FormSwitch from './form-switch'
 
 const Form = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
