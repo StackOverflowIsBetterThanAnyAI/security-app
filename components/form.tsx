@@ -6,7 +6,7 @@ import { useState } from 'react'
 const Form = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
 
-    const redColor = useThemeColor({}, 'red')
+    const color = useThemeColor({}, 'red')
 
     const handleClick = () => {
         setIsSigningUp((prev) => !prev)
@@ -19,8 +19,7 @@ const Form = () => {
             </ThemedText>
             <ThemedText center>
                 All fields marked with{' '}
-                <ThemedText style={{ color: redColor }}>*</ThemedText> are
-                required.
+                <ThemedText style={{ color }}>*</ThemedText> are required.
             </ThemedText>
             <FormSwitch handleClick={handleClick} isSigningUp={isSigningUp} />
         </>
