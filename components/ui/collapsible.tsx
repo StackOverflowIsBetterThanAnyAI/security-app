@@ -22,7 +22,7 @@ const Collapsible = ({
                 activeOpacity={0.8}
             >
                 <IconSymbol
-                    name="chevron.right"
+                    name="chevron-right"
                     size={18}
                     weight="medium"
                     color={

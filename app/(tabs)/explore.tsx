@@ -17,7 +17,7 @@ const ExploreScreen = () => {
                 <IconSymbol
                     size={310}
                     color="#808080"
-                    name="chevron.left.forwardslash.chevron.right"
+                    name="code"
                     style={styles.headerImage}
                 />
             }
