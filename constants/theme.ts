@@ -7,7 +7,7 @@ export const Colors = {
     light: {
         background: '#F7F4F7',
         border: '#353D42',
-        buttonActive: '#f5f3ff',
+        buttonActive: '#F5F3FF',
         buttonInactive: '#3F3B3F',
         icon: '#687076',
         red: '#A71111',
@@ -23,7 +23,7 @@ export const Colors = {
         buttonActive: '#ECEDEE',
         buttonInactive: '#313432',
         icon: '#9BA1A6',
-        red: '#d7110f',
+        red: '#D7110F',
         redInactive: '#DFB8B8',
         tabIconDefault: '#9BA1A6',
         tabIconSelected: tintColorDark,
