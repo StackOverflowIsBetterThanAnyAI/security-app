@@ -21,7 +21,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ color }) => (
-                        <IconSymbol size={28} name="house.fill" color={color} />
+                        <IconSymbol size={28} name="home" color={color} />
                     ),
                 }}
             />
@@ -30,11 +30,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Login',
                     tabBarIcon: ({ color }) => (
-                        <IconSymbol
-                            size={28}
-                            name="paperplane.fill"
-                            color={color}
-                        />
+                        <IconSymbol size={28} name="login" color={color} />
                     ),
                 }}
             />
@@ -43,11 +39,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Explore',
                     tabBarIcon: ({ color }) => (
-                        <IconSymbol
-                            size={28}
-                            name="paperplane.fill"
-                            color={color}
-                        />
+                        <IconSymbol size={28} name="send" color={color} />
                     ),
                 }}
             />
