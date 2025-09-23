@@ -50,7 +50,9 @@ const FormSwitchButton = ({
             style={({ pressed }) => [
                 styles.button,
                 isSignUpField ? styles.buttonSignup : styles.buttonLogin,
-                pressed && styles.buttonPressed,
+                pressed && {
+                    opacity: isSignUpField === isSigningUp ? 0.75 : 0.85,
+                },
                 { borderColor },
             ]}
             onPress={handleClick}
@@ -84,9 +86,6 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 12,
         borderTopRightRadius: 12,
         borderLeftWidth: 0,
-    },
-    buttonPressed: {
-        opacity: 0.75,
     },
     text: {
         fontSize: 16,
