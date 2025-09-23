@@ -6,13 +6,7 @@ export type ThemedTextProps = TextProps & {
     center?: boolean
     lightColor?: string
     darkColor?: string
-    type?:
-        | 'center'
-        | 'default'
-        | 'title'
-        | 'defaultSemiBold'
-        | 'subtitle'
-        | 'link'
+    type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link'
 }
 
 const ThemedText = ({
