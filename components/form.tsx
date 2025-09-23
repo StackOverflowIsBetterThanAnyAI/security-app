@@ -14,7 +14,7 @@ const Form = () => {
 
     return (
         <>
-            <ThemedText center type="title">
+            <ThemedText center type="title" accessibilityRole="header">
                 {isSigningUp ? 'Signup' : 'Login'}
             </ThemedText>
             <ThemedText center>
