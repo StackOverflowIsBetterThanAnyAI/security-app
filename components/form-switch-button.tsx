@@ -1,5 +1,6 @@
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { Pressable, StyleSheet, Text } from 'react-native'
+import React, { useEffect, useRef } from 'react'
+import { Animated, Pressable, StyleSheet } from 'react-native'
 
 type FormSwitchProps = {
     handleClick: () => void
@@ -20,13 +21,27 @@ const FormSwitchButton = ({
     const textColorActive = useThemeColor({}, 'buttonActive')
     const textColorInactive = useThemeColor({}, 'buttonInactive')
 
-    const backgroundColor =
-        isSignUpField === isSigningUp
-            ? backgroundColorActive
-            : backgroundColorInactive
+    const animation = useRef(
+        new Animated.Value(isSignUpField === isSigningUp ? 1 : 0)
+    ).current
 
-    const textColor =
-        isSignUpField === isSigningUp ? textColorActive : textColorInactive
+    useEffect(() => {
+        Animated.timing(animation, {
+            toValue: isSignUpField === isSigningUp ? 1 : 0,
+            duration: 200,
+            useNativeDriver: false,
+        }).start()
+    }, [isSigningUp, isSignUpField])
+
+    const backgroundColor = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [backgroundColorInactive, backgroundColorActive],
+    })
+
+    const color = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [textColorInactive, textColorActive],
+    })
 
     return (
         <Pressable
@@ -36,26 +51,31 @@ const FormSwitchButton = ({
                 styles.button,
                 isSignUpField ? styles.buttonSignup : styles.buttonLogin,
                 pressed && styles.buttonPressed,
-                {
-                    backgroundColor: backgroundColor,
-                    borderColor: borderColor,
-                },
+                { borderColor },
             ]}
             onPress={handleClick}
         >
-            <Text style={[styles.text, { color: textColor }]}>{text}</Text>
+            <Animated.View style={[styles.fill, { backgroundColor }]}>
+                <Animated.Text style={[styles.text, { color }]}>
+                    {text}
+                </Animated.Text>
+            </Animated.View>
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     button: {
+        borderWidth: 2,
+        overflow: 'hidden',
+    },
+    fill: {
         paddingVertical: 8,
         paddingHorizontal: 24,
-        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     buttonLogin: {
-        backgroundColor: '#007AFF',
         borderBottomLeftRadius: 12,
         borderTopLeftRadius: 12,
         borderRightWidth: 0,
