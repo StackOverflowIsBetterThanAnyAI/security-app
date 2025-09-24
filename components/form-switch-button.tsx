@@ -2,7 +2,7 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 import React, { useEffect, useRef } from 'react'
 import { Animated, Pressable, StyleSheet } from 'react-native'
 
-type FormSwitchProps = {
+type FormSwitchButtonProps = {
     handleClick: () => void
     isSigningUp: boolean
     isSignUpField?: boolean
@@ -14,7 +14,7 @@ const FormSwitchButton = ({
     isSignUpField = false,
     isSigningUp,
     text,
-}: FormSwitchProps) => {
+}: FormSwitchButtonProps) => {
     const borderColor = useThemeColor({}, 'border')
     const backgroundColorActive = useThemeColor({}, 'red')
     const backgroundColorInactive = useThemeColor({}, 'redInactive')
