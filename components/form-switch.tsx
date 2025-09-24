@@ -19,6 +19,7 @@ const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
+            marginBottom: 8,
         },
     })
 
