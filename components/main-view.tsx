@@ -10,24 +10,25 @@ type MainViewProps = {
 const MainView = ({ children }: MainViewProps) => {
     const backgroundColor = useThemeColor({}, 'background')
 
+    const styles = StyleSheet.create({
+        safeArea: {
+            backgroundColor,
+            flex: 1,
+        },
+        scrollContainer: {
+            flexGrow: 1,
+            gap: 16,
+            padding: 16,
+        },
+    })
+
     return (
-        <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+        <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {children}
             </ScrollView>
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
-    scrollContainer: {
-        flexGrow: 1,
-        gap: 16,
-        padding: 16,
-    },
-})
 
 export default MainView

@@ -11,8 +11,19 @@ type FormSwitchProps = {
 const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
     const backgroundColor = useThemeColor({}, 'red')
 
+    const styles = StyleSheet.create({
+        switchWrapper: {
+            alignSelf: 'center',
+            backgroundColor,
+            borderRadius: 12,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+    })
+
     return (
-        <ThemedView style={[styles.switchWrapper, { backgroundColor }]}>
+        <ThemedView style={styles.switchWrapper}>
             <FormSwitchButton
                 handleClick={handleClick}
                 isSigningUp={isSigningUp}
@@ -27,15 +38,5 @@ const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
         </ThemedView>
     )
 }
-
-const styles = StyleSheet.create({
-    switchWrapper: {
-        alignSelf: 'center',
-        borderRadius: 12,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-})
 
 export default FormSwitch
