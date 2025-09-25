@@ -1,6 +1,6 @@
+import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { Pressable, StyleSheet } from 'react-native'
-import ThemedText from './themed-text'
 
 type FormSubmitProps = {
     isSigningUp: boolean
