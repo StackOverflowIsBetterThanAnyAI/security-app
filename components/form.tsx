@@ -1,3 +1,4 @@
+import FormError from '@/components/form-error'
 import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
@@ -5,7 +6,7 @@ import ThemedText from '@/components/themed-text'
 import ThemedView from '@/components/themed-view'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { useRef, useState } from 'react'
-import { TextInput } from 'react-native'
+import { TextInput, View } from 'react-native'
 
 const Form = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
@@ -14,6 +15,11 @@ const Form = () => {
     const [userName, setUserName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
+
+    const [errorUserName, setErrorUserName] = useState<string>('error')
+    const [errorPassword, setErrorPassword] = useState<string>('error')
+    const [errorConfirmPassword, setErrorConfirmPassword] =
+        useState<string>('error')
 
     const userNameRef = useRef<TextInput>(null)
     const passwordRef = useRef<TextInput>(null)
@@ -42,52 +48,62 @@ const Form = () => {
                 </ThemedText>
             </ThemedView>
             <FormSwitch handleClick={handleClick} isSigningUp={isSigningUp} />
-            <FormInput
-                handleSubmitEditing={() => passwordRef?.current?.focus()}
-                label="User Name"
-                password={{}}
-                placeholder="Michael"
-                ref={userNameRef}
-                returnKeyType="next"
-                setValue={setUserName}
-                submitBehavior="submit"
-                value={userName}
-            />
-            <FormInput
-                handleSubmitEditing={
-                    isSigningUp
-                        ? () => confirmPasswordRef?.current?.focus()
-                        : undefined
-                }
-                label="Password"
-                password={{
-                    isPassword: true,
-                    isPasswordVisible,
-                    setIsPasswordVisible,
-                }}
-                placeholder="password"
-                ref={passwordRef}
-                returnKeyType={isSigningUp ? 'next' : 'done'}
-                setValue={setPassword}
-                submitBehavior={isSigningUp ? 'submit' : 'blurAndSubmit'}
-                value={password}
-            />
-            {isSigningUp && (
+            <View>
                 <FormInput
-                    label="Confirm Password"
+                    error={errorUserName}
+                    handleSubmitEditing={() => passwordRef?.current?.focus()}
+                    label="User Name"
+                    password={{}}
+                    placeholder="Michael"
+                    ref={userNameRef}
+                    returnKeyType="next"
+                    setValue={setUserName}
+                    submitBehavior="submit"
+                    value={userName}
+                />
+                <FormError error={errorUserName} />
+                <FormInput
+                    error={errorPassword}
+                    handleSubmitEditing={
+                        isSigningUp
+                            ? () => confirmPasswordRef?.current?.focus()
+                            : undefined
+                    }
+                    label="Password"
                     password={{
                         isPassword: true,
                         isPasswordVisible,
                         setIsPasswordVisible,
                     }}
                     placeholder="password"
-                    ref={confirmPasswordRef}
-                    returnKeyType="done"
-                    setValue={setConfirmPassword}
-                    submitBehavior="blurAndSubmit"
-                    value={confirmPassword}
+                    ref={passwordRef}
+                    returnKeyType={isSigningUp ? 'next' : 'done'}
+                    setValue={setPassword}
+                    submitBehavior={isSigningUp ? 'submit' : 'blurAndSubmit'}
+                    value={password}
                 />
-            )}
+                <FormError error={errorPassword} />
+                {isSigningUp && (
+                    <>
+                        <FormInput
+                            error={errorConfirmPassword}
+                            label="Confirm Password"
+                            password={{
+                                isPassword: true,
+                                isPasswordVisible,
+                                setIsPasswordVisible,
+                            }}
+                            placeholder="password"
+                            ref={confirmPasswordRef}
+                            returnKeyType="done"
+                            setValue={setConfirmPassword}
+                            submitBehavior="blurAndSubmit"
+                            value={confirmPassword}
+                        />
+                        <FormError error={errorConfirmPassword} />
+                    </>
+                )}
+            </View>
             <FormSubmit isSigningUp={isSigningUp} />
         </>
     )

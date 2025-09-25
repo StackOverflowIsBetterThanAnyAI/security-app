@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 
 type FormInputProps = {
+    error: string
     handleSubmitEditing?: () => void
     label: string
     password: {
@@ -21,6 +22,7 @@ type FormInputProps = {
 }
 
 const FormInput = ({
+    error,
     handleSubmitEditing,
     label,
     password,
@@ -67,7 +69,11 @@ const FormInput = ({
 
     const styles = StyleSheet.create({
         input: {
-            borderColor: isFocused ? borderColorActive : borderColorInactive,
+            borderColor: error
+                ? colorRed
+                : isFocused
+                ? borderColorActive
+                : borderColorInactive,
             borderRadius: 8,
             borderWidth: 2,
             color: colorInput,
@@ -80,10 +86,13 @@ const FormInput = ({
             gap: 4,
             justifyContent: 'space-between',
         },
+        wrapper: {
+            paddingBottom: error ? 0 : 30,
+        },
     })
 
     return (
-        <View>
+        <View style={styles.wrapper}>
             <View style={styles.label}>
                 <Pressable onPress={handleFocus} accessible={true}>
                     <ThemedText>
