@@ -7,13 +7,14 @@ type FormSubmitProps = {
 }
 
 const FormSubmit = ({ isSigningUp }: FormSubmitProps) => {
+    const backgroundColor = useThemeColor({}, 'red')
     const borderColor = useThemeColor({}, 'border')
 
     const handleSubmit = () => {}
 
     const styles = StyleSheet.create({
         wrapper: {
-            backgroundColor: 'red',
+            backgroundColor,
             borderColor,
             borderRadius: 12,
             borderWidth: 2,
