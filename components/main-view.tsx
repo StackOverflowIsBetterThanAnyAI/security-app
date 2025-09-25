@@ -1,6 +1,6 @@
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { ReactNode } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 type MainViewProps = {
@@ -24,9 +24,14 @@ const MainView = ({ children }: MainViewProps) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {children}
-            </ScrollView>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+                <ScrollView
+                    contentContainerStyle={styles.scrollContainer}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    {children}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
