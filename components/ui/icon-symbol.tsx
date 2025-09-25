@@ -2,7 +2,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SymbolWeight } from 'expo-symbols'
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
 
-type IconMapping = keyof typeof MAPPING
+export type IconMapping = keyof typeof MAPPING
 
 const MAPPING = {
     home: 'home',
