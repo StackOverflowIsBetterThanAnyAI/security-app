@@ -1,34 +1,35 @@
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState } from 'react'
-import {
-    KeyboardTypeOptions,
-    Pressable,
-    StyleSheet,
-    TextInput,
-    View,
-} from 'react-native'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 
 type FormInputProps = {
     handleSubmitEditing?: () => void
-    isPassword?: boolean
     label: string
+    password: {
+        isPasswordVisible?: boolean
+        isPassword?: boolean
+        setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>
+    }
     placeholder: string
     ref: React.RefObject<TextInput | null>
     returnKeyType: 'done' | 'next'
+    setValue: React.Dispatch<React.SetStateAction<string>>
     submitBehavior: 'submit' | 'blurAndSubmit'
-    type: KeyboardTypeOptions
+    value: string
 }
 
 const FormInput = ({
     handleSubmitEditing,
-    isPassword = false,
     label,
+    password,
     placeholder,
     ref,
     returnKeyType,
+    setValue,
     submitBehavior,
-    type,
+    value,
 }: FormInputProps) => {
     const [isFocused, setIsFocused] = useState(false)
 
@@ -42,8 +43,29 @@ const FormInput = ({
         ref?.current?.focus()
     }
 
+    const handleToggleVisibility = () => {
+        if (password.setIsPasswordVisible) {
+            password.setIsPasswordVisible((prev) => !prev)
+        }
+    }
+
+    const showPassword = (
+        <MaterialCommunityIcons
+            name="eye-outline"
+            size={24}
+            color={colorInput}
+        />
+    )
+
+    const hidePassword = (
+        <MaterialCommunityIcons
+            name="eye-off-outline"
+            size={24}
+            color={colorInput}
+        />
+    )
+
     const styles = StyleSheet.create({
-        button: { width: '100%' },
         input: {
             borderColor: isFocused ? borderColorActive : borderColorInactive,
             borderRadius: 8,
@@ -52,26 +74,44 @@ const FormInput = ({
             marginVertical: 8,
             padding: 8,
         },
+        label: {
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 4,
+            justifyContent: 'space-between',
+        },
     })
 
     return (
         <View>
-            <ThemedText>
-                <Pressable onPress={handleFocus} style={styles.button}>
+            <View style={styles.label}>
+                <Pressable onPress={handleFocus} accessible={true}>
                     <ThemedText>
                         {label}{' '}
                         <ThemedText style={{ color: colorRed }}>*</ThemedText>
                     </ThemedText>
                 </Pressable>
-            </ThemedText>
+                {password.isPassword && (
+                    <Pressable
+                        onPress={handleToggleVisibility}
+                        accessible={true}
+                    >
+                        {password.isPasswordVisible
+                            ? hidePassword
+                            : showPassword}
+                    </Pressable>
+                )}
+            </View>
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
-                keyboardType={type}
+                keyboardType="default"
                 autoCapitalize="none"
                 autoCorrect={false}
                 accessibilityLabel={label}
-                secureTextEntry={isPassword}
+                secureTextEntry={
+                    password.isPassword && !password.isPasswordVisible
+                }
                 placeholderTextColor={colorPlaceholder}
                 ref={ref}
                 returnKeyType={returnKeyType}
@@ -79,6 +119,8 @@ const FormInput = ({
                 onBlur={() => setIsFocused(false)}
                 onSubmitEditing={handleSubmitEditing}
                 submitBehavior={submitBehavior}
+                value={value}
+                onChangeText={setValue}
             />
         </View>
     )

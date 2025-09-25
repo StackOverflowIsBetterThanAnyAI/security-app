@@ -9,6 +9,11 @@ import { TextInput } from 'react-native'
 
 const Form = () => {
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
+
+    const [userName, setUserName] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
 
     const userNameRef = useRef<TextInput>(null)
     const passwordRef = useRef<TextInput>(null)
@@ -40,11 +45,13 @@ const Form = () => {
             <FormInput
                 handleSubmitEditing={() => passwordRef?.current?.focus()}
                 label="User Name"
+                password={{}}
                 placeholder="Michael"
                 ref={userNameRef}
                 returnKeyType="next"
+                setValue={setUserName}
                 submitBehavior="submit"
-                type="default"
+                value={userName}
             />
             <FormInput
                 handleSubmitEditing={
@@ -52,23 +59,33 @@ const Form = () => {
                         ? () => confirmPasswordRef?.current?.focus()
                         : undefined
                 }
-                isPassword
                 label="Password"
+                password={{
+                    isPassword: true,
+                    isPasswordVisible,
+                    setIsPasswordVisible,
+                }}
                 placeholder="password"
                 ref={passwordRef}
                 returnKeyType={isSigningUp ? 'next' : 'done'}
+                setValue={setPassword}
                 submitBehavior={isSigningUp ? 'submit' : 'blurAndSubmit'}
-                type="default"
+                value={password}
             />
             {isSigningUp && (
                 <FormInput
-                    isPassword
                     label="Confirm Password"
+                    password={{
+                        isPassword: true,
+                        isPasswordVisible,
+                        setIsPasswordVisible,
+                    }}
                     placeholder="password"
                     ref={confirmPasswordRef}
                     returnKeyType="done"
+                    setValue={setConfirmPassword}
                     submitBehavior="blurAndSubmit"
-                    type="default"
+                    value={confirmPassword}
                 />
             )}
             <FormSubmit isSigningUp={isSigningUp} />
