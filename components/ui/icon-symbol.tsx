@@ -16,7 +16,7 @@ const MAPPING = {
 
 const IconSymbol = ({
     name,
-    size = 24,
+    size,
     color,
     style,
 }: {
