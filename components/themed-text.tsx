@@ -6,7 +6,13 @@ export type ThemedTextProps = TextProps & {
     center?: boolean
     lightColor?: string
     darkColor?: string
-    type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link'
+    type?:
+        | 'default'
+        | 'error'
+        | 'title'
+        | 'defaultSemiBold'
+        | 'subtitle'
+        | 'link'
 }
 
 const ThemedText = ({
@@ -25,6 +31,7 @@ const ThemedText = ({
                 { color },
                 center ? styles.center : undefined,
                 type === 'default' ? styles.default : undefined,
+                type === 'error' ? styles.error : undefined,
                 type === 'title' ? styles.title : undefined,
                 type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
                 type === 'subtitle' ? styles.subtitle : undefined,
@@ -48,6 +55,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         fontWeight: '600',
+    },
+    error: {
+        fontSize: 14,
+        lineHeight: 22,
     },
     title: {
         fontSize: 32,
