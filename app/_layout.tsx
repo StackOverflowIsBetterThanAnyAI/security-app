@@ -1,4 +1,3 @@
-import { useColorScheme } from '@/hooks/use-color-scheme'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import {
     DarkTheme,
@@ -10,6 +9,8 @@ import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
+
+import { useColorScheme } from '@/hooks/use-color-scheme'
 
 export const unstable_settings = {
     anchor: '(tabs)',
