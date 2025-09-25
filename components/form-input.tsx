@@ -15,7 +15,7 @@ type FormInputProps = {
     label: string
     placeholder: string
     ref: React.RefObject<TextInput | null>
-    returnKeyType: 'done' | 'next' | 'send'
+    returnKeyType: 'done' | 'next'
     submitBehavior: 'submit' | 'blurAndSubmit'
     type: KeyboardTypeOptions
 }
