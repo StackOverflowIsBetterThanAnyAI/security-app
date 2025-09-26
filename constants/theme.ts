@@ -1,5 +1,3 @@
-import { Platform } from 'react-native'
-
 const tintColorLight = '#0A7EA4'
 const tintColorDark = '#F7F3F3'
 
@@ -33,19 +31,3 @@ export const Colors = {
         tint: tintColorDark,
     },
 }
-
-export const Fonts = Platform.select({
-    default: {
-        sans: 'normal',
-        serif: 'serif',
-        rounded: 'normal',
-        mono: 'monospace',
-    },
-    web: {
-        sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-        serif: "Georgia, 'Times New Roman', serif",
-        rounded:
-            "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-        mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
-    },
-})

@@ -50,14 +50,6 @@ const TabLayout = () => {
                     href: isLoggedIn ? null : undefined,
                 }}
             />
-            <Tabs.Screen
-                name="explore"
-                options={{
-                    title: 'Explore',
-                    tabBarIcon: getTabIcon('send'),
-                    href: isLoggedIn ? undefined : null,
-                }}
-            />
         </Tabs>
     )
 }

@@ -6,11 +6,6 @@ export type IconMapping = keyof typeof MAPPING
 
 const MAPPING = {
     home: 'home',
-    send: 'send',
-    code: 'code',
-    'chevron-right': 'chevron_right',
-    favorite: 'favorite',
-    notifications: 'notifications',
     login: 'login',
 } as const
 
