@@ -45,8 +45,8 @@ const ThemedText = ({
             fontWeight: '600',
         },
         error: {
-            fontSize: 14,
-            lineHeight: 22,
+            fontSize: 12,
+            lineHeight: 20,
         },
         title: {
             fontSize: 32,
