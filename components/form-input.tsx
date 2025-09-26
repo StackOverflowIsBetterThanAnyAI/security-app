@@ -1,23 +1,34 @@
-import ThemedText from '@/components/themed-text'
-import { useThemeColor } from '@/hooks/use-theme-color'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+
+import ThemedText from '@/components/themed-text'
+import {
+    checkForErrorConfirmPassword,
+    checkForErrorPassword,
+    checkForErrorUserName,
+} from '@/helper/checkForError'
+import { useThemeColor } from '@/hooks/use-theme-color'
+import { hidePassword, showPassword } from '@/icons/icons'
 
 type FormInputProps = {
     error: string
     handleSubmitEditing?: () => void
     label: string
     password: {
+        enteredPassword?: string
         isPasswordVisible?: boolean
-        isPassword?: boolean
         setIsPasswordVisible?: React.Dispatch<React.SetStateAction<boolean>>
+        setConfirmPassword?: React.Dispatch<React.SetStateAction<string>>
+        setErrorConfirmPassword?: React.Dispatch<React.SetStateAction<string>>
     }
+    pattern: RegExp
     placeholder: string
     ref: React.RefObject<TextInput | null>
     returnKeyType: 'done' | 'next'
+    setError: React.Dispatch<React.SetStateAction<string>>
     setValue: React.Dispatch<React.SetStateAction<string>>
     submitBehavior: 'submit' | 'blurAndSubmit'
+    type: 'username' | 'password' | 'confirmpassword'
     value: string
 }
 
@@ -26,11 +37,14 @@ const FormInput = ({
     handleSubmitEditing,
     label,
     password,
+    pattern,
     placeholder,
     ref,
     returnKeyType,
+    setError,
     setValue,
     submitBehavior,
+    type,
     value,
 }: FormInputProps) => {
     const [isFocused, setIsFocused] = useState(false)
@@ -41,7 +55,41 @@ const FormInput = ({
     const colorInput = useThemeColor({}, 'text')
     const colorPlaceholder = useThemeColor({}, 'textInactive')
 
+    const handleBlur = () => {
+        switch (type) {
+            case 'username':
+                checkForErrorUserName(pattern, setError, value)
+                break
+            case 'password':
+                checkForErrorPassword(pattern, setError, value)
+                break
+            case 'confirmpassword':
+                checkForErrorConfirmPassword(
+                    password.enteredPassword,
+                    setError,
+                    value
+                )
+        }
+        setIsFocused(false)
+    }
+
+    const handleChangeText = (e: string) => {
+        setValue(e)
+        if (
+            type === 'password' &&
+            password.setConfirmPassword &&
+            password.setErrorConfirmPassword
+        ) {
+            password.setConfirmPassword('')
+            password.setErrorConfirmPassword('')
+        }
+    }
+
     const handleFocus = () => {
+        setIsFocused(true)
+    }
+
+    const handlePress = () => {
         ref?.current?.focus()
     }
 
@@ -50,22 +98,6 @@ const FormInput = ({
             password.setIsPasswordVisible((prev) => !prev)
         }
     }
-
-    const showPassword = (
-        <MaterialCommunityIcons
-            name="eye-outline"
-            size={24}
-            color={colorInput}
-        />
-    )
-
-    const hidePassword = (
-        <MaterialCommunityIcons
-            name="eye-off-outline"
-            size={24}
-            color={colorInput}
-        />
-    )
 
     const styles = StyleSheet.create({
         input: {
@@ -87,27 +119,27 @@ const FormInput = ({
             justifyContent: 'space-between',
         },
         wrapper: {
-            paddingBottom: error ? 0 : 30,
+            paddingBottom: error ? 0 : 32,
         },
     })
 
     return (
         <View style={styles.wrapper}>
             <View style={styles.label}>
-                <Pressable onPress={handleFocus} accessible={true}>
+                <Pressable onPress={handlePress} accessible={true}>
                     <ThemedText>
                         {label}{' '}
                         <ThemedText style={{ color: colorRed }}>*</ThemedText>
                     </ThemedText>
                 </Pressable>
-                {password.isPassword && (
+                {['password', 'confirmpassword'].includes(type) && (
                     <Pressable
                         onPress={handleToggleVisibility}
                         accessible={true}
                     >
                         {password.isPasswordVisible
-                            ? hidePassword
-                            : showPassword}
+                            ? hidePassword(colorInput)
+                            : showPassword(colorInput)}
                     </Pressable>
                 )}
             </View>
@@ -119,17 +151,18 @@ const FormInput = ({
                 autoCorrect={false}
                 accessibilityLabel={label}
                 secureTextEntry={
-                    password.isPassword && !password.isPasswordVisible
+                    ['password', 'confirmpassword'].includes(type) &&
+                    !password.isPasswordVisible
                 }
                 placeholderTextColor={colorPlaceholder}
                 ref={ref}
                 returnKeyType={returnKeyType}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 onSubmitEditing={handleSubmitEditing}
                 submitBehavior={submitBehavior}
                 value={value}
-                onChangeText={setValue}
+                onChangeText={handleChangeText}
             />
         </View>
     )
