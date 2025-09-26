@@ -4,8 +4,9 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 
 export type ThemedTextProps = TextProps & {
     center?: boolean
-    lightColor?: string
     darkColor?: string
+    isDisabled?: boolean
+    lightColor?: string
     type?:
         | 'default'
         | 'error'
@@ -17,19 +18,58 @@ export type ThemedTextProps = TextProps & {
 
 const ThemedText = ({
     center = false,
-    style,
-    lightColor,
     darkColor,
+    isDisabled = false,
+    lightColor,
+    style,
     type = 'default',
     ...rest
 }: ThemedTextProps) => {
     const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
+    const colorInactive = useThemeColor({}, 'textInactive')
+
+    const styles = StyleSheet.create({
+        center: {
+            textAlign: 'center',
+        },
+        disabled: {
+            color: colorInactive,
+        },
+        default: {
+            fontSize: 16,
+            lineHeight: 24,
+        },
+        defaultSemiBold: {
+            fontSize: 16,
+            lineHeight: 24,
+            fontWeight: '600',
+        },
+        error: {
+            fontSize: 14,
+            lineHeight: 22,
+        },
+        title: {
+            fontSize: 32,
+            fontWeight: 'bold',
+            lineHeight: 40,
+        },
+        subtitle: {
+            fontSize: 20,
+            fontWeight: 'bold',
+        },
+        link: {
+            lineHeight: 30,
+            fontSize: 16,
+            color: '#0a7ea4',
+        },
+    })
 
     return (
         <Text
             style={[
                 { color },
                 center ? styles.center : undefined,
+                isDisabled ? styles.disabled : undefined,
                 type === 'default' ? styles.default : undefined,
                 type === 'error' ? styles.error : undefined,
                 type === 'title' ? styles.title : undefined,
@@ -42,38 +82,4 @@ const ThemedText = ({
         />
     )
 }
-
-const styles = StyleSheet.create({
-    center: {
-        textAlign: 'center',
-    },
-    default: {
-        fontSize: 16,
-        lineHeight: 24,
-    },
-    defaultSemiBold: {
-        fontSize: 16,
-        lineHeight: 24,
-        fontWeight: '600',
-    },
-    error: {
-        fontSize: 14,
-        lineHeight: 22,
-    },
-    title: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        lineHeight: 40,
-    },
-    subtitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    link: {
-        lineHeight: 30,
-        fontSize: 16,
-        color: '#0a7ea4',
-    },
-})
-
 export default ThemedText
