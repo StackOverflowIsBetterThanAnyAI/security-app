@@ -3,9 +3,19 @@ import { Tabs } from 'expo-router'
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
+import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { useContext } from 'react'
 
 const TabLayout = () => {
+    const contextIsLoggedIn = useContext(ContextIsLoggedIn)
+    if (!contextIsLoggedIn) {
+        throw new Error(
+            'TabLayout must be used within a ContextIsLoggedIn.Provider'
+        )
+    }
+    const [isLoggedIn, _setIsLoggedIn] = contextIsLoggedIn
+
     const colorScheme = useColorScheme()
 
     const getTabIcon =
@@ -15,6 +25,7 @@ const TabLayout = () => {
 
     return (
         <Tabs
+            initialRouteName={isLoggedIn ? 'index' : 'login'}
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
@@ -28,6 +39,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
+                    href: isLoggedIn ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -35,6 +47,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),
+                    href: isLoggedIn ? null : undefined,
                 }}
             />
             <Tabs.Screen
@@ -42,6 +55,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Explore',
                     tabBarIcon: getTabIcon('send'),
+                    href: isLoggedIn ? undefined : null,
                 }}
             />
         </Tabs>

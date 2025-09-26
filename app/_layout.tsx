@@ -10,13 +10,17 @@ import { StatusBar } from 'expo-status-bar'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
+import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { useState } from 'react'
 
 export const unstable_settings = {
     anchor: '(tabs)',
 }
 
 const RootLayout = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(false)
+
     const colorScheme = useColorScheme()
 
     const [fontsLoaded] = useFonts({
@@ -41,14 +45,19 @@ const RootLayout = () => {
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="modal"
-                    options={{ presentation: 'modal', title: 'Modal' }}
-                />
-            </Stack>
-            <StatusBar style="auto" />
+            <ContextIsLoggedIn.Provider value={[isLoggedIn, setIsLoggedIn]}>
+                <Stack>
+                    <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="modal"
+                        options={{ presentation: 'modal', title: 'Modal' }}
+                    />
+                </Stack>
+                <StatusBar style="auto" />
+            </ContextIsLoggedIn.Provider>
         </ThemeProvider>
     )
 }
