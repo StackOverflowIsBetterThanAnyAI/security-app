@@ -5,7 +5,7 @@ import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import ThemedView from '@/components/themed-view'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { TextInput, View } from 'react-native'
 
 const Form = () => {
@@ -16,16 +16,18 @@ const Form = () => {
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
 
-    const [errorUserName, setErrorUserName] = useState<string>('error')
+    const [errorUserName, setErrorUserName] = useState<string>('')
     const [errorPassword, setErrorPassword] = useState<string>('')
-    const [errorConfirmPassword, setErrorConfirmPassword] =
-        useState<string>('error')
+    const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
     const userNameRef = useRef<TextInput>(null)
     const passwordRef = useRef<TextInput>(null)
     const confirmPasswordRef = useRef<TextInput>(null)
 
     const color = useThemeColor({}, 'red')
+
+    const userNamePattern = useMemo(() => /^[a-z0-9]{5,20}$/i, [])
+    const passwordPattern = useMemo(() => /^[^\s]{8,25}$/, [])
 
     const handleClick = () => {
         setIsSigningUp((prev) => !prev)
@@ -54,11 +56,14 @@ const Form = () => {
                     handleSubmitEditing={() => passwordRef?.current?.focus()}
                     label="User Name"
                     password={{}}
+                    pattern={userNamePattern}
                     placeholder="Michael"
                     ref={userNameRef}
                     returnKeyType="next"
+                    setError={setErrorUserName}
                     setValue={setUserName}
                     submitBehavior="submit"
+                    type="username"
                     value={userName}
                 />
                 <FormError error={errorUserName} />
@@ -71,15 +76,19 @@ const Form = () => {
                     }
                     label="Password"
                     password={{
-                        isPassword: true,
                         isPasswordVisible,
                         setIsPasswordVisible,
+                        setConfirmPassword,
+                        setErrorConfirmPassword,
                     }}
+                    pattern={passwordPattern}
                     placeholder="password"
                     ref={passwordRef}
                     returnKeyType={isSigningUp ? 'next' : 'done'}
+                    setError={setErrorPassword}
                     setValue={setPassword}
                     submitBehavior={isSigningUp ? 'submit' : 'blurAndSubmit'}
+                    type="password"
                     value={password}
                 />
                 <FormError error={errorPassword} />
@@ -89,15 +98,18 @@ const Form = () => {
                             error={errorConfirmPassword}
                             label="Confirm Password"
                             password={{
-                                isPassword: true,
+                                enteredPassword: password,
                                 isPasswordVisible,
                                 setIsPasswordVisible,
                             }}
+                            pattern={passwordPattern}
                             placeholder="password"
                             ref={confirmPasswordRef}
                             returnKeyType="done"
+                            setError={setErrorConfirmPassword}
                             setValue={setConfirmPassword}
                             submitBehavior="blurAndSubmit"
+                            type="confirmpassword"
                             value={confirmPassword}
                         />
                         <FormError error={errorConfirmPassword} />
