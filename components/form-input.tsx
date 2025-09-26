@@ -136,6 +136,9 @@ const FormInput = ({
                     <Pressable
                         onPress={handleToggleVisibility}
                         accessible={true}
+                        style={({ pressed }) => [
+                            { opacity: pressed ? 0.75 : 1 },
+                        ]}
                     >
                         {password.isPasswordVisible
                             ? hidePassword(colorInput)
