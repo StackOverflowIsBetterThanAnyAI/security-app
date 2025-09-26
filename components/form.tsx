@@ -118,12 +118,12 @@ const Form = () => {
             </View>
             <FormSubmit
                 isDisabled={
-                    !errorConfirmPassword ||
-                    !errorPassword ||
-                    !errorUserName ||
-                    !confirmPassword.length ||
-                    !password.length ||
-                    !userName.length
+                    errorConfirmPassword.length > 0 ||
+                    errorPassword.length > 0 ||
+                    errorUserName.length > 0 ||
+                    confirmPassword.length === 0 ||
+                    password.length === 0 ||
+                    userName.length === 0
                 }
                 isSigningUp={isSigningUp}
             />
