@@ -56,25 +56,11 @@ const FormInput = ({
     const colorPlaceholder = useThemeColor({}, 'textInactive')
 
     const handleBlur = () => {
-        switch (type) {
-            case 'username':
-                checkForErrorUserName(pattern, setError, value)
-                break
-            case 'password':
-                checkForErrorPassword(pattern, setError, value)
-                break
-            case 'confirmpassword':
-                checkForErrorConfirmPassword(
-                    password.enteredPassword,
-                    setError,
-                    value
-                )
-        }
         setIsFocused(false)
     }
 
-    const handleChangeText = (e: string) => {
-        setValue(e)
+    const handleChangeText = (textValue: string) => {
+        setValue(textValue)
         if (
             type === 'password' &&
             password.setConfirmPassword &&
@@ -82,6 +68,20 @@ const FormInput = ({
         ) {
             password.setConfirmPassword('')
             password.setErrorConfirmPassword('')
+        }
+        switch (type) {
+            case 'username':
+                checkForErrorUserName(pattern, setError, textValue)
+                break
+            case 'password':
+                checkForErrorPassword(pattern, setError, textValue)
+                break
+            case 'confirmpassword':
+                checkForErrorConfirmPassword(
+                    password.enteredPassword,
+                    setError,
+                    textValue
+                )
         }
     }
 
