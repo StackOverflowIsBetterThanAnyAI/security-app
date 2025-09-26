@@ -12,7 +12,7 @@ import { hidePassword, showPassword } from '@/icons/icons'
 
 type FormInputProps = {
     error: string
-    handleSubmitEditing?: () => void
+    handleSubmitEditing: () => void
     label: string
     password: {
         enteredPassword?: string

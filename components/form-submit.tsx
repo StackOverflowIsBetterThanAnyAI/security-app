@@ -3,18 +3,19 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 import { Pressable, StyleSheet } from 'react-native'
 
 type FormSubmitProps = {
+    handleSubmit: () => void
     isDisabled: boolean
     isSigningUp: boolean
 }
 
-const FormSubmit = ({ isDisabled, isSigningUp }: FormSubmitProps) => {
+const FormSubmit = ({
+    handleSubmit,
+    isDisabled,
+    isSigningUp,
+}: FormSubmitProps) => {
     const backgroundColor = useThemeColor({}, 'red')
     const borderColorActive = useThemeColor({}, 'border')
     const borderColorInactive = useThemeColor({}, 'textInactive')
-
-    const handleSubmit = () => {
-        /* TODO: hit API endpoint */
-    }
 
     const styles = StyleSheet.create({
         disabled: {

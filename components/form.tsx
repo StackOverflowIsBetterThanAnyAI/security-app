@@ -33,6 +33,10 @@ const Form = () => {
         setIsSigningUp((prev) => !prev)
     }
 
+    const handleSubmit = () => {
+        /* TODO: hit API endpoint */
+    }
+
     return (
         <>
             <ThemedText center type="title" accessibilityRole="header">
@@ -72,14 +76,18 @@ const Form = () => {
                     handleSubmitEditing={
                         isSigningUp
                             ? () => confirmPasswordRef?.current?.focus()
-                            : undefined
+                            : handleSubmit
                     }
                     label="Password"
                     password={{
                         isPasswordVisible,
                         setIsPasswordVisible,
-                        setConfirmPassword,
-                        setErrorConfirmPassword,
+                        setConfirmPassword: isSigningUp
+                            ? setConfirmPassword
+                            : undefined,
+                        setErrorConfirmPassword: isSigningUp
+                            ? setErrorConfirmPassword
+                            : undefined,
                     }}
                     pattern={passwordPattern}
                     placeholder="password"
@@ -96,6 +104,7 @@ const Form = () => {
                     <>
                         <FormInput
                             error={errorConfirmPassword}
+                            handleSubmitEditing={handleSubmit}
                             label="Confirm Password"
                             password={{
                                 enteredPassword: password,
@@ -117,11 +126,12 @@ const Form = () => {
                 )}
             </View>
             <FormSubmit
+                handleSubmit={handleSubmit}
                 isDisabled={
-                    errorConfirmPassword.length > 0 ||
+                    (isSigningUp && errorConfirmPassword.length > 0) ||
                     errorPassword.length > 0 ||
                     errorUserName.length > 0 ||
-                    confirmPassword.length === 0 ||
+                    (isSigningUp && confirmPassword.length === 0) ||
                     password.length === 0 ||
                     userName.length === 0
                 }
