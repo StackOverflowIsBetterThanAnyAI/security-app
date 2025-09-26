@@ -17,7 +17,7 @@ const Form = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('')
 
     const [errorUserName, setErrorUserName] = useState<string>('error')
-    const [errorPassword, setErrorPassword] = useState<string>('error')
+    const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] =
         useState<string>('error')
 
@@ -104,7 +104,17 @@ const Form = () => {
                     </>
                 )}
             </View>
-            <FormSubmit isSigningUp={isSigningUp} />
+            <FormSubmit
+                isDisabled={
+                    !errorConfirmPassword ||
+                    !errorPassword ||
+                    !errorUserName ||
+                    !confirmPassword.length ||
+                    !password.length ||
+                    !userName.length
+                }
+                isSigningUp={isSigningUp}
+            />
         </>
     )
 }

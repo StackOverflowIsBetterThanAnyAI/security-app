@@ -3,19 +3,28 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 import { Pressable, StyleSheet } from 'react-native'
 
 type FormSubmitProps = {
+    isDisabled: boolean
     isSigningUp: boolean
 }
 
-const FormSubmit = ({ isSigningUp }: FormSubmitProps) => {
+const FormSubmit = ({ isDisabled, isSigningUp }: FormSubmitProps) => {
     const backgroundColor = useThemeColor({}, 'red')
-    const borderColor = useThemeColor({}, 'border')
+    const borderColorActive = useThemeColor({}, 'border')
+    const borderColorInactive = useThemeColor({}, 'textInactive')
 
-    const handleSubmit = () => {}
+    const handleSubmit = () => {
+        /* TODO: hit API endpoint */
+    }
 
     const styles = StyleSheet.create({
-        wrapper: {
+        disabled: {
+            borderColor: borderColorInactive,
+        },
+        enabled: {
             backgroundColor,
-            borderColor,
+            borderColor: borderColorActive,
+        },
+        wrapper: {
             borderRadius: 12,
             borderWidth: 2,
             marginHorizontal: 'auto',
@@ -29,15 +38,23 @@ const FormSubmit = ({ isSigningUp }: FormSubmitProps) => {
         <Pressable
             accessible={true}
             accessibilityRole="button"
+            accessibilityState={{ disabled: isDisabled }}
+            accessibilityLabel={`${isSigningUp ? 'Signup' : 'Login'}${
+                isDisabled ? ', disabled' : ''
+            }`}
             style={({ pressed }) => [
                 styles.wrapper,
-                pressed && {
-                    opacity: 0.75,
-                },
+                isDisabled ? styles.disabled : styles.enabled,
+                !isDisabled &&
+                    pressed && {
+                        opacity: 0.75,
+                    },
             ]}
-            onPress={handleSubmit}
+            onPress={!isDisabled ? handleSubmit : undefined}
         >
-            <ThemedText>{isSigningUp ? 'Signup' : 'Login'}</ThemedText>
+            <ThemedText isDisabled={isDisabled}>
+                {isSigningUp ? 'Signup' : 'Login'}
+            </ThemedText>
         </Pressable>
     )
 }
