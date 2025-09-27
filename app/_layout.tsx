@@ -11,7 +11,7 @@ import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
-import { ContextIsLoginFailed } from '@/context/ContextLoginFailed'
+import { ContextLoginError } from '@/context/ContextLoginError'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
 
@@ -21,9 +21,7 @@ export const unstable_settings = {
 
 const RootLayout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(false)
-    const [isLoginFailed, setIsLoginFailed] = useState<boolean | undefined>(
-        false
-    )
+    const [loginError, setLoginError] = useState<string>('')
 
     const colorScheme = useColorScheme()
 
@@ -50,9 +48,7 @@ const RootLayout = () => {
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
             <ContextIsLoggedIn.Provider value={[isLoggedIn, setIsLoggedIn]}>
-                <ContextIsLoginFailed.Provider
-                    value={[isLoginFailed, setIsLoginFailed]}
-                >
+                <ContextLoginError.Provider value={[loginError, setLoginError]}>
                     <Stack>
                         <Stack.Screen
                             name="(tabs)"
@@ -60,7 +56,7 @@ const RootLayout = () => {
                         />
                     </Stack>
                     <StatusBar style="auto" />
-                </ContextIsLoginFailed.Provider>
+                </ContextLoginError.Provider>
             </ContextIsLoggedIn.Provider>
         </ThemeProvider>
     )
