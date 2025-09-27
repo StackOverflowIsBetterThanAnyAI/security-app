@@ -13,16 +13,18 @@ const FormSubmit = ({
     isDisabled,
     isSigningUp,
 }: FormSubmitProps) => {
-    const backgroundColor = useThemeColor({}, 'red')
+    const backgroundColorActive = useThemeColor({}, 'red')
+    const backgroundColorInactive = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
     const borderColorInactive = useThemeColor({}, 'textInactive')
 
     const styles = StyleSheet.create({
         disabled: {
+            backgroundColor: backgroundColorInactive,
             borderColor: borderColorInactive,
         },
         enabled: {
-            backgroundColor,
+            backgroundColor: backgroundColorActive,
             borderColor: borderColorActive,
         },
         wrapper: {

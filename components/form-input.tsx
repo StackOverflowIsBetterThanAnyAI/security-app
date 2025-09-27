@@ -49,6 +49,7 @@ const FormInput = ({
 }: FormInputProps) => {
     const [isFocused, setIsFocused] = useState(false)
 
+    const backgroundColor = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
     const borderColorInactive = useThemeColor({}, 'textInactive')
     const colorRed = useThemeColor({}, 'red')
@@ -101,6 +102,7 @@ const FormInput = ({
 
     const styles = StyleSheet.create({
         input: {
+            backgroundColor,
             borderColor: error
                 ? colorRed
                 : isFocused
