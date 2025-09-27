@@ -1,7 +1,6 @@
 import FormSwitchButton from '@/components/form-switch-button'
-import ThemedView from '@/components/themed-view'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 type FormSwitchProps = {
     handleClick: () => void
@@ -24,7 +23,7 @@ const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
     })
 
     return (
-        <ThemedView style={styles.switchWrapper}>
+        <View style={styles.switchWrapper}>
             <FormSwitchButton
                 handleClick={handleClick}
                 isSigningUp={isSigningUp}
@@ -36,7 +35,7 @@ const FormSwitch = ({ handleClick, isSigningUp }: FormSwitchProps) => {
                 isSignUpField
                 text="Signup"
             />
-        </ThemedView>
+        </View>
     )
 }
 

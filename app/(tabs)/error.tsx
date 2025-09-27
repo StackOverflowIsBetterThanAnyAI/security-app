@@ -1,15 +1,14 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
-import ThemedView from '@/components/themed-view'
 
 const ErrorScreen = () => {
     return (
         <MainView>
-            <ThemedView style={styles.titleContainer}>
+            <View style={styles.titleContainer}>
                 <ThemedText type="title">Error!</ThemedText>
-            </ThemedView>
+            </View>
         </MainView>
     )
 }

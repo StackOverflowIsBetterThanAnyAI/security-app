@@ -3,7 +3,6 @@ import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
-import ThemedView from '@/components/themed-view'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -62,7 +61,7 @@ const Form = () => {
             <ThemedText center type="title" accessibilityRole="header">
                 {isSigningUp ? 'Signup' : 'Login'}
             </ThemedText>
-            <ThemedView>
+            <View>
                 <ThemedText center>
                     {isSigningUp
                         ? 'Create a new account.'
@@ -72,7 +71,7 @@ const Form = () => {
                     All fields marked with{' '}
                     <ThemedText style={{ color }}>*</ThemedText> are required.
                 </ThemedText>
-            </ThemedView>
+            </View>
             <FormSwitch handleClick={handleClick} isSigningUp={isSigningUp} />
             <View>
                 <FormInput
