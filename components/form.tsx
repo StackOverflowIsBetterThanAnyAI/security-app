@@ -4,11 +4,29 @@ import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import ThemedView from '@/components/themed-view'
+import { ContextIsLoggedIn } from '@/context/ContextLogin'
+import { ContextIsLoginFailed } from '@/context/ContextLoginFailed'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { useMemo, useRef, useState } from 'react'
+import { useContext, useMemo, useRef, useState } from 'react'
 import { TextInput, View } from 'react-native'
 
 const Form = () => {
+    const contextIsLoggedIn = useContext(ContextIsLoggedIn)
+    if (!contextIsLoggedIn) {
+        throw new Error(
+            'TabLayout must be used within a ContextIsLoggedIn.Provider'
+        )
+    }
+    const [_isLoggedIn, setIsLoggedIn] = contextIsLoggedIn
+
+    const contextIsLoginFailed = useContext(ContextIsLoginFailed)
+    if (!contextIsLoginFailed) {
+        throw new Error(
+            'TabLayout must be used within a ContextIsLoginFailed.Provider'
+        )
+    }
+    const [_isLoginFailed, setIsLoginFailed] = contextIsLoginFailed
+
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
 
@@ -34,6 +52,8 @@ const Form = () => {
     }
 
     const handleSubmit = () => {
+        setIsLoginFailed(false)
+        setIsLoggedIn(true)
         /* TODO: hit API endpoint */
     }
 

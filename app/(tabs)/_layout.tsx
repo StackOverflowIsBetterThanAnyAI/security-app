@@ -4,6 +4,7 @@ import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
+import { ContextIsLoginFailed } from '@/context/ContextLoginFailed'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useContext } from 'react'
 
@@ -15,6 +16,14 @@ const TabLayout = () => {
         )
     }
     const [isLoggedIn, _setIsLoggedIn] = contextIsLoggedIn
+
+    const contextIsLoginFailed = useContext(ContextIsLoginFailed)
+    if (!contextIsLoginFailed) {
+        throw new Error(
+            'TabLayout must be used within a ContextIsLoginFailed.Provider'
+        )
+    }
+    const [isLoginFailed, _setIsLoginFailed] = contextIsLoginFailed
 
     const colorScheme = useColorScheme()
 
@@ -35,11 +44,19 @@ const TabLayout = () => {
             }}
         >
             <Tabs.Screen
+                name="error"
+                options={{
+                    title: 'Error',
+                    tabBarIcon: getTabIcon('error'),
+                    href: isLoginFailed ? undefined : null,
+                }}
+            />
+            <Tabs.Screen
                 name="index"
                 options={{
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
-                    href: isLoggedIn ? undefined : null,
+                    href: isLoggedIn && !isLoginFailed ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -47,7 +64,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),
-                    href: isLoggedIn ? null : undefined,
+                    href: !isLoggedIn && !isLoginFailed ? undefined : null,
                 }}
             />
         </Tabs>

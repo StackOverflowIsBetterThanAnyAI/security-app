@@ -5,6 +5,7 @@ import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
 export type IconMapping = keyof typeof MAPPING
 
 const MAPPING = {
+    error: 'error',
     home: 'home',
     login: 'login',
 } as const
