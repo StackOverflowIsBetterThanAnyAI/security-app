@@ -1,6 +1,3 @@
-const tintColorLight = '#0A7EA4'
-const tintColorDark = '#F7F3F3'
-
 export const Colors = {
     light: {
         background: '#F7F4F7',
@@ -8,13 +5,12 @@ export const Colors = {
         buttonActive: '#F5F3FF',
         buttonInactive: '#3F3B3F',
         icon: '#687076',
+        rect: '#DDDADA40',
         red: '#A71111',
         redInactive: '#E0C9C9',
-        tabIconDefault: '#687076',
-        tabIconSelected: tintColorLight,
         text: '#11181C',
         textInactive: '#11181C99',
-        tint: tintColorLight,
+        tint: '#0A7EA4',
     },
     dark: {
         background: '#151718',
@@ -22,12 +18,11 @@ export const Colors = {
         buttonActive: '#ECEDEE',
         buttonInactive: '#313432',
         icon: '#9BA1A6',
+        rect: '#3132331A',
         red: '#D7110F',
         redInactive: '#DFB8B8',
-        tabIconDefault: '#9BA1A6',
-        tabIconSelected: tintColorDark,
         text: '#ECEDEE',
         textInactive: '#ECEDEE7D',
-        tint: tintColorDark,
+        tint: '#F7F4F7',
     },
 }
