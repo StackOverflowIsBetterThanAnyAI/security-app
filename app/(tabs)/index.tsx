@@ -4,7 +4,7 @@ import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import ThemedView from '@/components/themed-view'
 
-const HomeScreen = () => {
+const IndexScreen = () => {
     return (
         <MainView>
             <ThemedView style={styles.titleContainer}>
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HomeScreen
+export default IndexScreen
