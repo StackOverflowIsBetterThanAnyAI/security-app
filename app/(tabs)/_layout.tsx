@@ -1,4 +1,5 @@
-import { Tabs } from 'expo-router'
+import { Tabs, usePathname, useRouter } from 'expo-router'
+import { useContext, useEffect } from 'react'
 
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
@@ -6,7 +7,6 @@ import { Colors } from '@/constants/theme'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { useColorScheme } from '@/hooks/use-color-scheme'
-import { useContext } from 'react'
 
 const TabLayout = () => {
     const contextIsLoggedIn = useContext(ContextIsLoggedIn)
@@ -26,6 +26,22 @@ const TabLayout = () => {
     const [loginError, _setLoginError] = contextLoginError
 
     const colorScheme = useColorScheme()
+    const router = useRouter()
+    const pathname = usePathname()
+
+    useEffect(() => {
+        if (loginError.length > 0 && pathname !== '/error') {
+            router.replace('/error')
+        } else if (isLoggedIn && pathname !== '/') {
+            router.replace('/')
+        } else if (
+            !isLoggedIn &&
+            loginError.length === 0 &&
+            pathname !== '/login'
+        ) {
+            router.replace('/login')
+        }
+    }, [isLoggedIn, loginError, pathname])
 
     const getTabIcon =
         (name: IconMapping) =>
