@@ -12,6 +12,7 @@ import 'react-native-reanimated'
 
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextUserName } from '@/context/ContextUserName'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
 
@@ -22,6 +23,7 @@ export const unstable_settings = {
 const RootLayout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(false)
     const [loginError, setLoginError] = useState<string>('')
+    const [userName, setUserName] = useState<string>('')
 
     const colorScheme = useColorScheme()
 
@@ -49,13 +51,15 @@ const RootLayout = () => {
         >
             <ContextIsLoggedIn.Provider value={[isLoggedIn, setIsLoggedIn]}>
                 <ContextLoginError.Provider value={[loginError, setLoginError]}>
-                    <Stack>
-                        <Stack.Screen
-                            name="(tabs)"
-                            options={{ headerShown: false }}
-                        />
-                    </Stack>
-                    <StatusBar style="auto" />
+                    <ContextUserName.Provider value={[userName, setUserName]}>
+                        <Stack>
+                            <Stack.Screen
+                                name="(tabs)"
+                                options={{ headerShown: false }}
+                            />
+                        </Stack>
+                        <StatusBar style="auto" />
+                    </ContextUserName.Provider>
                 </ContextLoginError.Provider>
             </ContextIsLoggedIn.Provider>
         </ThemeProvider>
