@@ -7,11 +7,15 @@ import {
     View,
 } from 'react-native'
 
+import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
+import Pagination from '@/components/pagination'
 import RefreshButton from '@/components/refresh-button'
 import ThemedText from '@/components/themed-text'
 import { ContextUserName } from '@/context/ContextUserName'
+
+const error = require('@/assets/images/error.webp')
 
 const HomeScreen = () => {
     const contextUserName = useContext(ContextUserName)
@@ -24,6 +28,7 @@ const HomeScreen = () => {
 
     const scrollRef = useRef<ScrollView>(null)
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
+    const [page, setPage] = useState<number>(1)
 
     const handleRefresh = () => {
         /* TODO */
@@ -31,7 +36,7 @@ const HomeScreen = () => {
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y
-        setIsMoveToTopVisible(offsetY > 256)
+        setIsMoveToTopVisible(offsetY > 128)
     }
 
     return (
@@ -48,9 +53,32 @@ const HomeScreen = () => {
                     <ThemedText type="title">Past Recordings</ThemedText>
                 </View>
                 <RefreshButton handlePress={handleRefresh} />
-                {/* Recordings */}
+                <ImageGrid
+                    images={[
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                        error,
+                    ]}
+                />
                 <RefreshButton handlePress={handleRefresh} />
-                {/* Pagination */}
+                <Pagination page={page} setPage={setPage} />
             </MainView>
             <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
