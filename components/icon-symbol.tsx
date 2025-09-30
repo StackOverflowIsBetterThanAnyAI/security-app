@@ -5,10 +5,12 @@ import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
 export type IconMapping = keyof typeof MAPPING
 
 const MAPPING = {
+    'chevron-left': 'chevron-elft',
+    'chevron-right': 'chevron-right',
     error: 'error',
+    'expand-less': 'expand-less',
     home: 'home',
     login: 'login',
-    'expand-less': 'expand-less',
 } as const
 
 const IconSymbol = ({
