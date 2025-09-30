@@ -57,7 +57,7 @@ const MainView = forwardRef<ScrollView, MainViewProps>(
         })
 
         return (
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea} edges={['top']}>
                 <PatternBackground />
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
                     <ScrollView
