@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import {
     NativeScrollEvent,
     NativeSyntheticEvent,
+    ScrollView,
     StyleSheet,
     View,
 } from 'react-native'
@@ -21,6 +22,7 @@ const HomeScreen = () => {
     }
     const [userName, _setUserName] = contextUserName
 
+    const scrollRef = useRef<ScrollView>(null)
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
 
     const handleRefresh = () => {
@@ -34,7 +36,11 @@ const HomeScreen = () => {
 
     return (
         <>
-            <MainView handleScroll={handleScroll}>
+            <MainView
+                ref={scrollRef}
+                onScroll={handleScroll}
+                scrollEventThrottle={16}
+            >
                 <View style={styles.titleContainer}>
                     <ThemedText center type="title">
                         Welcome, {userName}!
@@ -65,7 +71,7 @@ const HomeScreen = () => {
                 <RefreshButton handlePress={handleRefresh} />
                 <RefreshButton handlePress={handleRefresh} />
             </MainView>
-            <MoveToTop isVisible={isMoveToTopVisible} />
+            <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
     )
 }

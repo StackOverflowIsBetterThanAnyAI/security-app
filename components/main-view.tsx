@@ -1,11 +1,10 @@
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { ReactNode } from 'react'
+import { ReactNode, forwardRef } from 'react'
 import {
     Dimensions,
     KeyboardAvoidingView,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
     ScrollView,
+    ScrollViewProps,
     StyleSheet,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,8 +12,7 @@ import Svg, { Rect } from 'react-native-svg'
 
 type MainViewProps = {
     children: ReactNode
-    handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
-}
+} & ScrollViewProps
 
 const PatternBackground = () => {
     const { width, height } = Dimensions.get('window')
@@ -42,36 +40,38 @@ const PatternBackground = () => {
     )
 }
 
-const MainView = ({ children, handleScroll }: MainViewProps) => {
-    const backgroundColor = useThemeColor({}, 'background')
+const MainView = forwardRef<ScrollView, MainViewProps>(
+    ({ children, ...props }, ref) => {
+        const backgroundColor = useThemeColor({}, 'background')
 
-    const styles = StyleSheet.create({
-        safeArea: {
-            backgroundColor,
-            flex: 1,
-        },
-        scrollContainer: {
-            flexGrow: 1,
-            gap: 16,
-            padding: 16,
-        },
-    })
+        const styles = StyleSheet.create({
+            safeArea: {
+                backgroundColor,
+                flex: 1,
+            },
+            scrollContainer: {
+                flexGrow: 1,
+                gap: 16,
+                padding: 16,
+            },
+        })
 
-    return (
-        <SafeAreaView style={styles.safeArea}>
-            <PatternBackground />
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-                <ScrollView
-                    contentContainerStyle={styles.scrollContainer}
-                    keyboardShouldPersistTaps="handled"
-                    onScroll={handleScroll}
-                    scrollEventThrottle={handleScroll ? 16 : undefined}
-                >
-                    {children}
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
-    )
-}
+        return (
+            <SafeAreaView style={styles.safeArea}>
+                <PatternBackground />
+                <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+                    <ScrollView
+                        ref={ref}
+                        contentContainerStyle={styles.scrollContainer}
+                        keyboardShouldPersistTaps="handled"
+                        {...props}
+                    >
+                        {children}
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        )
+    }
+)
 
 export default MainView

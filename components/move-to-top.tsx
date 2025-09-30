@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Animated, Pressable, StyleSheet } from 'react-native'
+import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import IconSymbol from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
@@ -7,9 +7,10 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 
 type MoveToTopProps = {
     isVisible: boolean
+    scrollRef: React.RefObject<ScrollView | null>
 }
 
-const MoveToTop = ({ isVisible }: MoveToTopProps) => {
+const MoveToTop = ({ isVisible, scrollRef }: MoveToTopProps) => {
     const backgroundColor = useThemeColor({}, 'background')
     const borderColor = useThemeColor({}, 'border')
     const color = useThemeColor({}, 'tint')
@@ -17,7 +18,7 @@ const MoveToTop = ({ isVisible }: MoveToTopProps) => {
     const opacity = useRef(new Animated.Value(0)).current
 
     const handlePress = () => {
-        /* TODO */
+        scrollRef.current?.scrollTo({ y: 0, animated: true })
     }
 
     useEffect(() => {
@@ -38,8 +39,6 @@ const MoveToTop = ({ isVisible }: MoveToTopProps) => {
             bottom: 16,
             height: 64,
             justifyContent: 'center',
-            marginHorizontal: 'auto',
-            marginTop: 8,
             position: 'absolute',
             right: 16,
             width: 64,
