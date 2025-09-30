@@ -3,6 +3,8 @@ import { ReactNode } from 'react'
 import {
     Dimensions,
     KeyboardAvoidingView,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
     ScrollView,
     StyleSheet,
 } from 'react-native'
@@ -11,6 +13,7 @@ import Svg, { Rect } from 'react-native-svg'
 
 type MainViewProps = {
     children: ReactNode
+    handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
 }
 
 const PatternBackground = () => {
@@ -39,7 +42,7 @@ const PatternBackground = () => {
     )
 }
 
-const MainView = ({ children }: MainViewProps) => {
+const MainView = ({ children, handleScroll }: MainViewProps) => {
     const backgroundColor = useThemeColor({}, 'background')
 
     const styles = StyleSheet.create({
@@ -61,6 +64,8 @@ const MainView = ({ children }: MainViewProps) => {
                 <ScrollView
                     contentContainerStyle={styles.scrollContainer}
                     keyboardShouldPersistTaps="handled"
+                    onScroll={handleScroll}
+                    scrollEventThrottle={handleScroll ? 16 : undefined}
                 >
                     {children}
                 </ScrollView>
