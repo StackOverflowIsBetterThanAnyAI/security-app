@@ -8,6 +8,7 @@ const MAPPING = {
     error: 'error',
     home: 'home',
     login: 'login',
+    'expand-less': 'expand-less',
 } as const
 
 const IconSymbol = ({
