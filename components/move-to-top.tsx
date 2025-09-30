@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import IconSymbol from '@/components/icon-symbol'
-import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type MoveToTopProps = {
@@ -59,7 +58,6 @@ const MoveToTop = ({ isVisible, scrollRef }: MoveToTopProps) => {
                 onPress={handlePress}
             >
                 <IconSymbol size={28} name={'expand-less'} color={color} />
-                <ThemedText style={{ fontSize: 12 }}>Top</ThemedText>
             </Pressable>
         </Animated.View>
     )
