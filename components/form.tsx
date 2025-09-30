@@ -5,6 +5,7 @@ import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextUserName } from '@/context/ContextUserName'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { useContext, useMemo, useRef, useState } from 'react'
 import { TextInput, View } from 'react-native'
@@ -12,24 +13,25 @@ import { TextInput, View } from 'react-native'
 const Form = () => {
     const contextIsLoggedIn = useContext(ContextIsLoggedIn)
     if (!contextIsLoggedIn) {
-        throw new Error(
-            'TabLayout must be used within a ContextIsLoggedIn.Provider'
-        )
+        throw new Error('Form must be used within a ContextIsLoggedIn.Provider')
     }
     const [_isLoggedIn, setIsLoggedIn] = contextIsLoggedIn
 
     const contextLoginError = useContext(ContextLoginError)
     if (!contextLoginError) {
-        throw new Error(
-            'TabLayout must be used within a ContextLoginError.Provider'
-        )
+        throw new Error('Form must be used within a ContextLoginError.Provider')
     }
     const [_loginError, setLoginError] = contextLoginError
+
+    const contextUserName = useContext(ContextUserName)
+    if (!contextUserName) {
+        throw new Error('Form must be used within a ContextUserName.Provider')
+    }
+    const [userName, setUserName] = contextUserName
 
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
 
-    const [userName, setUserName] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirmPassword, setConfirmPassword] = useState<string>('')
 
