@@ -32,8 +32,8 @@ const TabLayout = () => {
     useEffect(() => {
         if (loginError.length > 0 && pathname !== '/error') {
             router.replace('/error')
-        } else if (isLoggedIn && pathname !== '/') {
-            router.replace('/')
+        } else if (isLoggedIn && pathname !== '/home') {
+            router.replace('/home')
         } else if (
             !isLoggedIn &&
             loginError.length === 0 &&
@@ -68,7 +68,7 @@ const TabLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="index"
+                name="home"
                 options={{
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
