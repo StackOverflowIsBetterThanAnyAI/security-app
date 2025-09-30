@@ -49,27 +49,8 @@ const HomeScreen = () => {
                 </View>
                 <RefreshButton handlePress={handleRefresh} />
                 {/* Recordings */}
+                <RefreshButton handlePress={handleRefresh} />
                 {/* Pagination */}
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
-                <RefreshButton handlePress={handleRefresh} />
             </MainView>
             <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
