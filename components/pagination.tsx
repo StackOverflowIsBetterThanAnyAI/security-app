@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
 import IconSymbol from '@/components/icon-symbol'

@@ -1,6 +1,7 @@
-import { useThemeColor } from '@/hooks/use-theme-color'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Dimensions, Image, Pressable, StyleSheet } from 'react-native'
+
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 type ImageGridProps = {
     imageHighlighted: string
