@@ -7,6 +7,7 @@ import {
     View,
 } from 'react-native'
 
+import HighlightImage from '@/components/highlight-image'
 import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
@@ -27,6 +28,7 @@ const HomeScreen = () => {
     const [userName, _setUserName] = contextUserName
 
     const scrollRef = useRef<ScrollView>(null)
+    const [imageHighlighted, setImageHighlighted] = useState<string>('')
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
 
@@ -76,10 +78,16 @@ const HomeScreen = () => {
                         error,
                         error,
                     ]}
+                    setImageHighlighted={setImageHighlighted}
                 />
                 <RefreshButton handlePress={handleRefresh} />
                 <Pagination page={page} setPage={setPage} />
             </MainView>
+            <HighlightImage
+                imageHighlighted={imageHighlighted}
+                setImageHighlighted={setImageHighlighted}
+                source={imageHighlighted}
+            />
             <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
     )

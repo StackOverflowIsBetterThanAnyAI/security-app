@@ -1,11 +1,13 @@
 import React from 'react'
-import { FlatList, Image, StyleSheet, View } from 'react-native'
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
 type ImageGridProps = {
+    // TODO: maybe adjust any type
     images: any[]
+    setImageHighlighted: React.Dispatch<React.SetStateAction<string>>
 }
 
-const ImageGrid = ({ images }: ImageGridProps) => {
+const ImageGrid = ({ images, setImageHighlighted }: ImageGridProps) => {
     return (
         <FlatList
             data={images}
@@ -23,11 +25,18 @@ const ImageGrid = ({ images }: ImageGridProps) => {
                         ![18, 19].includes(index) ? { paddingBottom: 16 } : {},
                     ]}
                 >
-                    <Image
-                        source={item}
-                        style={styles.image}
-                        resizeMode="cover"
-                    />
+                    <Pressable
+                        onPress={() => setImageHighlighted(item)}
+                        style={({ pressed }) => [
+                            { opacity: pressed ? 0.75 : 1 },
+                        ]}
+                    >
+                        <Image
+                            source={item}
+                            style={styles.image}
+                            resizeMode="cover"
+                        />
+                    </Pressable>
                 </View>
             )}
         />
@@ -40,7 +49,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     imageWrapper: {
-        aspectRatio: '16/9',
+        aspectRatio: 16 / 9,
         flex: 1,
     },
 })
