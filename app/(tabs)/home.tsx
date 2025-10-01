@@ -28,7 +28,7 @@ const HomeScreen = () => {
     const [userName, _setUserName] = contextUserName
 
     const scrollRef = useRef<ScrollView>(null)
-    const [imageHighlighted, setImageHighlighted] = useState<string>('')
+    const [imageHighlighted, setImageHighlighted] = useState<any>('')
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
 
