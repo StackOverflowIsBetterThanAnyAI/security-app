@@ -20,7 +20,7 @@ export const Colors = {
         buttonInactive: '#313432',
         highlight: '#151718CC',
         icon: '#9BA1A6',
-        rect: '#31323349',
+        rect: '#31323340',
         red: '#D7110F',
         redInactive: '#DFB8B8',
         text: '#ECEDEE',
