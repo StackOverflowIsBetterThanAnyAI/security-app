@@ -2,7 +2,6 @@ import { useContext, useMemo, useRef, useState } from 'react'
 import { Platform, TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
-import { handleApiSignup } from '@/api/handleApiSignup'
 import FormError from '@/components/form-error'
 import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
@@ -57,8 +56,9 @@ const Form = () => {
     const userNamePattern = useMemo(() => /^[a-z0-9]{5,20}$/i, [])
     const passwordPattern = useMemo(() => /^[^\s]{8,25}$/, [])
 
-    const handleLogin = () =>
+    const handleLogin = (isLogin: boolean) =>
         handleApiLogin({
+            isLogin,
             password,
             setData,
             setIsLoading,
@@ -67,18 +67,6 @@ const Form = () => {
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userName,
         })
-
-    const handleSignup = () => {
-        handleApiSignup({
-            password,
-            setData,
-            setIsLoading,
-            setIsLoggedIn,
-            setLoginError,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
-            userName,
-        })
-    }
 
     const handleSwitch = () => {
         setIsSigningUp((prev) => !prev)
@@ -123,7 +111,7 @@ const Form = () => {
                     handleSubmitEditing={
                         isSigningUp
                             ? () => confirmPasswordRef?.current?.focus()
-                            : handleLogin
+                            : () => handleLogin(true)
                     }
                     label="Password"
                     password={{
@@ -151,7 +139,7 @@ const Form = () => {
                     <>
                         <FormInput
                             error={errorConfirmPassword}
-                            handleSubmitEditing={handleSignup}
+                            handleSubmitEditing={() => handleLogin(false)}
                             label="Confirm Password"
                             password={{
                                 enteredPassword: password,
@@ -173,7 +161,11 @@ const Form = () => {
                 )}
             </View>
             <FormSubmit
-                handleSubmit={isSigningUp ? handleSignup : handleLogin}
+                handleSubmit={
+                    isSigningUp
+                        ? () => handleLogin(false)
+                        : () => handleLogin(true)
+                }
                 isDisabled={
                     (isSigningUp && errorConfirmPassword.length > 0) ||
                     errorPassword.length > 0 ||
