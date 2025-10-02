@@ -39,6 +39,9 @@ const Form = () => {
     const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
+    const [data, setData] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
     const userNameRef = useRef<TextInput>(null)
     const passwordRef = useRef<TextInput>(null)
     const confirmPasswordRef = useRef<TextInput>(null)
@@ -48,14 +51,36 @@ const Form = () => {
     const userNamePattern = useMemo(() => /^[a-z0-9]{5,20}$/i, [])
     const passwordPattern = useMemo(() => /^[^\s]{8,25}$/, [])
 
-    const handleClick = () => {
-        setIsSigningUp((prev) => !prev)
+    const handleLogin = async () => {
+        setIsLoading(true)
+        try {
+            const response = await fetch('https://fakeurl.com')
+            if (!response.ok) {
+                throw new Error(
+                    `Error ${response.status}: ${response.statusText}`
+                )
+            }
+            const json = await response.json()
+            setData(json)
+
+            setLoginError('')
+            setIsLoggedIn(true)
+        } catch (err: any) {
+            setLoginError(err.message)
+            setIsLoggedIn(false)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
-    const handleSubmit = () => {
+    const handleSignup = () => {
         setLoginError('')
         setIsLoggedIn(true)
         /* TODO: hit API endpoint */
+    }
+
+    const handleSwitch = () => {
+        setIsSigningUp((prev) => !prev)
     }
 
     return (
@@ -74,7 +99,7 @@ const Form = () => {
                     <ThemedText style={{ color }}>*</ThemedText> are required.
                 </ThemedText>
             </View>
-            <FormSwitch handleClick={handleClick} isSigningUp={isSigningUp} />
+            <FormSwitch handleClick={handleSwitch} isSigningUp={isSigningUp} />
             <View>
                 <FormInput
                     error={errorUserName}
@@ -97,7 +122,7 @@ const Form = () => {
                     handleSubmitEditing={
                         isSigningUp
                             ? () => confirmPasswordRef?.current?.focus()
-                            : handleSubmit
+                            : handleLogin
                     }
                     label="Password"
                     password={{
@@ -125,7 +150,7 @@ const Form = () => {
                     <>
                         <FormInput
                             error={errorConfirmPassword}
-                            handleSubmitEditing={handleSubmit}
+                            handleSubmitEditing={handleSignup}
                             label="Confirm Password"
                             password={{
                                 enteredPassword: password,
@@ -147,7 +172,7 @@ const Form = () => {
                 )}
             </View>
             <FormSubmit
-                handleSubmit={handleSubmit}
+                handleSubmit={isSigningUp ? handleSignup : handleLogin}
                 isDisabled={
                     (isSigningUp && errorConfirmPassword.length > 0) ||
                     errorPassword.length > 0 ||
