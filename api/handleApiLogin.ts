@@ -1,9 +1,8 @@
-import { LoginData } from '@/types/types'
+import { saveData } from '@/helper/storeData'
 
 type handleLoginProps = {
     isLogin?: boolean
     password: string
-    setData: (value: LoginData) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsLoggedIn: (value: React.SetStateAction<boolean | undefined>) => void
     setLoginError: (value: React.SetStateAction<string>) => void
@@ -14,7 +13,6 @@ type handleLoginProps = {
 export const handleApiLogin = async ({
     isLogin = false,
     password,
-    setData,
     setIsLoading,
     setIsLoggedIn,
     setLoginError,
@@ -40,8 +38,8 @@ export const handleApiLogin = async ({
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`)
         }
-        const json = await response.json()
-        setData(json)
+        const data: { token: string; role: string } = await response.json()
+        await saveData({ authToken: data.token, authRole: data.role })
 
         setLoginError('')
         setIsLoggedIn(true)
