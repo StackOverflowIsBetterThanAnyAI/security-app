@@ -1,5 +1,5 @@
 import { useContext, useMemo, useRef, useState } from 'react'
-import { TextInput, View } from 'react-native'
+import { Platform, TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
 import FormError from '@/components/form-error'
@@ -7,7 +7,7 @@ import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
-import { URL } from '@/constants/api'
+import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
@@ -60,7 +60,7 @@ const Form = () => {
             setIsLoading,
             setIsLoggedIn,
             setLoginError,
-            url: URL,
+            url: Platform.OS === 'web' ? URL : URL_MOBILE,
         })
 
     const handleSignup = () => {
