@@ -1,14 +1,17 @@
+import { useContext, useMemo, useRef, useState } from 'react'
+import { TextInput, View } from 'react-native'
+
+import { handleApiLogin } from '@/api/handleApiLogin'
 import FormError from '@/components/form-error'
 import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
+import { URL } from '@/constants/api'
 import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { useContext, useMemo, useRef, useState } from 'react'
-import { TextInput, View } from 'react-native'
 
 const Form = () => {
     const contextIsLoggedIn = useContext(ContextIsLoggedIn)
@@ -51,27 +54,14 @@ const Form = () => {
     const userNamePattern = useMemo(() => /^[a-z0-9]{5,20}$/i, [])
     const passwordPattern = useMemo(() => /^[^\s]{8,25}$/, [])
 
-    const handleLogin = async () => {
-        setIsLoading(true)
-        try {
-            const response = await fetch('https://fakeurl.com')
-            if (!response.ok) {
-                throw new Error(
-                    `Error ${response.status}: ${response.statusText}`
-                )
-            }
-            const json = await response.json()
-            setData(json)
-
-            setLoginError('')
-            setIsLoggedIn(true)
-        } catch (err: any) {
-            setLoginError(err.message)
-            setIsLoggedIn(false)
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    const handleLogin = () =>
+        handleApiLogin({
+            setData,
+            setIsLoading,
+            setIsLoggedIn,
+            setLoginError,
+            url: URL,
+        })
 
     const handleSignup = () => {
         setLoginError('')
