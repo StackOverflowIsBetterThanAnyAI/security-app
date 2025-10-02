@@ -2,6 +2,7 @@ import { useContext, useMemo, useRef, useState } from 'react'
 import { Platform, TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
+import { handleApiSignup } from '@/api/handleApiSignup'
 import FormError from '@/components/form-error'
 import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
@@ -42,7 +43,9 @@ const Form = () => {
     const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
-    const [data, setData] = useState<any>(null)
+    const [data, setData] = useState<{ token: string; role: string } | null>(
+        null
+    )
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const userNameRef = useRef<TextInput>(null)
@@ -56,17 +59,25 @@ const Form = () => {
 
     const handleLogin = () =>
         handleApiLogin({
+            password,
             setData,
             setIsLoading,
             setIsLoggedIn,
             setLoginError,
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
+            userName,
         })
 
     const handleSignup = () => {
-        setLoginError('')
-        setIsLoggedIn(true)
-        /* TODO: hit API endpoint */
+        handleApiSignup({
+            password,
+            setData,
+            setIsLoading,
+            setIsLoggedIn,
+            setLoginError,
+            url: Platform.OS === 'web' ? URL : URL_MOBILE,
+            userName,
+        })
     }
 
     const handleSwitch = () => {

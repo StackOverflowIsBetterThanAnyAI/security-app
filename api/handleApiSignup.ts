@@ -1,4 +1,4 @@
-type handleLoginProps = {
+type handleLoginSignup = {
     password: string
     setData: (value: { token: string; role: string }) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
@@ -8,7 +8,7 @@ type handleLoginProps = {
     userName: string
 }
 
-export const handleApiLogin = async ({
+export const handleApiSignup = async ({
     password,
     setData,
     setIsLoading,
@@ -16,10 +16,10 @@ export const handleApiLogin = async ({
     setLoginError,
     url,
     userName,
-}: handleLoginProps) => {
+}: handleLoginSignup) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/login`, {
+        const response = await fetch(`${url}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
