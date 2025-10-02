@@ -2,11 +2,13 @@ import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { Pressable, StyleSheet } from 'react-native'
 
-type RefreshButtonProps = {
+type ButtonProps = {
+    accessibilityLabel: string
     handlePress: () => void
+    label: string
 }
 
-const RefreshButton = ({ handlePress }: RefreshButtonProps) => {
+const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
     const backgroundColor = useThemeColor({}, 'background')
     const borderColor = useThemeColor({}, 'border')
 
@@ -20,6 +22,7 @@ const RefreshButton = ({ handlePress }: RefreshButtonProps) => {
             marginTop: 8,
             paddingVertical: 8,
             paddingHorizontal: 24,
+            minWidth: 128,
         },
     })
 
@@ -27,7 +30,7 @@ const RefreshButton = ({ handlePress }: RefreshButtonProps) => {
         <Pressable
             accessible={true}
             accessibilityRole="button"
-            accessibilityLabel="Refresh Recordings"
+            accessibilityLabel={accessibilityLabel}
             style={({ pressed }) => [
                 styles.button,
                 pressed && {
@@ -36,9 +39,9 @@ const RefreshButton = ({ handlePress }: RefreshButtonProps) => {
             ]}
             onPress={handlePress}
         >
-            <ThemedText>Refresh</ThemedText>
+            <ThemedText center>{label}</ThemedText>
         </Pressable>
     )
 }
 
-export default RefreshButton
+export default Button

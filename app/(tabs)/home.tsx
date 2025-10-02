@@ -7,12 +7,12 @@ import {
     View,
 } from 'react-native'
 
+import Button from '@/components/button'
 import HighlightImage from '@/components/highlight-image'
 import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
 import Pagination from '@/components/pagination'
-import RefreshButton from '@/components/refresh-button'
 import ThemedText from '@/components/themed-text'
 import { ContextUserName } from '@/context/ContextUserName'
 
@@ -54,7 +54,11 @@ const HomeScreen = () => {
                     </ThemedText>
                     <ThemedText type="title">Past Recordings</ThemedText>
                 </View>
-                <RefreshButton handlePress={handleRefresh} />
+                <Button
+                    accessibilityLabel="Refresh Recordings"
+                    handlePress={handleRefresh}
+                    label="Refresh"
+                />
                 <ImageGrid
                     images={[
                         error,
@@ -80,7 +84,11 @@ const HomeScreen = () => {
                     ]}
                     setImageHighlighted={setImageHighlighted}
                 />
-                <RefreshButton handlePress={handleRefresh} />
+                <Button
+                    accessibilityLabel="Refresh Recordings"
+                    handlePress={handleRefresh}
+                    label="Refresh"
+                />
                 <Pagination page={page} setPage={setPage} />
             </MainView>
             <HighlightImage
