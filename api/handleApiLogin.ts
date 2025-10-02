@@ -1,7 +1,9 @@
+import { LoginData } from '@/types/types'
+
 type handleLoginProps = {
     isLogin?: boolean
     password: string
-    setData: (value: { token: string; role: string }) => void
+    setData: (value: LoginData) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsLoggedIn: (value: React.SetStateAction<boolean | undefined>) => void
     setLoginError: (value: React.SetStateAction<string>) => void

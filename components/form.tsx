@@ -12,6 +12,7 @@ import { ContextIsLoggedIn } from '@/context/ContextLogin'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { LoginData } from '@/types/types'
 
 const Form = () => {
     const contextIsLoggedIn = useContext(ContextIsLoggedIn)
@@ -42,9 +43,7 @@ const Form = () => {
     const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
-    const [data, setData] = useState<{ token: string; role: string } | null>(
-        null
-    )
+    const [data, setData] = useState<LoginData | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const userNameRef = useRef<TextInput>(null)
