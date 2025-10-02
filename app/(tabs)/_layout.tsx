@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react'
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
-import { ContextIsLoggedIn } from '@/context/ContextLogin'
+import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 

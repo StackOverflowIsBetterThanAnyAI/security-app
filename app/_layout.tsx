@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
-import { ContextIsLoggedIn } from '@/context/ContextLogin'
+import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
 import { useColorScheme } from '@/hooks/use-color-scheme'
