@@ -7,13 +7,7 @@ export type ThemedTextProps = TextProps & {
     darkColor?: string
     isDisabled?: boolean
     lightColor?: string
-    type?:
-        | 'default'
-        | 'error'
-        | 'title'
-        | 'defaultSemiBold'
-        | 'subtitle'
-        | 'link'
+    type?: 'default' | 'error' | 'title' | 'subtitle' | 'link'
 }
 
 const ThemedText = ({
@@ -38,11 +32,6 @@ const ThemedText = ({
         default: {
             fontSize: 16,
             lineHeight: 24,
-        },
-        defaultSemiBold: {
-            fontSize: 16,
-            lineHeight: 24,
-            fontWeight: '600',
         },
         error: {
             fontSize: 12,
@@ -73,7 +62,6 @@ const ThemedText = ({
                 type === 'default' ? styles.default : undefined,
                 type === 'error' ? styles.error : undefined,
                 type === 'title' ? styles.title : undefined,
-                type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
                 type === 'subtitle' ? styles.subtitle : undefined,
                 type === 'link' ? styles.link : undefined,
                 style,
