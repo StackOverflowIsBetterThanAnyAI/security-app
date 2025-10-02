@@ -46,7 +46,7 @@ const TabLayout = () => {
     const getTabIcon =
         (name: IconMapping) =>
         ({ color, focused }: { color: string; focused: boolean }) =>
-            <IconSymbol size={focused ? 32 : 28} name={name} color={color} />
+            <IconSymbol size={focused ? 30 : 28} name={name} color={color} />
 
     return (
         <Tabs
