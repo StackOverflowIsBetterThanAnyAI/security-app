@@ -1,24 +1,32 @@
+import { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import Button from '@/components/button'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
+import { ContextLoginError } from '@/context/ContextLoginError'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { noConnection } from '@/icons/icons'
 
-type ErrorScreenProps = {
-    error?: string
-}
+const ErrorScreen = () => {
+    const contextLoginError = useContext(ContextLoginError)
+    if (!contextLoginError) {
+        throw new Error(
+            'ErrorScreen must be used within a ContextLoginError.Provider'
+        )
+    }
+    const [loginError, setLoginError] = contextLoginError
 
-const ErrorScreen = ({ error }: ErrorScreenProps) => {
     const colorInput = useThemeColor({}, 'text')
 
     const handleGoBack = () => {
         /* TODO */
+        setLoginError('')
     }
 
     const handleTryAgain = () => {
         /* TODO */
+        setLoginError('')
     }
 
     return (
@@ -31,11 +39,7 @@ const ErrorScreen = ({ error }: ErrorScreenProps) => {
                     <ThemedText center type="subtitle">
                         An Error occurred!
                     </ThemedText>
-                    {error && (
-                        <ThemedText center type="subtitle">
-                            {error}
-                        </ThemedText>
-                    )}
+                    {loginError && <ThemedText center>{loginError}</ThemedText>}
                 </View>
                 {noConnection(colorInput)}
                 <View style={styles.buttonWrapper}>
