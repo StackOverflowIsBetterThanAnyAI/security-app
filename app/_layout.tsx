@@ -13,6 +13,8 @@ import 'react-native-reanimated'
 import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
+import { ContextUserRole } from '@/context/ContextUserRole'
+import { ContextUserToken } from '@/context/ContextUserToken'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
 
@@ -24,6 +26,10 @@ const RootLayout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(false)
     const [loginError, setLoginError] = useState<string>('')
     const [userName, setUserName] = useState<string>('')
+    const [userRole, setUserRole] = useState<'user' | 'member' | 'admin'>(
+        'user'
+    )
+    const [userToken, setUserToken] = useState<string>('')
 
     const colorScheme = useColorScheme()
 
@@ -52,13 +58,21 @@ const RootLayout = () => {
             <ContextIsLoggedIn.Provider value={[isLoggedIn, setIsLoggedIn]}>
                 <ContextLoginError.Provider value={[loginError, setLoginError]}>
                     <ContextUserName.Provider value={[userName, setUserName]}>
-                        <Stack>
-                            <Stack.Screen
-                                name="(tabs)"
-                                options={{ headerShown: false }}
-                            />
-                        </Stack>
-                        <StatusBar style="auto" />
+                        <ContextUserRole.Provider
+                            value={[userRole, setUserRole]}
+                        >
+                            <ContextUserToken.Provider
+                                value={[userToken, setUserToken]}
+                            >
+                                <Stack>
+                                    <Stack.Screen
+                                        name="(tabs)"
+                                        options={{ headerShown: false }}
+                                    />
+                                </Stack>
+                                <StatusBar style="auto" />
+                            </ContextUserToken.Provider>
+                        </ContextUserRole.Provider>
                     </ContextUserName.Provider>
                 </ContextLoginError.Provider>
             </ContextIsLoggedIn.Provider>

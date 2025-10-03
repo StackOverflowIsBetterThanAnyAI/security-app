@@ -6,6 +6,10 @@ type handleLoginProps = {
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsLoggedIn: (value: React.SetStateAction<boolean | undefined>) => void
     setLoginError: (value: React.SetStateAction<string>) => void
+    setUserRole: React.Dispatch<
+        React.SetStateAction<'user' | 'member' | 'admin'>
+    >
+    setUserToken: React.Dispatch<React.SetStateAction<string>>
     url: string
     userName: string
 }
@@ -16,6 +20,8 @@ export const handleApiLogin = async ({
     setIsLoading,
     setIsLoggedIn,
     setLoginError,
+    setUserRole,
+    setUserToken,
     url,
     userName,
 }: handleLoginProps) => {
@@ -38,8 +44,15 @@ export const handleApiLogin = async ({
         if (!response.ok) {
             throw new Error(`Error ${response.status} ${response.statusText}`)
         }
-        const data: { token: string; role: string } = await response.json()
-        await saveData({ authToken: data.token, authRole: data.role })
+        const data: { token: string; role: 'user' | 'member' | 'admin' } =
+            await response.json()
+        await saveData({
+            authName: userName,
+            authRole: data.role,
+            authToken: data.token,
+        })
+        setUserRole(data.role)
+        setUserToken(data.token)
 
         setLoginError('')
         setIsLoggedIn(true)

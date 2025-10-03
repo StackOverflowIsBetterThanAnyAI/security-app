@@ -1,4 +1,4 @@
-import { useContext, useMemo, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Platform, TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
@@ -11,6 +11,9 @@ import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
 import { ContextUserName } from '@/context/ContextUserName'
+import { ContextUserRole } from '@/context/ContextUserRole'
+import { ContextUserToken } from '@/context/ContextUserToken'
+import { loadData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const Form = () => {
@@ -32,6 +35,18 @@ const Form = () => {
     }
     const [userName, setUserName] = contextUserName
 
+    const contextUserRole = useContext(ContextUserRole)
+    if (!contextUserRole) {
+        throw new Error('Form must be used within a ContextUserRole.Provider')
+    }
+    const [_userRole, setUserRole] = contextUserRole
+
+    const contextUserToken = useContext(ContextUserToken)
+    if (!contextUserToken) {
+        throw new Error('Form must be used within a ContextUserToken.Provider')
+    }
+    const [_userToken, setUserToken] = contextUserToken
+
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
 
@@ -42,6 +57,7 @@ const Form = () => {
     const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
+    // TODO
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const userNameRef = useRef<TextInput>(null)
@@ -60,6 +76,8 @@ const Form = () => {
             setIsLoading,
             setIsLoggedIn,
             setLoginError,
+            setUserRole,
+            setUserToken,
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userName,
         })
@@ -67,6 +85,18 @@ const Form = () => {
     const handleSwitch = () => {
         setIsSigningUp((prev) => !prev)
     }
+
+    useEffect(() => {
+        const autoLogin = async () => {
+            const data = await loadData(['authName', 'authRole', 'authToken'])
+            if (data?.authToken && data?.authName && data?.authRole) {
+                setIsLoggedIn(true)
+                setUserName(data.authName)
+                setUserRole(data.authRole as 'user' | 'member' | 'admin')
+            }
+        }
+        autoLogin()
+    }, [])
 
     return (
         <>
