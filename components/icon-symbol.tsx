@@ -11,6 +11,7 @@ const MAPPING = {
     'expand-less': 'expand-less',
     home: 'home',
     login: 'login',
+    person: 'person',
 } as const
 
 const IconSymbol = ({

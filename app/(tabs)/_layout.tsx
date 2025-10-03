@@ -6,6 +6,7 @@ import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
 import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextUserName } from '@/context/ContextUserName'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 
 const TabLayout = () => {
@@ -24,6 +25,14 @@ const TabLayout = () => {
         )
     }
     const [loginError, _setLoginError] = contextLoginError
+
+    const contextUserName = useContext(ContextUserName)
+    if (!contextUserName) {
+        throw new Error(
+            'TabLayout must be used within a ContextUserName.Provider'
+        )
+    }
+    const [userName, _setUserName] = contextUserName
 
     const colorScheme = useColorScheme()
     const router = useRouter()
@@ -85,6 +94,17 @@ const TabLayout = () => {
                     tabBarIcon: getTabIcon('login'),
                     href:
                         !isLoggedIn && loginError.length === 0
+                            ? undefined
+                            : null,
+                }}
+            />
+            <Tabs.Screen
+                name="user"
+                options={{
+                    title: userName ?? 'Profile',
+                    tabBarIcon: getTabIcon('person'),
+                    href:
+                        isLoggedIn && loginError.length === 0
                             ? undefined
                             : null,
                 }}
