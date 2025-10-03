@@ -4,7 +4,7 @@ type handleLoginProps = {
     isLogin?: boolean
     password: string
     setIsLoading: (value: React.SetStateAction<boolean>) => void
-    setIsLoggedIn: (value: React.SetStateAction<boolean | undefined>) => void
+    setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setLoginError: (value: React.SetStateAction<string>) => void
     setUserRole: React.Dispatch<
         React.SetStateAction<'user' | 'member' | 'admin'>
@@ -18,7 +18,7 @@ export const handleApiLogin = async ({
     isLogin = false,
     password,
     setIsLoading,
-    setIsLoggedIn,
+    setIsUserLoggedIn,
     setLoginError,
     setUserRole,
     setUserToken,
@@ -55,10 +55,10 @@ export const handleApiLogin = async ({
         setUserToken(data.token)
 
         setLoginError('')
-        setIsLoggedIn(true)
+        setIsUserLoggedIn(true)
     } catch (err: any) {
         setLoginError(err.message)
-        setIsLoggedIn(false)
+        setIsUserLoggedIn(false)
     } finally {
         setIsLoading(false)
     }

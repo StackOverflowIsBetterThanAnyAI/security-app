@@ -4,20 +4,11 @@ import { useContext, useEffect } from 'react'
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
-import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
-import { ContextUserName } from '@/context/ContextUserName'
+import { ContextUser } from '@/context/ContextUser'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 
 const TabLayout = () => {
-    const contextIsLoggedIn = useContext(ContextIsLoggedIn)
-    if (!contextIsLoggedIn) {
-        throw new Error(
-            'TabLayout must be used within a ContextIsLoggedIn.Provider'
-        )
-    }
-    const [isLoggedIn, _setIsLoggedIn] = contextIsLoggedIn
-
     const contextLoginError = useContext(ContextLoginError)
     if (!contextLoginError) {
         throw new Error(
@@ -26,13 +17,11 @@ const TabLayout = () => {
     }
     const [loginError, _setLoginError] = contextLoginError
 
-    const contextUserName = useContext(ContextUserName)
-    if (!contextUserName) {
-        throw new Error(
-            'TabLayout must be used within a ContextUserName.Provider'
-        )
+    const contextUser = useContext(ContextUser)
+    if (!contextUser) {
+        throw new Error('TabLayout must be used within a ContextUser.Provider')
     }
-    const [userName, _setUserName] = contextUserName
+    const { isUserLoggedIn, userName } = contextUser
 
     const colorScheme = useColorScheme()
     const router = useRouter()
@@ -41,16 +30,16 @@ const TabLayout = () => {
     useEffect(() => {
         if (loginError.length > 0 && pathname !== '/error') {
             router.replace('/error')
-        } else if (isLoggedIn && pathname !== '/home') {
+        } else if (isUserLoggedIn && pathname !== '/home') {
             router.replace('/home')
         } else if (
-            !isLoggedIn &&
+            !isUserLoggedIn &&
             loginError.length === 0 &&
             pathname !== '/login'
         ) {
             router.replace('/login')
         }
-    }, [isLoggedIn, loginError, pathname])
+    }, [isUserLoggedIn, loginError, pathname])
 
     const getTabIcon =
         (name: IconMapping) =>
@@ -59,7 +48,7 @@ const TabLayout = () => {
 
     return (
         <Tabs
-            initialRouteName={isLoggedIn ? 'home' : 'login'}
+            initialRouteName={isUserLoggedIn ? 'home' : 'login'}
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
@@ -82,7 +71,7 @@ const TabLayout = () => {
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
                     href:
-                        isLoggedIn && loginError.length === 0
+                        isUserLoggedIn && loginError.length === 0
                             ? undefined
                             : null,
                 }}
@@ -93,7 +82,7 @@ const TabLayout = () => {
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),
                     href:
-                        !isLoggedIn && loginError.length === 0
+                        !isUserLoggedIn && loginError.length === 0
                             ? undefined
                             : null,
                 }}
@@ -104,7 +93,7 @@ const TabLayout = () => {
                     title: userName ?? 'Profile',
                     tabBarIcon: getTabIcon('person'),
                     href:
-                        isLoggedIn && loginError.length === 0
+                        isUserLoggedIn && loginError.length === 0
                             ? undefined
                             : null,
                 }}

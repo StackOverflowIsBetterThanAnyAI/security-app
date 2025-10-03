@@ -14,18 +14,16 @@ import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
 import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
-import { ContextUserName } from '@/context/ContextUserName'
+import { ContextUser } from '@/context/ContextUser'
 
 const error = require('@/assets/images/error.webp')
 
 const HomeScreen = () => {
-    const contextUserName = useContext(ContextUserName)
-    if (!contextUserName) {
-        throw new Error(
-            'HomeScreen must be used within a ContextUserName.Provider'
-        )
+    const contextUser = useContext(ContextUser)
+    if (!contextUser) {
+        throw new Error('HomeScreen must be used within a ContextUser.Provider')
     }
-    const [userName, _setUserName] = contextUserName
+    const { userName } = contextUser
 
     const scrollRef = useRef<ScrollView>(null)
     const [imageHighlighted, setImageHighlighted] = useState<any>('')

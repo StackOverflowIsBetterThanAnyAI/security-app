@@ -8,44 +8,29 @@ import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { URL, URL_MOBILE } from '@/constants/api'
-import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
-import { ContextUserName } from '@/context/ContextUserName'
-import { ContextUserRole } from '@/context/ContextUserRole'
-import { ContextUserToken } from '@/context/ContextUserToken'
+import { ContextUser } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const Form = () => {
-    const contextIsLoggedIn = useContext(ContextIsLoggedIn)
-    if (!contextIsLoggedIn) {
-        throw new Error('Form must be used within a ContextIsLoggedIn.Provider')
+    const contextUser = useContext(ContextUser)
+    if (!contextUser) {
+        throw new Error('Form must be used within a ContextUser.Provider')
     }
-    const [_isLoggedIn, setIsLoggedIn] = contextIsLoggedIn
+    const {
+        setIsUserLoggedIn,
+        userName,
+        setUserName,
+        setUserRole,
+        setUserToken,
+    } = contextUser
 
     const contextLoginError = useContext(ContextLoginError)
     if (!contextLoginError) {
         throw new Error('Form must be used within a ContextLoginError.Provider')
     }
     const [_loginError, setLoginError] = contextLoginError
-
-    const contextUserName = useContext(ContextUserName)
-    if (!contextUserName) {
-        throw new Error('Form must be used within a ContextUserName.Provider')
-    }
-    const [userName, setUserName] = contextUserName
-
-    const contextUserRole = useContext(ContextUserRole)
-    if (!contextUserRole) {
-        throw new Error('Form must be used within a ContextUserRole.Provider')
-    }
-    const [_userRole, setUserRole] = contextUserRole
-
-    const contextUserToken = useContext(ContextUserToken)
-    if (!contextUserToken) {
-        throw new Error('Form must be used within a ContextUserToken.Provider')
-    }
-    const [_userToken, setUserToken] = contextUserToken
 
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
@@ -74,7 +59,7 @@ const Form = () => {
             isLogin,
             password,
             setIsLoading,
-            setIsLoggedIn,
+            setIsUserLoggedIn,
             setLoginError,
             setUserRole,
             setUserToken,
@@ -90,7 +75,7 @@ const Form = () => {
         const autoLogin = async () => {
             const data = await loadData(['authName', 'authRole', 'authToken'])
             if (data?.authToken && data?.authName && data?.authRole) {
-                setIsLoggedIn(true)
+                setIsUserLoggedIn(true)
                 setUserName(data.authName)
                 setUserRole(data.authRole as 'user' | 'member' | 'admin')
             }

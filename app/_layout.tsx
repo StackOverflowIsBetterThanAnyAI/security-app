@@ -10,11 +10,8 @@ import { StatusBar } from 'expo-status-bar'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
-import { ContextIsLoggedIn } from '@/context/ContextIsLoggedIn'
 import { ContextLoginError } from '@/context/ContextLoginError'
-import { ContextUserName } from '@/context/ContextUserName'
-import { ContextUserRole } from '@/context/ContextUserRole'
-import { ContextUserToken } from '@/context/ContextUserToken'
+import { ContextUser } from '@/context/ContextUser'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
 
@@ -23,7 +20,7 @@ export const unstable_settings = {
 }
 
 const RootLayout = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(false)
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [loginError, setLoginError] = useState<string>('')
     const [userName, setUserName] = useState<string>('')
     const [userRole, setUserRole] = useState<'user' | 'member' | 'admin'>(
@@ -55,27 +52,28 @@ const RootLayout = () => {
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <ContextIsLoggedIn.Provider value={[isLoggedIn, setIsLoggedIn]}>
-                <ContextLoginError.Provider value={[loginError, setLoginError]}>
-                    <ContextUserName.Provider value={[userName, setUserName]}>
-                        <ContextUserRole.Provider
-                            value={[userRole, setUserRole]}
-                        >
-                            <ContextUserToken.Provider
-                                value={[userToken, setUserToken]}
-                            >
-                                <Stack>
-                                    <Stack.Screen
-                                        name="(tabs)"
-                                        options={{ headerShown: false }}
-                                    />
-                                </Stack>
-                                <StatusBar style="auto" />
-                            </ContextUserToken.Provider>
-                        </ContextUserRole.Provider>
-                    </ContextUserName.Provider>
-                </ContextLoginError.Provider>
-            </ContextIsLoggedIn.Provider>
+            <ContextLoginError.Provider value={[loginError, setLoginError]}>
+                <ContextUser.Provider
+                    value={{
+                        isUserLoggedIn,
+                        setIsUserLoggedIn,
+                        userName,
+                        setUserName,
+                        userRole,
+                        setUserRole,
+                        userToken,
+                        setUserToken,
+                    }}
+                >
+                    <Stack>
+                        <Stack.Screen
+                            name="(tabs)"
+                            options={{ headerShown: false }}
+                        />
+                    </Stack>
+                    <StatusBar style="auto" />
+                </ContextUser.Provider>
+            </ContextLoginError.Provider>
         </ThemeProvider>
     )
 }
