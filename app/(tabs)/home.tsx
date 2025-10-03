@@ -22,7 +22,7 @@ const HomeScreen = () => {
     const contextUserName = useContext(ContextUserName)
     if (!contextUserName) {
         throw new Error(
-            'TabLayout must be used within a ContextUserName.Provider'
+            'HomeScreen must be used within a ContextUserName.Provider'
         )
     }
     const [userName, _setUserName] = contextUserName
