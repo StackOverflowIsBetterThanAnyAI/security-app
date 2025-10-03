@@ -9,7 +9,7 @@ import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextLoginError } from '@/context/ContextLoginError'
-import { ContextUser } from '@/context/ContextUser'
+import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
@@ -77,7 +77,7 @@ const Form = () => {
             if (data?.authToken && data?.authName && data?.authRole) {
                 setIsUserLoggedIn(true)
                 setUserName(data.authName)
-                setUserRole(data.authRole as 'user' | 'member' | 'admin')
+                setUserRole(data.authRole as UserRoleType)
             }
         }
         autoLogin()

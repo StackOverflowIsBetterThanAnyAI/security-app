@@ -11,7 +11,7 @@ import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
 import { ContextLoginError } from '@/context/ContextLoginError'
-import { ContextUser } from '@/context/ContextUser'
+import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
 
@@ -23,9 +23,7 @@ const RootLayout = () => {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [loginError, setLoginError] = useState<string>('')
     const [userName, setUserName] = useState<string>('')
-    const [userRole, setUserRole] = useState<'user' | 'member' | 'admin'>(
-        'user'
-    )
+    const [userRole, setUserRole] = useState<UserRoleType>('user')
     const [userToken, setUserToken] = useState<string>('')
 
     const colorScheme = useColorScheme()

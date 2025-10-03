@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-export type UserRole = 'user' | 'member' | 'admin'
+export type UserRoleType = 'user' | 'member' | 'admin'
 
 export type UserContextType = {
     isUserLoggedIn: boolean
@@ -9,8 +9,8 @@ export type UserContextType = {
     userName: string
     setUserName: React.Dispatch<React.SetStateAction<string>>
 
-    userRole: UserRole
-    setUserRole: React.Dispatch<React.SetStateAction<UserRole>>
+    userRole: UserRoleType
+    setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
 
     userToken: string
     setUserToken: React.Dispatch<React.SetStateAction<string>>
