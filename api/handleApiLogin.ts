@@ -36,7 +36,7 @@ export const handleApiLogin = async ({
         )
 
         if (!response.ok) {
-            throw new Error(`Error ${response.status}: ${response.statusText}`)
+            throw new Error(`Error ${response.status} ${response.statusText}`)
         }
         const data: { token: string; role: string } = await response.json()
         await saveData({ authToken: data.token, authRole: data.role })
