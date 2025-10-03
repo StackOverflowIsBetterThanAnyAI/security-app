@@ -27,6 +27,7 @@ const TabLayout = () => {
     const router = useRouter()
     const pathname = usePathname()
 
+    // TODO
     useEffect(() => {
         if (loginError.length > 0 && pathname !== '/error') {
             router.replace('/error')
