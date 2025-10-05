@@ -1,9 +1,12 @@
+import { Router } from 'expo-router'
+
 import { UserRoleType } from '@/context/ContextUser'
 import { saveData } from '@/helper/storeData'
 
 type handleLoginProps = {
     isLogin?: boolean
     password: string
+    router: Router
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setLoginError: (value: React.SetStateAction<string>) => void
@@ -16,6 +19,7 @@ type handleLoginProps = {
 export const handleApiLogin = async ({
     isLogin = false,
     password,
+    router,
     setIsLoading,
     setIsUserLoggedIn,
     setLoginError,
@@ -55,9 +59,11 @@ export const handleApiLogin = async ({
 
         setLoginError('')
         setIsUserLoggedIn(true)
+        router.replace('/home')
     } catch (err: any) {
         setLoginError(err.message)
         setIsUserLoggedIn(false)
+        router.replace('/error')
     } finally {
         setIsLoading(false)
     }

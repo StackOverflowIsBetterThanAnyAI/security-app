@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Platform, TextInput, View } from 'react-native'
 
@@ -32,6 +33,8 @@ const Form = () => {
     }
     const [_loginError, setLoginError] = contextLoginError
 
+    const router = useRouter()
+
     const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
 
@@ -58,6 +61,7 @@ const Form = () => {
         handleApiLogin({
             isLogin,
             password,
+            router,
             setIsLoading,
             setIsUserLoggedIn,
             setLoginError,
@@ -78,6 +82,7 @@ const Form = () => {
                 setIsUserLoggedIn(true)
                 setUserName(data.authName)
                 setUserRole(data.authRole as UserRoleType)
+                router.replace('/home')
             }
         }
         autoLogin()
