@@ -45,7 +45,7 @@ const HighlightImage = ({
             <Pressable onPress={() => {}}>
                 <Image
                     ref={imageRef}
-                    source={source}
+                    source={{ uri: source }}
                     style={styles.image}
                     width={width}
                     resizeMode="contain"
