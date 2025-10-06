@@ -40,6 +40,8 @@ const HomeScreen = () => {
     }
     const { userName, userToken } = contextUser
 
+    const ITEMS_PER_PAGE = 36
+
     const router = useRouter()
     const colorIcon = useThemeColor({}, 'text')
 
@@ -98,7 +100,14 @@ const HomeScreen = () => {
                             images={images}
                             setImageHighlighted={setImageHighlighted}
                         />
-                        <Pagination page={page} setPage={setPage} />
+                        {totalImages > ITEMS_PER_PAGE && (
+                            <Pagination
+                                ITEMS_PER_PAGE={ITEMS_PER_PAGE}
+                                page={page}
+                                setPage={setPage}
+                                totalImages={totalImages}
+                            />
+                        )}
                     </>
                 ) : (
                     <View style={styles.noImagesContainer}>

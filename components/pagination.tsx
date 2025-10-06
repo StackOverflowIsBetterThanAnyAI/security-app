@@ -6,11 +6,18 @@ import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
+    ITEMS_PER_PAGE: number
     page: number
     setPage: React.Dispatch<React.SetStateAction<number>>
+    totalImages: number
 }
 
-const Pagination = ({ page, setPage }: PaginationProps) => {
+const Pagination = ({
+    ITEMS_PER_PAGE,
+    page,
+    setPage,
+    totalImages,
+}: PaginationProps) => {
     const backgroundColorActive = useThemeColor({}, 'red')
     const backgroundColorInactive = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
@@ -22,16 +29,23 @@ const Pagination = ({ page, setPage }: PaginationProps) => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(true)
 
     const handlePressNext = () => {
-        setPage((prev) => prev + 1)
+        const next = page + 1
+        if (next >= Math.ceil(totalImages / ITEMS_PER_PAGE)) {
+            setIsNextDisabled(true)
+        } else {
+            setIsNextDisabled(false)
+        }
+        setPage(next)
         setIsPreviousDisabled(false)
     }
     const handlePressPrevious = () => {
         if (page > 1) {
             const prev = page - 1
-            if (prev === 1) {
+            if (prev <= 1) {
                 setIsPreviousDisabled(true)
             }
             setPage(prev)
+            setIsNextDisabled(false)
         }
     }
 
