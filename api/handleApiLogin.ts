@@ -7,9 +7,11 @@ type handleLoginProps = {
     isLogin?: boolean
     password: string
     router: Router
+    setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
     setError: (value: React.SetStateAction<string>) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+    setPassword: React.Dispatch<React.SetStateAction<string>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
     setUserToken: React.Dispatch<React.SetStateAction<string>>
@@ -21,9 +23,11 @@ export const handleApiLogin = async ({
     isLogin = false,
     password,
     router,
+    setConfirmPassword,
     setError,
     setIsLoading,
     setIsUserLoggedIn,
+    setPassword,
     setRetryFn,
     setUserRole,
     setUserToken,
@@ -61,9 +65,11 @@ export const handleApiLogin = async ({
         setUserRole(data.role)
         setUserToken(data.token)
 
+        setConfirmPassword('')
         setError('')
-        setRetryFn(() => {})
         setIsUserLoggedIn(true)
+        setPassword('')
+        setRetryFn(() => {})
         router.replace('/home')
     } catch (err: any) {
         setError(err.message)
@@ -75,9 +81,11 @@ export const handleApiLogin = async ({
                     isLogin,
                     password,
                     router,
+                    setConfirmPassword,
                     setError,
                     setIsLoading,
                     setIsUserLoggedIn,
+                    setPassword,
                     setRetryFn,
                     setUserRole,
                     setUserToken,
