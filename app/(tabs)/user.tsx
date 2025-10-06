@@ -16,7 +16,11 @@ const UserScreen = () => {
     return (
         <MainView>
             <ThemedText>User</ThemedText>
-            <Pressable onPress={handleLogout}>
+            <Pressable
+                onPress={handleLogout}
+                accessible={true}
+                accessibilityRole="button"
+            >
                 <ThemedText>Logout</ThemedText>
             </Pressable>
         </MainView>

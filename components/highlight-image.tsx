@@ -37,6 +37,8 @@ const HighlightImage = ({
 
     return (
         <Pressable
+            accessible={true}
+            accessibilityRole="button"
             onPress={() => setImageHighlighted('')}
             style={[styles.wrapper]}
         >

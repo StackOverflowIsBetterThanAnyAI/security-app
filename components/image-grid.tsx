@@ -25,6 +25,8 @@ const ImageGrid = ({ images, setImageHighlighted }: ImageGridProps) => {
                     ]}
                 >
                     <Pressable
+                        accessible={true}
+                        accessibilityRole="button"
                         onPress={() => setImageHighlighted(item)}
                         style={({ pressed }) => [
                             { opacity: pressed ? 0.75 : 1 },
