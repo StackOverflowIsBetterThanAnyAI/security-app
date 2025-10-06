@@ -1,32 +1,36 @@
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import Button from '@/components/button'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
-import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextError } from '@/context/ContextError'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { noConnection } from '@/icons/icons'
 
 const ErrorScreen = () => {
-    const contextLoginError = useContext(ContextLoginError)
-    if (!contextLoginError) {
+    const contextError = useContext(ContextError)
+    if (!contextError) {
         throw new Error(
-            'ErrorScreen must be used within a ContextLoginError.Provider'
+            'ErrorScreen must be used within a ContextError.Provider'
         )
     }
-    const [loginError, setLoginError] = contextLoginError
+    const { error, retryFn, setError } = contextError
 
     const colorInput = useThemeColor({}, 'text')
+    const router = useRouter()
+    const { from } = useLocalSearchParams<{ from: string }>()
 
     const handleGoBack = () => {
-        /* TODO */
-        setLoginError('')
+        setError('')
+        router.replace(`/${from}` as any)
     }
 
     const handleTryAgain = () => {
-        /* TODO */
-        setLoginError('')
+        if (retryFn) {
+            retryFn()
+        }
     }
 
     return (
@@ -39,7 +43,7 @@ const ErrorScreen = () => {
                     <ThemedText center type="subtitle">
                         An Error occurred!
                     </ThemedText>
-                    {loginError && <ThemedText center>{loginError}</ThemedText>}
+                    {error && <ThemedText center>{error}</ThemedText>}
                 </View>
                 {noConnection(colorInput)}
                 <View style={styles.buttonWrapper}>

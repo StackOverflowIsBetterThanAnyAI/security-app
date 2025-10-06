@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
-import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextError } from '@/context/ContextError'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useState } from 'react'
@@ -21,7 +21,8 @@ export const unstable_settings = {
 
 const RootLayout = () => {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
-    const [loginError, setLoginError] = useState<string>('')
+    const [error, setError] = useState<string>('')
+    const [retryFn, setRetryFn] = useState<(() => void) | null>(null)
     const [userName, setUserName] = useState<string>('')
     const [userRole, setUserRole] = useState<UserRoleType>('user')
     const [userToken, setUserToken] = useState<string>('')
@@ -50,7 +51,9 @@ const RootLayout = () => {
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
-            <ContextLoginError.Provider value={[loginError, setLoginError]}>
+            <ContextError.Provider
+                value={{ error, retryFn, setError, setRetryFn }}
+            >
                 <ContextUser.Provider
                     value={{
                         isUserLoggedIn,
@@ -71,7 +74,7 @@ const RootLayout = () => {
                     </Stack>
                     <StatusBar style="auto" />
                 </ContextUser.Provider>
-            </ContextLoginError.Provider>
+            </ContextError.Provider>
         </ThemeProvider>
     )
 }

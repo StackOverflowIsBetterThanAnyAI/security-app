@@ -4,18 +4,16 @@ import { useContext } from 'react'
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
-import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 
 const TabLayout = () => {
-    const contextLoginError = useContext(ContextLoginError)
-    if (!contextLoginError) {
-        throw new Error(
-            'TabLayout must be used within a ContextLoginError.Provider'
-        )
+    const contextError = useContext(ContextError)
+    if (!contextError) {
+        throw new Error('TabLayout must be used within a ContextError.Provider')
     }
-    const [loginError, _setLoginError] = contextLoginError
+    const { error } = contextError
 
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
@@ -46,7 +44,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Error',
                     tabBarIcon: getTabIcon('error'),
-                    href: loginError.length > 0 ? undefined : null,
+                    href: error.length > 0 ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -55,9 +53,7 @@ const TabLayout = () => {
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
                     href:
-                        isUserLoggedIn && loginError.length === 0
-                            ? undefined
-                            : null,
+                        isUserLoggedIn && error.length === 0 ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -66,7 +62,7 @@ const TabLayout = () => {
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),
                     href:
-                        !isUserLoggedIn && loginError.length === 0
+                        !isUserLoggedIn && error.length === 0
                             ? undefined
                             : null,
                 }}
@@ -77,9 +73,7 @@ const TabLayout = () => {
                     title: userName ?? 'Profile',
                     tabBarIcon: getTabIcon('person'),
                     href:
-                        isUserLoggedIn && loginError.length === 0
-                            ? undefined
-                            : null,
+                        isUserLoggedIn && error.length === 0 ? undefined : null,
                 }}
             />
         </Tabs>
