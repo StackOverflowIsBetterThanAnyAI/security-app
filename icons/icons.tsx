@@ -15,3 +15,11 @@ export const hidePassword = (colorInput: string) => (
 export const noConnection = (colorInput: string) => (
     <MaterialCommunityIcons name="wifi-off" size={48} color={colorInput} />
 )
+
+export const noFile = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="file-alert-outline"
+        size={48}
+        color={colorInput}
+    />
+)
