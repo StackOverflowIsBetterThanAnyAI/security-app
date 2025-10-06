@@ -33,7 +33,8 @@ const ImageGrid = ({ images, setImageHighlighted }: ImageGridProps) => {
                         ]}
                     >
                         <Image
-                            source={item}
+                            alt={item}
+                            source={{ uri: item }}
                             style={styles.image}
                             resizeMode="cover"
                         />
