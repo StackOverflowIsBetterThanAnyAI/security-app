@@ -1,18 +1,21 @@
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { Pressable, StyleSheet } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 
 type FormSubmitProps = {
     handleSubmit: () => void
     isDisabled: boolean
+    isLoading: boolean
     isSigningUp: boolean
 }
 
 const FormSubmit = ({
     handleSubmit,
     isDisabled,
+    isLoading,
     isSigningUp,
 }: FormSubmitProps) => {
+    const activityColor = useThemeColor({}, 'text')
     const backgroundColorActive = useThemeColor({}, 'red')
     const backgroundColorInactive = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
@@ -41,23 +44,38 @@ const FormSubmit = ({
         <Pressable
             accessible={true}
             accessibilityRole="button"
-            accessibilityState={{ disabled: isDisabled }}
+            accessibilityState={{ disabled: isDisabled || isLoading }}
             accessibilityLabel={`${isSigningUp ? 'Signup' : 'Login'}${
-                isDisabled ? ', disabled' : ''
+                isDisabled || isLoading ? ', disabled' : ''
             }`}
             style={({ pressed }) => [
                 styles.wrapper,
-                isDisabled ? styles.disabled : styles.enabled,
+                isDisabled || isLoading ? styles.disabled : styles.enabled,
                 !isDisabled &&
+                    !isLoading &&
                     pressed && {
                         opacity: 0.75,
                     },
             ]}
-            onPress={!isDisabled ? handleSubmit : undefined}
+            onPress={!isDisabled && !isLoading ? handleSubmit : undefined}
         >
-            <ThemedText isDisabled={isDisabled}>
-                {isSigningUp ? 'Signup' : 'Login'}
-            </ThemedText>
+            {isLoading ? (
+                <ActivityIndicator
+                    color={activityColor}
+                    style={{ width: 64, height: 26 }}
+                />
+            ) : (
+                <ThemedText
+                    isDisabled={isDisabled}
+                    center
+                    style={{
+                        width: 64,
+                        height: 26,
+                    }}
+                >
+                    {isSigningUp ? 'Signup' : 'Login'}
+                </ThemedText>
+            )}
         </Pressable>
     )
 }

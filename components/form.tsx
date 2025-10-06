@@ -9,7 +9,7 @@ import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { URL, URL_MOBILE } from '@/constants/api'
-import { ContextLoginError } from '@/context/ContextLoginError'
+import { ContextError } from '@/context/ContextError'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -27,11 +27,11 @@ const Form = () => {
         setUserToken,
     } = contextUser
 
-    const contextLoginError = useContext(ContextLoginError)
-    if (!contextLoginError) {
-        throw new Error('Form must be used within a ContextLoginError.Provider')
+    const contextError = useContext(ContextError)
+    if (!contextError) {
+        throw new Error('Form must be used within a ContextError.Provider')
     }
-    const [_loginError, setLoginError] = contextLoginError
+    const { setError, setRetryFn } = contextError
 
     const router = useRouter()
 
@@ -45,7 +45,6 @@ const Form = () => {
     const [errorPassword, setErrorPassword] = useState<string>('')
     const [errorConfirmPassword, setErrorConfirmPassword] = useState<string>('')
 
-    // TODO
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const userNameRef = useRef<TextInput>(null)
@@ -62,9 +61,10 @@ const Form = () => {
             isLogin,
             password,
             router,
+            setError,
             setIsLoading,
             setIsUserLoggedIn,
-            setLoginError,
+            setRetryFn,
             setUserRole,
             setUserToken,
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
@@ -104,11 +104,16 @@ const Form = () => {
                     <ThemedText style={{ color }}>*</ThemedText> are required.
                 </ThemedText>
             </View>
-            <FormSwitch handleClick={handleSwitch} isSigningUp={isSigningUp} />
+            <FormSwitch
+                handleClick={handleSwitch}
+                isLoading={isLoading}
+                isSigningUp={isSigningUp}
+            />
             <View>
                 <FormInput
                     error={errorUserName}
                     handleSubmitEditing={() => passwordRef?.current?.focus()}
+                    isLoading={isLoading}
                     label="User Name"
                     password={{}}
                     pattern={userNamePattern}
@@ -129,6 +134,7 @@ const Form = () => {
                             ? () => confirmPasswordRef?.current?.focus()
                             : () => handleLogin(true)
                     }
+                    isLoading={isLoading}
                     label="Password"
                     password={{
                         isPasswordVisible,
@@ -156,6 +162,7 @@ const Form = () => {
                         <FormInput
                             error={errorConfirmPassword}
                             handleSubmitEditing={() => handleLogin(false)}
+                            isLoading={isLoading}
                             label="Confirm Password"
                             password={{
                                 enteredPassword: password,
@@ -190,6 +197,7 @@ const Form = () => {
                     password.length === 0 ||
                     userName.length === 0
                 }
+                isLoading={isLoading}
                 isSigningUp={isSigningUp}
             />
         </>

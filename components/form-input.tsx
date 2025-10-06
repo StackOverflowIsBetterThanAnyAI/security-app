@@ -13,6 +13,7 @@ import { hidePassword, showPassword } from '@/icons/icons'
 type FormInputProps = {
     error: string
     handleSubmitEditing: () => void
+    isLoading: boolean
     label: string
     password: {
         enteredPassword?: string
@@ -35,6 +36,7 @@ type FormInputProps = {
 const FormInput = ({
     error,
     handleSubmitEditing,
+    isLoading,
     label,
     password,
     pattern,
@@ -128,7 +130,12 @@ const FormInput = ({
     return (
         <View style={styles.wrapper}>
             <View style={styles.label}>
-                <Pressable onPress={handlePress} accessible={true}>
+                <Pressable
+                    onPress={!isLoading ? handlePress : undefined}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: isLoading }}
+                >
                     <ThemedText>
                         {label}{' '}
                         <ThemedText style={{ color: colorRed }}>*</ThemedText>
@@ -136,10 +143,14 @@ const FormInput = ({
                 </Pressable>
                 {['password', 'confirmpassword'].includes(type) && (
                     <Pressable
-                        onPress={handleToggleVisibility}
+                        onPress={
+                            !isLoading ? handleToggleVisibility : undefined
+                        }
                         accessible={true}
+                        accessibilityRole="button"
+                        accessibilityState={{ disabled: isLoading }}
                         style={({ pressed }) => [
-                            { opacity: pressed ? 0.75 : 1 },
+                            { opacity: pressed && !isLoading ? 0.75 : 1 },
                         ]}
                     >
                         {password.isPasswordVisible
@@ -155,6 +166,8 @@ const FormInput = ({
                 autoCapitalize="none"
                 autoCorrect={false}
                 accessibilityLabel={label}
+                accessibilityState={{ disabled: isLoading }}
+                editable={!isLoading}
                 secureTextEntry={
                     ['password', 'confirmpassword'].includes(type) &&
                     !password.isPasswordVisible

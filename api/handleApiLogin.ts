@@ -7,9 +7,10 @@ type handleLoginProps = {
     isLogin?: boolean
     password: string
     router: Router
+    setError: (value: React.SetStateAction<string>) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-    setLoginError: (value: React.SetStateAction<string>) => void
+    setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
     setUserToken: React.Dispatch<React.SetStateAction<string>>
     url: string
@@ -20,9 +21,10 @@ export const handleApiLogin = async ({
     isLogin = false,
     password,
     router,
+    setError,
     setIsLoading,
     setIsUserLoggedIn,
-    setLoginError,
+    setRetryFn,
     setUserRole,
     setUserToken,
     url,
@@ -57,13 +59,35 @@ export const handleApiLogin = async ({
         setUserRole(data.role)
         setUserToken(data.token)
 
-        setLoginError('')
+        setError('')
+        setRetryFn(() => {})
         setIsUserLoggedIn(true)
         router.replace('/home')
     } catch (err: any) {
-        setLoginError(err.message)
+        setError(err.message)
         setIsUserLoggedIn(false)
-        router.replace('/error')
+
+        queueMicrotask(() => {
+            setRetryFn(() => () => {
+                handleApiLogin({
+                    isLogin,
+                    password,
+                    router,
+                    setError,
+                    setIsLoading,
+                    setIsUserLoggedIn,
+                    setRetryFn,
+                    setUserRole,
+                    setUserToken,
+                    url,
+                    userName,
+                })
+            })
+            router.push({
+                pathname: '/error',
+                params: { from: 'login' },
+            })
+        })
     } finally {
         setIsLoading(false)
     }

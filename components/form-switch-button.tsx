@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 import { Animated, Pressable, StyleSheet } from 'react-native'
 
 type FormSwitchButtonProps = {
-    handleClick: () => void
+    handleClick: () => void | undefined
+    isLoading: boolean
     isSigningUp: boolean
     isSignUpField?: boolean
     text: string
@@ -11,6 +12,7 @@ type FormSwitchButtonProps = {
 
 const FormSwitchButton = ({
     handleClick,
+    isLoading,
     isSignUpField = false,
     isSigningUp,
     text,
@@ -50,12 +52,13 @@ const FormSwitchButton = ({
             style={({ pressed }) => [
                 styles.button,
                 isSignUpField ? styles.buttonSignup : styles.buttonLogin,
-                pressed && {
-                    opacity: isSignUpField === isSigningUp ? 0.75 : 0.85,
-                },
+                !isLoading &&
+                    pressed && {
+                        opacity: isSignUpField === isSigningUp ? 0.75 : 0.85,
+                    },
                 { borderColor },
             ]}
-            onPress={handleClick}
+            onPress={!isLoading ? handleClick : undefined}
         >
             <Animated.View style={[styles.fill, { backgroundColor }]}>
                 <Animated.Text style={[styles.text, { color }]}>
