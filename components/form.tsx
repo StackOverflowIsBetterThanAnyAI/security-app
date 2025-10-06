@@ -15,6 +15,12 @@ import { loadData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const Form = () => {
+    const contextError = useContext(ContextError)
+    if (!contextError) {
+        throw new Error('Form must be used within a ContextError.Provider')
+    }
+    const { setError, setRetryFn } = contextError
+
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
         throw new Error('Form must be used within a ContextUser.Provider')
@@ -26,12 +32,6 @@ const Form = () => {
         setUserRole,
         setUserToken,
     } = contextUser
-
-    const contextError = useContext(ContextError)
-    if (!contextError) {
-        throw new Error('Form must be used within a ContextError.Provider')
-    }
-    const { setError, setRetryFn } = contextError
 
     const router = useRouter()
 
