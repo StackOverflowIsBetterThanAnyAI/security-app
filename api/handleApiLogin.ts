@@ -47,7 +47,9 @@ export const handleApiLogin = async ({
         )
 
         if (!response.ok) {
-            throw new Error(`Error ${response.status} ${response.statusText}`)
+            const data = await response.json().catch(() => ({}))
+            const message = data.error || response.statusText || 'Unknown error'
+            throw new Error(`Error ${response.status}: ${message}`)
         }
         const data: { token: string; role: UserRoleType } =
             await response.json()
