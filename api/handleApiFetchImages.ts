@@ -1,6 +1,7 @@
 import { Router } from 'expo-router'
 
 type handleLoginProps = {
+    page: number
     router: Router
     setError: (value: React.SetStateAction<string>) => void
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
@@ -13,6 +14,7 @@ type handleLoginProps = {
 }
 
 export const handleApiFetchImages = async ({
+    page,
     router,
     setError,
     setImages,
@@ -25,7 +27,7 @@ export const handleApiFetchImages = async ({
 }: handleLoginProps) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/images`, {
+        const response = await fetch(`${url}/images?page=${page}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -53,6 +55,7 @@ export const handleApiFetchImages = async ({
         queueMicrotask(() => {
             setRetryFn(() => () => {
                 handleApiFetchImages({
+                    page,
                     router,
                     setError,
                     setImages,
