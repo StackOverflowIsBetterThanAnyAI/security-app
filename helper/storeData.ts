@@ -9,7 +9,6 @@ export const saveData = async (data: Record<string, string>) => {
     }
 }
 
-// TODO: not implemented yet
 export const loadData = async (keys: string[]) => {
     try {
         const result = await AsyncStorage.multiGet(keys)
@@ -20,7 +19,6 @@ export const loadData = async (keys: string[]) => {
     }
 }
 
-// TODO: not implemented yet
 export const clearData = async (keys: string[]) => {
     try {
         await AsyncStorage.multiRemove(keys)
