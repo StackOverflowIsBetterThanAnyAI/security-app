@@ -5,15 +5,16 @@ import {
     ThemeProvider,
 } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useEffect, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
 import { ContextError } from '@/context/ContextError'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
+import { loadData } from '@/helper/storeData'
 import { useColorScheme } from '@/hooks/use-color-scheme'
-import { useState } from 'react'
 
 export const unstable_settings = {
     anchor: '(tabs)',
@@ -28,6 +29,21 @@ const RootLayout = () => {
     const [userToken, setUserToken] = useState<string>('')
 
     const colorScheme = useColorScheme()
+    const router = useRouter()
+
+    useEffect(() => {
+        const autoLogin = async () => {
+            const data = await loadData(['authName', 'authRole', 'authToken'])
+            if (data?.authToken && data?.authName && data?.authRole) {
+                setIsUserLoggedIn(true)
+                setUserName(data.authName)
+                setUserRole(data.authRole as UserRoleType)
+                setUserToken(data.authToken)
+                router.replace('/home')
+            }
+        }
+        autoLogin()
+    }, [])
 
     const [fontsLoaded] = useFonts({
         ...MaterialCommunityIcons.font,

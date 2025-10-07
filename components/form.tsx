@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useContext, useMemo, useRef, useState } from 'react'
 import { Platform, TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
@@ -10,8 +10,7 @@ import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
 import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
-import { ContextUser, UserRoleType } from '@/context/ContextUser'
-import { loadData } from '@/helper/storeData'
+import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const Form = () => {
@@ -76,20 +75,6 @@ const Form = () => {
     const handleSwitch = () => {
         setIsSigningUp((prev) => !prev)
     }
-
-    useEffect(() => {
-        const autoLogin = async () => {
-            const data = await loadData(['authName', 'authRole', 'authToken'])
-            if (data?.authToken && data?.authName && data?.authRole) {
-                setIsUserLoggedIn(true)
-                setUserName(data.authName)
-                setUserRole(data.authRole as UserRoleType)
-                setUserToken(data.authToken)
-                router.replace('/home')
-            }
-        }
-        autoLogin()
-    }, [])
 
     return (
         <>
