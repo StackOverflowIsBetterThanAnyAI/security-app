@@ -1,59 +1,84 @@
+import { useThemeColor } from '@/hooks/use-theme-color'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
 type ImageGridProps = {
-    // TODO: maybe adjust any type
-    images: any[]
-    setImageHighlighted: React.Dispatch<React.SetStateAction<string>>
+    images: string[]
+    setImageHighlighted: React.Dispatch<React.SetStateAction<string | null>>
+    url: string
+    userToken: string
 }
 
-const ImageGrid = ({ images, setImageHighlighted }: ImageGridProps) => {
+const ImageGrid = ({
+    images,
+    setImageHighlighted,
+    url,
+    userToken,
+}: ImageGridProps) => {
+    const backgroundColor = useThemeColor({}, 'highlight')
+    const bottomRowIndices: number[] = []
+    bottomRowIndices.push(images.length - 1)
+    if (images.length % 2 === 0) {
+        bottomRowIndices.push(images.length - 2)
+    }
+
+    const styles = StyleSheet.create({
+        image: {
+            height: '100%',
+            width: '100%',
+        },
+        imageWrapper: {
+            backgroundColor,
+        },
+        wrapper: {
+            aspectRatio: 16 / 9,
+            width: '50%',
+        },
+    })
+
     return (
         <FlatList
             data={images}
             keyExtractor={(_, index) => index.toString()}
             numColumns={2}
             scrollEnabled={false}
-            renderItem={({ item, index }) => (
-                <View
-                    style={[
-                        styles.imageWrapper,
-                        index % 2 === 0
-                            ? { paddingRight: 8 }
-                            : { paddingLeft: 8 },
-                        // TODO: 18, 19 hardcoded
-                        ![18, 19].includes(index) ? { paddingBottom: 16 } : {},
-                    ]}
-                >
-                    <Pressable
-                        accessible={true}
-                        accessibilityRole="button"
-                        onPress={() => setImageHighlighted(item)}
-                        style={({ pressed }) => [
-                            { opacity: pressed ? 0.75 : 1 },
+            renderItem={({ item, index }) => {
+                const fullUriWithToken = `${url}${item}?token=${userToken}`
+
+                return (
+                    <View
+                        style={[
+                            styles.wrapper,
+                            index % 2 === 0
+                                ? { paddingRight: 8 }
+                                : { paddingLeft: 8 },
+                            !bottomRowIndices.includes(index)
+                                ? { marginBottom: 16 }
+                                : {},
                         ]}
                     >
-                        <Image
-                            alt={item}
-                            source={{ uri: item }}
-                            style={styles.image}
-                            resizeMode="cover"
-                        />
-                    </Pressable>
-                </View>
-            )}
+                        <Pressable
+                            accessible={true}
+                            accessibilityRole="button"
+                            onPress={() =>
+                                setImageHighlighted(fullUriWithToken)
+                            }
+                            style={({ pressed }) => [
+                                { opacity: pressed ? 0.75 : 1 },
+                                styles.imageWrapper,
+                            ]}
+                        >
+                            <Image
+                                alt={item}
+                                source={{ uri: fullUriWithToken }}
+                                style={styles.image}
+                                resizeMode="cover"
+                            />
+                        </Pressable>
+                    </View>
+                )
+            }}
         />
     )
 }
-
-const styles = StyleSheet.create({
-    image: {
-        height: '100%',
-        width: '100%',
-    },
-    imageWrapper: {
-        aspectRatio: 16 / 9,
-        flex: 1,
-    },
-})
 
 export default ImageGrid
