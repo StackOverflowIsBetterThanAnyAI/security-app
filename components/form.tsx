@@ -84,6 +84,7 @@ const Form = () => {
                 setIsUserLoggedIn(true)
                 setUserName(data.authName)
                 setUserRole(data.authRole as UserRoleType)
+                setUserToken(data.authToken)
                 router.replace('/home')
             }
         }
