@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Image, Pressable, StyleSheet, View } from 'react-native'
 
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -31,6 +31,12 @@ const ImageGridItem = ({
     const imageSource = imageLoadFailed
         ? errorImageSource
         : { uri: fullUriWithToken }
+
+    useEffect(() => {
+        if (imageLoadFailed) {
+            setImageLoadFailed(false)
+        }
+    }, [item])
 
     const styles = StyleSheet.create({
         image: {
