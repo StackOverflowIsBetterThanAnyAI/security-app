@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import {
     NativeScrollEvent,
     NativeSyntheticEvent,
@@ -23,7 +23,7 @@ import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { noFile } from '@/icons/icons'
 
-// TODO: const error = require('@/assets/images/error.webp')
+export const ITEMS_PER_PAGE = 36
 
 const HomeScreen = () => {
     const contextError = useContext(ContextError)
@@ -40,25 +40,25 @@ const HomeScreen = () => {
     }
     const { userName, userToken } = contextUser
 
-    const ITEMS_PER_PAGE = 36
-
     const router = useRouter()
     const colorIcon = useThemeColor({}, 'text')
 
     const scrollRef = useRef<ScrollView>(null)
 
-    const [imageHighlighted, setImageHighlighted] = useState<any>('')
+    const [imageHighlighted, setImageHighlighted] = useState<string | null>(
+        null
+    )
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
 
     const [images, setImages] = useState<string[] | null>(null)
     // TODO
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
-    // TODO
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleRefresh = () => {
+    const handleFetchImages = () => {
         handleApiFetchImages({
+            page,
             router,
             setError,
             setImages,
@@ -75,6 +75,10 @@ const HomeScreen = () => {
         const offsetY = event.nativeEvent.contentOffset.y
         setIsMoveToTopVisible(offsetY > 128)
     }
+
+    useEffect(() => {
+        handleFetchImages()
+    }, [])
 
     return (
         <>
@@ -93,20 +97,39 @@ const HomeScreen = () => {
                     <>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleRefresh}
+                            handlePress={handleFetchImages}
                             label="Refresh"
                         />
                         <ImageGrid
                             images={images}
                             setImageHighlighted={setImageHighlighted}
+                            url={Platform.OS === 'web' ? URL : URL_MOBILE}
+                            userToken={userToken}
                         />
                         {totalImages > ITEMS_PER_PAGE && (
-                            <Pagination
-                                ITEMS_PER_PAGE={ITEMS_PER_PAGE}
-                                page={page}
-                                setPage={setPage}
-                                totalImages={totalImages}
-                            />
+                            <>
+                                {images.length > 12 && (
+                                    <Button
+                                        accessibilityLabel="Refresh Recordings"
+                                        handlePress={handleFetchImages}
+                                        label="Refresh"
+                                    />
+                                )}
+                                <Pagination
+                                    ITEMS_PER_PAGE={ITEMS_PER_PAGE}
+                                    page={page}
+                                    router={router}
+                                    setPage={setPage}
+                                    setImages={setImages}
+                                    setIsLoading={setIsLoading}
+                                    setTotalImages={setTotalImages}
+                                    totalImages={totalImages}
+                                    url={
+                                        Platform.OS === 'web' ? URL : URL_MOBILE
+                                    }
+                                    userToken={userToken}
+                                />
+                            </>
                         )}
                     </>
                 ) : (
@@ -117,17 +140,18 @@ const HomeScreen = () => {
                         </ThemedText>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleRefresh}
+                            handlePress={handleFetchImages}
                             label="Refresh"
                         />
                     </View>
                 )}
             </MainView>
-            <HighlightImage
-                imageHighlighted={imageHighlighted}
-                setImageHighlighted={setImageHighlighted}
-                source={imageHighlighted}
-            />
+            {imageHighlighted && (
+                <HighlightImage
+                    imageHighlighted={imageHighlighted}
+                    setImageHighlighted={setImageHighlighted}
+                />
+            )}
             <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
     )
