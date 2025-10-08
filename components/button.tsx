@@ -1,14 +1,21 @@
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { Pressable, StyleSheet } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 
 type ButtonProps = {
     accessibilityLabel: string
     handlePress: () => void
+    isLoading: boolean
     label: string
 }
 
-const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
+const Button = ({
+    accessibilityLabel,
+    handlePress,
+    isLoading,
+    label,
+}: ButtonProps) => {
+    const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
     const borderColor = useThemeColor({}, 'border')
 
@@ -30,16 +37,29 @@ const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
         <Pressable
             accessible={true}
             accessibilityRole="button"
-            accessibilityLabel={accessibilityLabel}
+            accessibilityState={{ disabled: isLoading }}
+            accessibilityLabel={`${accessibilityLabel}${
+                isLoading ? ', disabled' : ''
+            }`}
             style={({ pressed }) => [
                 styles.button,
-                pressed && {
-                    opacity: 0.75,
-                },
+                !isLoading &&
+                    pressed && {
+                        opacity: 0.75,
+                    },
             ]}
-            onPress={handlePress}
+            onPress={!isLoading ? handlePress : undefined}
         >
-            <ThemedText center>{label}</ThemedText>
+            {isLoading ? (
+                <ActivityIndicator
+                    color={activityColor}
+                    style={{ height: 26 }}
+                />
+            ) : (
+                <ThemedText center style={{ height: 26 }}>
+                    {label}
+                </ThemedText>
+            )}
         </Pressable>
     )
 }
