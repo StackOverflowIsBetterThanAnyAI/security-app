@@ -51,7 +51,6 @@ const HomeScreen = () => {
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
 
     const [images, setImages] = useState<string[] | null>(null)
-    // TODO
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
     const [totalImages, setTotalImages] = useState<number>(1)
@@ -101,6 +100,7 @@ const HomeScreen = () => {
                         <Button
                             accessibilityLabel="Refresh Recordings"
                             handlePress={handleFetchImages}
+                            isLoading={isLoading}
                             label="Refresh"
                         />
                         <ImageGrid
@@ -115,6 +115,7 @@ const HomeScreen = () => {
                                     <Button
                                         accessibilityLabel="Refresh Recordings"
                                         handlePress={handleFetchImages}
+                                        isLoading={isLoading}
                                         label="Refresh"
                                     />
                                 )}
@@ -124,7 +125,6 @@ const HomeScreen = () => {
                                     router={router}
                                     setPage={setPage}
                                     setImages={setImages}
-                                    setIsLoading={setIsLoading}
                                     setTotalImages={setTotalImages}
                                     totalImages={totalImages}
                                     url={
@@ -144,6 +144,7 @@ const HomeScreen = () => {
                         <Button
                             accessibilityLabel="Refresh Recordings"
                             handlePress={handleFetchImages}
+                            isLoading={isLoading}
                             label="Refresh"
                         />
                     </View>
