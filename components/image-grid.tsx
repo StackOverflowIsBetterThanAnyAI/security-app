@@ -1,6 +1,7 @@
+import { FlatList } from 'react-native'
+
 import { ITEMS_PER_PAGE } from '@/app/(tabs)/home'
-import { useThemeColor } from '@/hooks/use-theme-color'
-import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
+import ImageGridItem from '@/components/image-grid-item'
 
 type ImageGridProps = {
     images: string[]
@@ -15,65 +16,22 @@ const ImageGrid = ({
     url,
     userToken,
 }: ImageGridProps) => {
-    const backgroundColor = useThemeColor({}, 'highlight')
-    const bottomRowIndices: number[] = [ITEMS_PER_PAGE - 1, ITEMS_PER_PAGE - 2]
-
-    const styles = StyleSheet.create({
-        image: {
-            height: '100%',
-            width: '100%',
-        },
-        imageWrapper: {
-            backgroundColor,
-        },
-        wrapper: {
-            aspectRatio: 16 / 9,
-            width: '50%',
-        },
-    })
-
     return (
         <FlatList
             data={images}
             keyExtractor={(_, index) => index.toString()}
             numColumns={2}
             scrollEnabled={false}
-            renderItem={({ item, index }) => {
-                const fullUriWithToken = `${url}${item}?token=${userToken}`
-
-                return (
-                    <View
-                        style={[
-                            styles.wrapper,
-                            index % 2 === 0
-                                ? { paddingRight: 8 }
-                                : { paddingLeft: 8 },
-                            !bottomRowIndices.includes(index)
-                                ? { marginBottom: 16 }
-                                : {},
-                        ]}
-                    >
-                        <Pressable
-                            accessible={true}
-                            accessibilityRole="button"
-                            onPress={() =>
-                                setImageHighlighted(fullUriWithToken)
-                            }
-                            style={({ pressed }) => [
-                                { opacity: pressed ? 0.75 : 1 },
-                                styles.imageWrapper,
-                            ]}
-                        >
-                            <Image
-                                alt={item}
-                                source={{ uri: fullUriWithToken }}
-                                style={styles.image}
-                                resizeMode="cover"
-                            />
-                        </Pressable>
-                    </View>
-                )
-            }}
+            renderItem={({ item, index }) => (
+                <ImageGridItem
+                    bottomRowIndices={[ITEMS_PER_PAGE - 1, ITEMS_PER_PAGE - 2]}
+                    index={index}
+                    item={item}
+                    setImageHighlighted={setImageHighlighted}
+                    url={url}
+                    userToken={userToken}
+                />
+            )}
         />
     )
 }
