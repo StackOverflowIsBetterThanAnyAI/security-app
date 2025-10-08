@@ -1,9 +1,16 @@
 import { useRef, useState } from 'react'
-import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native'
+import {
+    ActivityIndicator,
+    Dimensions,
+    Image,
+    Pressable,
+    StyleSheet,
+    View,
+} from 'react-native'
 
+import ThemedText from '@/components/themed-text'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import ThemedText from './themed-text'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -18,6 +25,7 @@ const HighlightImage = ({
 }: ImageGridProps) => {
     const { width, height } = Dimensions.get('window')
 
+    const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
     const highlightColor = useThemeColor({}, 'highlight')
 
@@ -49,6 +57,7 @@ const HighlightImage = ({
     })
 
     const styles = StyleSheet.create({
+        activity: { backgroundColor, height: imageHeight },
         footer: {
             backgroundColor,
             paddingHorizontal: 16,
@@ -106,6 +115,13 @@ const HighlightImage = ({
                         width={width}
                         resizeMode="contain"
                         onError={handleErrorImage}
+                    />
+                )}
+                {!imageIsLoaded && (
+                    <ActivityIndicator
+                        color={activityColor}
+                        size="large"
+                        style={styles.activity}
                     />
                 )}
             </Pressable>
