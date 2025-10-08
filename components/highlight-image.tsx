@@ -22,7 +22,7 @@ const HighlightImage = ({
     const highlightColor = useThemeColor({}, 'highlight')
 
     const imageRef = useRef<Image>(null)
-    const [imageHeight, setImageHeight] = useState<number | null>(null)
+    const [imageHeight, setImageHeight] = useState<number>(256)
     const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
     const [imageIsLoadedSuccess, setImageIsLoadedSuccess] =
         useState<boolean>(false)

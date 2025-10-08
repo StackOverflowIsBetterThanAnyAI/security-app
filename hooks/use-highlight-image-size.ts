@@ -4,7 +4,7 @@ import { Image } from 'react-native'
 type useHighlightImageSizeProps = {
     height: number
     imageHighlighted: string | null
-    setImageHeight: (value: React.SetStateAction<number | null>) => void
+    setImageHeight: (value: React.SetStateAction<number>) => void
     setImageIsLoaded: (value: React.SetStateAction<boolean>) => void
     setImageIsLoadedSuccess: (value: React.SetStateAction<boolean>) => void
     width: number
@@ -19,7 +19,7 @@ export const useHighlightImageSize = ({
     width,
 }: useHighlightImageSizeProps) => {
     useEffect(() => {
-        setImageHeight(null)
+        setImageHeight(256)
         setImageIsLoaded(false)
         setImageIsLoadedSuccess(false)
 
