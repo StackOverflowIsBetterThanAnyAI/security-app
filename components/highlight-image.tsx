@@ -23,24 +23,28 @@ const HighlightImage = ({
 
     const imageRef = useRef<Image>(null)
     const [imageHeight, setImageHeight] = useState<number | null>(null)
-    const [imageIsLoadFailed, setImageIsLoadFailed] = useState<boolean>(false)
-    const imageSource = imageIsLoadFailed
-        ? errorImageSource
-        : { uri: imageHighlighted! }
+    const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
+    const [imageIsLoadedSuccess, setImageIsLoadedSuccess] =
+        useState<boolean>(false)
+
+    const imageSource = imageIsLoadedSuccess
+        ? { uri: imageHighlighted! }
+        : errorImageSource
 
     const handleCloseImage = () => {
         setImageHighlighted(null)
     }
 
     const handleErrorImage = () => {
-        setImageIsLoadFailed(true)
+        setImageIsLoadedSuccess(false)
     }
 
     useHighlightImageSize({
         height,
         imageHighlighted,
         setImageHeight,
-        setImageIsLoadFailed,
+        setImageIsLoaded,
+        setImageIsLoadedSuccess,
         width,
     })
 
@@ -52,7 +56,8 @@ const HighlightImage = ({
             width: '100%',
         },
         image: {
-            height: imageHeight || height * 0.5,
+            backgroundColor,
+            height: imageHeight,
         },
         wrapper: {
             backgroundColor: highlightColor,
@@ -74,22 +79,34 @@ const HighlightImage = ({
             style={[styles.wrapper]}
         >
             <Pressable onPress={() => {}}>
-                <Image
-                    ref={imageRef}
-                    source={imageSource}
-                    style={styles.image}
-                    width={width}
-                    resizeMode="contain"
-                    onError={handleErrorImage}
-                />
-                {!imageIsLoadFailed && imageSource.uri && (
-                    <View style={styles.footer}>
-                        <ThemedText>
-                            {imageSource.uri
-                                .split('/image/')[1]
-                                .replace(/\?.*$/, '')}
-                        </ThemedText>
-                    </View>
+                {imageIsLoaded && imageIsLoadedSuccess && imageSource.uri && (
+                    <>
+                        <Image
+                            ref={imageRef}
+                            source={imageSource}
+                            style={styles.image}
+                            width={width}
+                            resizeMode="contain"
+                            onError={handleErrorImage}
+                        />
+                        <View style={styles.footer}>
+                            <ThemedText>
+                                {decodeURI(imageSource.uri)
+                                    .split('/image/')[1]
+                                    .replace(/\?.*$/, '')}
+                            </ThemedText>
+                        </View>
+                    </>
+                )}
+                {imageIsLoaded && !imageIsLoadedSuccess && (
+                    <Image
+                        ref={imageRef}
+                        source={imageSource}
+                        style={styles.image}
+                        width={width}
+                        resizeMode="contain"
+                        onError={handleErrorImage}
+                    />
                 )}
             </Pressable>
         </Pressable>

@@ -5,7 +5,8 @@ type useHighlightImageSizeProps = {
     height: number
     imageHighlighted: string | null
     setImageHeight: (value: React.SetStateAction<number | null>) => void
-    setImageIsLoadFailed: (value: React.SetStateAction<boolean>) => void
+    setImageIsLoaded: (value: React.SetStateAction<boolean>) => void
+    setImageIsLoadedSuccess: (value: React.SetStateAction<boolean>) => void
     width: number
 }
 
@@ -13,12 +14,14 @@ export const useHighlightImageSize = ({
     height,
     imageHighlighted,
     setImageHeight,
-    setImageIsLoadFailed,
+    setImageIsLoaded,
+    setImageIsLoadedSuccess,
     width,
 }: useHighlightImageSizeProps) => {
     useEffect(() => {
         setImageHeight(null)
-        setImageIsLoadFailed(false)
+        setImageIsLoaded(false)
+        setImageIsLoadedSuccess(false)
 
         if (imageHighlighted) {
             Image.getSize(
@@ -27,13 +30,22 @@ export const useHighlightImageSize = ({
                     const calculatedHeight =
                         (width / originalWidth) * originalHeight
                     setImageHeight(Math.min(calculatedHeight, height))
-                    setImageIsLoadFailed(false)
+                    setImageIsLoaded(true)
+                    setImageIsLoadedSuccess(true)
                 },
                 () => {
-                    setImageHeight(height * 0.5)
-                    setImageIsLoadFailed(true)
+                    setImageHeight(256)
+                    setImageIsLoaded(true)
+                    setImageIsLoadedSuccess(false)
                 }
             )
         }
-    }, [height, imageHighlighted, setImageHeight, setImageIsLoadFailed, width])
+    }, [
+        height,
+        imageHighlighted,
+        setImageHeight,
+        setImageIsLoaded,
+        setImageIsLoadedSuccess,
+        width,
+    ])
 }
