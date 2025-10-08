@@ -1,23 +1,46 @@
-import { useState } from 'react'
+import { Router } from 'expo-router'
+import { useContext, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
+import { handleApiFetchImages } from '@/api/handleApiFetchImages'
 import IconSymbol from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
+import { ContextError } from '@/context/ContextError'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
     ITEMS_PER_PAGE: number
     page: number
+    router: Router
+    setImages: React.Dispatch<React.SetStateAction<string[] | null>>
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
     setPage: React.Dispatch<React.SetStateAction<number>>
+    setTotalImages: React.Dispatch<React.SetStateAction<number>>
     totalImages: number
+    url: string
+    userToken: string
 }
 
 const Pagination = ({
     ITEMS_PER_PAGE,
     page,
+    router,
     setPage,
+    setImages,
+    setIsLoading,
+    setTotalImages,
     totalImages,
+    url,
+    userToken,
 }: PaginationProps) => {
+    const contextError = useContext(ContextError)
+    if (!contextError) {
+        throw new Error(
+            'Pagination must be used within a ContextError.Provider'
+        )
+    }
+    const { setError, setRetryFn } = contextError
+
     const backgroundColorActive = useThemeColor({}, 'red')
     const backgroundColorInactive = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
@@ -37,6 +60,18 @@ const Pagination = ({
         }
         setPage(next)
         setIsPreviousDisabled(false)
+        handleApiFetchImages({
+            page: next,
+            router,
+            setError,
+            setImages,
+            setIsLoading,
+            setPage,
+            setRetryFn,
+            setTotalImages,
+            url,
+            userToken,
+        })
     }
     const handlePressPrevious = () => {
         if (page > 1) {
@@ -46,6 +81,18 @@ const Pagination = ({
             }
             setPage(prev)
             setIsNextDisabled(false)
+            handleApiFetchImages({
+                page: prev,
+                router,
+                setError,
+                setImages,
+                setIsLoading,
+                setPage,
+                setRetryFn,
+                setTotalImages,
+                url,
+                userToken,
+            })
         }
     }
 
@@ -76,6 +123,7 @@ const Pagination = ({
             gap: 32,
             height: 48,
             justifyContent: 'center',
+            marginBottom: 16,
             marginHorizontal: 'auto',
         },
     })
@@ -97,7 +145,7 @@ const Pagination = ({
                             opacity: 0.75,
                         },
                 ]}
-                onPress={handlePressPrevious}
+                onPress={!isPreviousDisabled ? handlePressPrevious : undefined}
             >
                 <IconSymbol
                     size={28}
@@ -121,7 +169,7 @@ const Pagination = ({
                             opacity: 0.75,
                         },
                 ]}
-                onPress={handlePressNext}
+                onPress={!isNextDisabled ? handlePressNext : undefined}
             >
                 <IconSymbol
                     size={28}
