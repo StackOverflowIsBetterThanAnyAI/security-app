@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import Button from '@/components/button'
@@ -21,6 +21,8 @@ const ErrorScreen = () => {
     const colorInput = useThemeColor({}, 'text')
     const router = useRouter()
     const { from } = useLocalSearchParams<{ from: string }>()
+    //TODO
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleGoBack = () => {
         setError('')
@@ -50,11 +52,13 @@ const ErrorScreen = () => {
                     <Button
                         accessibilityLabel="Try Again"
                         handlePress={handleTryAgain}
+                        isLoading={isLoading}
                         label="Try Again"
                     />
                     <Button
                         accessibilityLabel="Go Back"
                         handlePress={handleGoBack}
+                        isLoading={isLoading}
                         label="Go Back"
                     />
                 </View>
