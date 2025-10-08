@@ -92,6 +92,9 @@ const HomeScreen = () => {
                         Welcome, {userName}!
                     </ThemedText>
                     <ThemedText type="title">Past Recordings</ThemedText>
+                    <ThemedText type="subtitle">
+                        TODO: Filter by Date
+                    </ThemedText>
                 </View>
                 {images ? (
                     <>
