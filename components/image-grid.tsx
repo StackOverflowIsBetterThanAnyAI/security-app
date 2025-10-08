@@ -1,3 +1,4 @@
+import { ITEMS_PER_PAGE } from '@/app/(tabs)/home'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
@@ -15,11 +16,7 @@ const ImageGrid = ({
     userToken,
 }: ImageGridProps) => {
     const backgroundColor = useThemeColor({}, 'highlight')
-    const bottomRowIndices: number[] = []
-    bottomRowIndices.push(images.length - 1)
-    if (images.length % 2 === 0) {
-        bottomRowIndices.push(images.length - 2)
-    }
+    const bottomRowIndices: number[] = [ITEMS_PER_PAGE - 1, ITEMS_PER_PAGE - 2]
 
     const styles = StyleSheet.create({
         image: {
