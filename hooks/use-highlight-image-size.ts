@@ -19,7 +19,6 @@ export const useHighlightImageSize = ({
     width,
 }: useHighlightImageSizeProps) => {
     useEffect(() => {
-        setImageHeight(256)
         setImageIsLoaded(false)
         setImageIsLoadedSuccess(false)
 
