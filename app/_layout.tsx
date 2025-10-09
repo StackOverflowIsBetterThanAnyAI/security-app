@@ -15,12 +15,14 @@ import { ContextError } from '@/context/ContextError'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 export const unstable_settings = {
     anchor: '(tabs)',
 }
 
 const RootLayout = () => {
+    const [isLoading, setIsLoading] = useState(true)
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
     const [retryFn, setRetryFn] = useState<(() => void) | null>(null)
@@ -29,6 +31,8 @@ const RootLayout = () => {
     const [userToken, setUserToken] = useState<string>('')
 
     const colorScheme = useColorScheme()
+    const activityColor = useThemeColor({}, 'text')
+    const backgroundColor = useThemeColor({}, 'background')
     const router = useRouter()
 
     useEffect(() => {
@@ -39,26 +43,33 @@ const RootLayout = () => {
                 setUserName(data.authName)
                 setUserRole(data.authRole as UserRoleType)
                 setUserToken(data.authToken)
-                router.replace('/home')
             }
+            setIsLoading(false)
         }
         autoLogin()
     }, [])
+
+    useEffect(() => {
+        if (!isLoading && userName && userRole && userToken && isUserLoggedIn) {
+            router.replace('/home')
+        }
+    }, [isLoading, userName, userRole, userToken, isUserLoggedIn])
 
     const [fontsLoaded] = useFonts({
         ...MaterialCommunityIcons.font,
     })
 
-    if (!fontsLoaded) {
+    if (!fontsLoaded || isLoading) {
         return (
             <View
                 style={{
+                    alignItems: 'center',
+                    backgroundColor,
                     flex: 1,
                     justifyContent: 'center',
-                    alignItems: 'center',
                 }}
             >
-                <ActivityIndicator size="large" />
+                <ActivityIndicator size="large" color={activityColor} />
             </View>
         )
     }
