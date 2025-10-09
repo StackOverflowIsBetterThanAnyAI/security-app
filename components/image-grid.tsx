@@ -1,7 +1,7 @@
 import { FlatList } from 'react-native'
 
-import { ITEMS_PER_PAGE } from '@/app/(tabs)/home'
 import ImageGridItem from '@/components/image-grid-item'
+import { ITEMS_PER_PAGE } from '@/constants/api'
 
 type ImageGridProps = {
     images: string[]

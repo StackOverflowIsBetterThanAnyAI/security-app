@@ -17,13 +17,11 @@ import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
 import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
-import { URL, URL_MOBILE } from '@/constants/api'
+import { ITEMS_PER_PAGE, URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { noFile } from '@/icons/icons'
-
-export const ITEMS_PER_PAGE = 36
 
 const HomeScreen = () => {
     const contextError = useContext(ContextError)
