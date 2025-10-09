@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router'
 import { useContext, useEffect, useRef, useState } from 'react'
 import {
+    ActivityIndicator,
     NativeScrollEvent,
     NativeSyntheticEvent,
     Platform,
@@ -50,10 +51,13 @@ const HomeScreen = () => {
 
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleFetchImages = () => {
+    const handleFetchImages = (
+        setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    ) => {
         handleApiFetchImages({
             page,
             router,
@@ -74,7 +78,7 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        handleFetchImages()
+        handleFetchImages(setIsLoadingInitial)
     }, [])
 
     return (
@@ -93,11 +97,13 @@ const HomeScreen = () => {
                         TODO: Filter by Date
                     </ThemedText>
                 </View>
-                {images ? (
+                {isLoadingInitial ? (
+                    <ActivityIndicator size="large" color={colorIcon} />
+                ) : images ? (
                     <>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleFetchImages}
+                            handlePress={() => handleFetchImages(setIsLoading)}
                             isLoading={isLoading}
                             label="Refresh"
                         />
@@ -112,7 +118,9 @@ const HomeScreen = () => {
                                 {images.length > 12 && (
                                     <Button
                                         accessibilityLabel="Refresh Recordings"
-                                        handlePress={handleFetchImages}
+                                        handlePress={() =>
+                                            handleFetchImages(setIsLoading)
+                                        }
                                         isLoading={isLoading}
                                         label="Refresh"
                                     />
@@ -141,7 +149,7 @@ const HomeScreen = () => {
                         </ThemedText>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleFetchImages}
+                            handlePress={() => handleFetchImages(setIsLoading)}
                             isLoading={isLoading}
                             label="Refresh"
                         />
