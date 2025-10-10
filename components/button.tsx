@@ -1,35 +1,53 @@
+import { useState } from 'react'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 
 type ButtonProps = {
     accessibilityLabel: string
-    handlePress: () => void
-    isLoading: boolean
+    handlePress: () => Promise<void> | void
     label: string
 }
 
-const Button = ({
-    accessibilityLabel,
-    handlePress,
-    isLoading,
-    label,
-}: ButtonProps) => {
+const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
-    const borderColor = useThemeColor({}, 'border')
+    const borderColorActive = useThemeColor({}, 'border')
+    const borderColorInactive = useThemeColor({}, 'textInactive')
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const handleButtonPress = async () => {
+        if (isLoading) {
+            return
+        }
+        setIsLoading(true)
+        try {
+            await handlePress()
+        } catch (error) {
+            console.error('Action failed:', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const styles = StyleSheet.create({
         button: {
             backgroundColor,
-            borderColor,
             borderRadius: 12,
             borderWidth: 2,
             marginHorizontal: 'auto',
             marginTop: 8,
             paddingVertical: 8,
             paddingHorizontal: 24,
-            minWidth: 128,
+            minWidth: 144,
+        },
+        disabled: {
+            borderColor: borderColorInactive,
+        },
+        enabled: {
+            borderColor: borderColorActive,
         },
     })
 
@@ -43,12 +61,13 @@ const Button = ({
             }`}
             style={({ pressed }) => [
                 styles.button,
+                isLoading ? styles.disabled : styles.enabled,
                 !isLoading &&
                     pressed && {
                         opacity: 0.75,
                     },
             ]}
-            onPress={!isLoading ? handlePress : undefined}
+            onPress={!isLoading ? handleButtonPress : undefined}
         >
             {isLoading ? (
                 <ActivityIndicator
