@@ -1,3 +1,4 @@
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useRouter } from 'expo-router'
 import { useContext, useEffect, useRef, useState } from 'react'
 import {
@@ -37,10 +38,11 @@ const HomeScreen = () => {
     if (!contextUser) {
         throw new Error('HomeScreen must be used within a ContextUser.Provider')
     }
-    const { userName, userToken } = contextUser
+    const { setIsUserLoggedIn, userName, userToken } = contextUser
 
-    const router = useRouter()
     const colorIcon = useThemeColor({}, 'text')
+    const router = useRouter()
+    const tabBarHeight = useBottomTabBarHeight()
 
     const scrollRef = useRef<ScrollView>(null)
 
@@ -50,20 +52,18 @@ const HomeScreen = () => {
     const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
 
     const [images, setImages] = useState<string[] | null>(null)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [isLoadingInitial, setIsLoadingInitial] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [page, setPage] = useState<number>(1)
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleFetchImages = (
-        setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-    ) => {
+    const handleFetchImages = () => {
         handleApiFetchImages({
             page,
             router,
             setError,
             setImages,
             setIsLoading,
+            setIsUserLoggedIn,
             setPage,
             setRetryFn,
             setTotalImages,
@@ -78,7 +78,7 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        handleFetchImages(setIsLoadingInitial)
+        handleFetchImages()
     }, [])
 
     return (
@@ -97,14 +97,20 @@ const HomeScreen = () => {
                         TODO: Filter by Date
                     </ThemedText>
                 </View>
-                {isLoadingInitial ? (
-                    <ActivityIndicator size="large" color={colorIcon} />
+                {isLoading && !images ? (
+                    <View
+                        style={[
+                            styles.activityLoader,
+                            { bottom: -tabBarHeight },
+                        ]}
+                    >
+                        <ActivityIndicator size="large" color={colorIcon} />
+                    </View>
                 ) : images ? (
                     <>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={() => handleFetchImages(setIsLoading)}
-                            isLoading={isLoading}
+                            handlePress={handleFetchImages}
                             label="Refresh"
                         />
                         <ImageGrid
@@ -118,10 +124,7 @@ const HomeScreen = () => {
                                 {images.length > 12 && (
                                     <Button
                                         accessibilityLabel="Refresh Recordings"
-                                        handlePress={() =>
-                                            handleFetchImages(setIsLoading)
-                                        }
-                                        isLoading={isLoading}
+                                        handlePress={handleFetchImages}
                                         label="Refresh"
                                     />
                                 )}
@@ -149,8 +152,7 @@ const HomeScreen = () => {
                         </ThemedText>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={() => handleFetchImages(setIsLoading)}
-                            isLoading={isLoading}
+                            handlePress={handleFetchImages}
                             label="Refresh"
                         />
                     </View>
@@ -168,6 +170,15 @@ const HomeScreen = () => {
 }
 
 const styles = StyleSheet.create({
+    activityLoader: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10,
+    },
     noImagesContainer: {
         gap: 16,
         alignItems: 'center',
