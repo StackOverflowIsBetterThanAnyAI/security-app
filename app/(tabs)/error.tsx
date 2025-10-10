@@ -43,7 +43,7 @@ const ErrorScreen = () => {
                     <ThemedText center type="subtitle">
                         An Error occurred!
                     </ThemedText>
-                    {error && <ThemedText center>{error}</ThemedText>}
+                    {error.length && <ThemedText center>{error}</ThemedText>}
                 </View>
                 {noConnection(colorInput)}
                 <View style={styles.buttonWrapper}>
