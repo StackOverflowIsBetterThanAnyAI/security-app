@@ -34,7 +34,7 @@ const Form = () => {
 
     const router = useRouter()
 
-    const [isSigningUp, setIsSigningUp] = useState<boolean>(true)
+    const [isSigningUp, setIsSigningUp] = useState<boolean>(false)
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
 
     const [password, setPassword] = useState<string>('')
