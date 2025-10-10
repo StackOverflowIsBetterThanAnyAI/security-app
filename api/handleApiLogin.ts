@@ -78,7 +78,6 @@ export const handleApiLogin = async ({
         setIsUserLoggedIn(true)
         setPassword('')
         setRetryFn(() => {})
-        router.replace('/(tabs)/home')
     } catch (err: any) {
         setError(err.message)
         setIsUserLoggedIn(false)
