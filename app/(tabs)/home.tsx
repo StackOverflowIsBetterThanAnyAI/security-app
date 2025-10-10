@@ -139,7 +139,6 @@ const HomeScreen = () => {
                                     url={
                                         Platform.OS === 'web' ? URL : URL_MOBILE
                                     }
-                                    userToken={userToken}
                                 />
                             </>
                         )}

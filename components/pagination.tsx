@@ -6,6 +6,7 @@ import { handleApiFetchImages } from '@/api/handleApiFetchImages'
 import PaginationButton from '@/components/pagination-button'
 import ThemedText from '@/components/themed-text'
 import { ContextError } from '@/context/ContextError'
+import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
@@ -17,7 +18,6 @@ type PaginationProps = {
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
     totalImages: number
     url: string
-    userToken: string
 }
 
 const Pagination = ({
@@ -29,7 +29,6 @@ const Pagination = ({
     setTotalImages,
     totalImages,
     url,
-    userToken,
 }: PaginationProps) => {
     const contextError = useContext(ContextError)
     if (!contextError) {
@@ -38,6 +37,12 @@ const Pagination = ({
         )
     }
     const { setError, setRetryFn } = contextError
+
+    const contextUser = useContext(ContextUser)
+    if (!contextUser) {
+        throw new Error('HomeScreen must be used within a ContextUser.Provider')
+    }
+    const { setIsUserLoggedIn, userName, userToken } = contextUser
 
     const backgroundColorInactive = useThemeColor({}, 'background')
 
@@ -60,6 +65,7 @@ const Pagination = ({
             setError,
             setImages,
             setIsLoading,
+            setIsUserLoggedIn,
             setPage,
             setRetryFn,
             setTotalImages,
@@ -81,6 +87,7 @@ const Pagination = ({
                 setError,
                 setImages,
                 setIsLoading,
+                setIsUserLoggedIn,
                 setPage,
                 setRetryFn,
                 setTotalImages,
