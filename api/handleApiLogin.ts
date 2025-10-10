@@ -1,7 +1,7 @@
 import { Router } from 'expo-router'
 
 import { UserRoleType } from '@/context/ContextUser'
-import { saveData } from '@/helper/storeData'
+import { clearData, saveData } from '@/helper/storeData'
 
 type handleLoginProps = {
     isLogin?: boolean
@@ -51,6 +51,14 @@ export const handleApiLogin = async ({
         )
 
         if (!response.ok) {
+            if (response.status === 403) {
+                setIsUserLoggedIn(false)
+                setError('')
+                await clearData(['authToken', 'authRole', 'authName'])
+                router.replace('/(tabs)/login')
+                return
+            }
+
             const data = await response.json().catch(() => ({}))
             const message = data.error || response.statusText || 'Unknown error'
             throw new Error(`Error ${response.status}: ${message}`)
@@ -70,7 +78,7 @@ export const handleApiLogin = async ({
         setIsUserLoggedIn(true)
         setPassword('')
         setRetryFn(() => {})
-        router.replace('/home')
+        router.replace('/(tabs)/home')
     } catch (err: any) {
         setError(err.message)
         setIsUserLoggedIn(false)
@@ -94,7 +102,7 @@ export const handleApiLogin = async ({
                 })
             })
             router.push({
-                pathname: '/error',
+                pathname: '/(tabs)/error',
                 params: { from: 'login' },
             })
         })

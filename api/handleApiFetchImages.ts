@@ -1,3 +1,4 @@
+import { clearData } from '@/helper/storeData'
 import { Router } from 'expo-router'
 
 type handleLoginProps = {
@@ -6,6 +7,7 @@ type handleLoginProps = {
     setError: (value: React.SetStateAction<string>) => void
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
     setIsLoading: (value: React.SetStateAction<boolean>) => void
+    setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setPage: React.Dispatch<React.SetStateAction<number>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
@@ -19,6 +21,7 @@ export const handleApiFetchImages = async ({
     setError,
     setImages,
     setIsLoading,
+    setIsUserLoggedIn,
     setPage,
     setRetryFn,
     setTotalImages,
@@ -34,6 +37,14 @@ export const handleApiFetchImages = async ({
         })
 
         if (!response.ok) {
+            if (response.status === 403) {
+                setIsUserLoggedIn(false)
+                setError('')
+                await clearData(['authToken', 'authRole', 'authName'])
+                router.replace('/(tabs)/login')
+                return
+            }
+
             const data = await response.json().catch(() => ({}))
             const message = data.error || response.statusText || 'Unknown error'
             throw new Error(`Error ${response.status}: ${message}`)
@@ -49,8 +60,8 @@ export const handleApiFetchImages = async ({
 
         setError('')
         setRetryFn(() => {})
-    } catch (err: any) {
-        setError(err.message)
+    } catch (error: any) {
+        setError(error.message)
 
         queueMicrotask(() => {
             setRetryFn(() => () => {
@@ -60,6 +71,7 @@ export const handleApiFetchImages = async ({
                     setError,
                     setImages,
                     setIsLoading,
+                    setIsUserLoggedIn,
                     setPage,
                     setRetryFn,
                     setTotalImages,
@@ -68,7 +80,7 @@ export const handleApiFetchImages = async ({
                 })
             })
             router.push({
-                pathname: '/error',
+                pathname: '/(tabs)/error',
                 params: { from: 'home' },
             })
         })
