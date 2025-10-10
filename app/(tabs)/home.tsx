@@ -78,7 +78,7 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        handleFetchImages()
+        setTimeout(() => handleFetchImages(), 300000)
     }, [])
 
     return (
