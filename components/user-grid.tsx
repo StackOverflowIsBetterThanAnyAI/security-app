@@ -1,7 +1,7 @@
 import { FlatList } from 'react-native'
 
 import { UsersType } from '@/api/handleApiFetchUsers'
-import UserGridItem from './user-grid-item'
+import UserGridItem from '@/components/user-grid-item'
 
 type UserGridProps = {
     users: UsersType[]
