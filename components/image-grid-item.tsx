@@ -12,12 +12,12 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 const errorImageSource = require('./../assets/images/error.webp')
 
 type ImageGridItemProps = {
-    item: string
-    index: number
-    url: string
-    userToken: string
-    setImageHighlighted: React.Dispatch<React.SetStateAction<string | null>>
     bottomRowIndices: number[]
+    index: number
+    item: string
+    setImageHighlighted: React.Dispatch<React.SetStateAction<string | null>>
+    userToken: string
+    url: string
 }
 
 const ImageGridItem = ({
