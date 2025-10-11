@@ -19,7 +19,7 @@ const TabLayout = () => {
     if (!contextUser) {
         throw new Error('TabLayout must be used within a ContextUser.Provider')
     }
-    const { isUserLoggedIn, userName } = contextUser
+    const { isUserLoggedIn, userName, userRole } = contextUser
 
     const colorScheme = useColorScheme()
 
@@ -73,7 +73,24 @@ const TabLayout = () => {
                     title: userName ?? 'Profile',
                     tabBarIcon: getTabIcon('person'),
                     href:
-                        isUserLoggedIn && error.length === 0 ? undefined : null,
+                        isUserLoggedIn &&
+                        error.length === 0 &&
+                        userRole !== 'admin'
+                            ? undefined
+                            : null,
+                }}
+            />
+            <Tabs.Screen
+                name="admin"
+                options={{
+                    title: userName ?? 'Profile',
+                    tabBarIcon: getTabIcon('person'),
+                    href:
+                        isUserLoggedIn &&
+                        error.length === 0 &&
+                        userRole === 'admin'
+                            ? undefined
+                            : null,
                 }}
             />
         </Tabs>

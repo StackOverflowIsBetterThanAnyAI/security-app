@@ -9,12 +9,12 @@ import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
-const UserScreen = () => {
+const AdminScreen = () => {
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
         throw new Error('UserScreen must be used within a ContextUser.Provider')
     }
-    const { setIsUserLoggedIn, userName, userRole } = contextUser
+    const { setIsUserLoggedIn, userName } = contextUser
 
     const avatarColor = useThemeColor({}, 'text')
     const backgroundColorAvatar = useThemeColor({}, 'buttonInactive')
@@ -72,9 +72,7 @@ const UserScreen = () => {
                         paddingBottom: 8,
                     }}
                 >
-                    Role:{' '}
-                    {userRole.substring(0, 1).toUpperCase() +
-                        userRole.substring(1)}
+                    Role: Admin
                 </ThemedText>
             </View>
             <Pressable
@@ -92,4 +90,4 @@ const UserScreen = () => {
     )
 }
 
-export default UserScreen
+export default AdminScreen
