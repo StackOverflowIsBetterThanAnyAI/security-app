@@ -24,7 +24,6 @@ const ImageGrid = ({
             scrollEnabled={false}
             renderItem={({ item, index }) => (
                 <ImageGridItem
-                    key={item}
                     bottomRowIndices={[ITEMS_PER_PAGE - 1, ITEMS_PER_PAGE - 2]}
                     index={index}
                     item={item}
