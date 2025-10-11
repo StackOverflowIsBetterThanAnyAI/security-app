@@ -107,7 +107,6 @@ const Pagination = ({
             gap: 32,
             height: 48,
             justifyContent: 'center',
-            marginBottom: 16,
             marginHorizontal: 'auto',
         },
     })
