@@ -43,7 +43,6 @@ const UserScreen = () => {
             borderRadius: 12,
             borderWidth: 2,
             marginHorizontal: 'auto',
-            marginTop: 'auto',
             paddingVertical: 8,
             paddingHorizontal: 24,
         },
@@ -62,16 +61,7 @@ const UserScreen = () => {
                 <View style={styles.avatarContainer}>
                     <IconSymbol name="person" size={128} color={avatarColor} />
                 </View>
-                <ThemedText
-                    center
-                    type="subtitle"
-                    style={{
-                        borderBottomWidth: 2,
-                        borderBottomColor: borderColorButton,
-                        marginHorizontal: 8,
-                        paddingBottom: 8,
-                    }}
-                >
+                <ThemedText center type="subtitle">
                     Role:{' '}
                     {userRole.substring(0, 1).toUpperCase() +
                         userRole.substring(1)}
