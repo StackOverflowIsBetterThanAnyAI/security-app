@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router'
 import { useContext } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
+import Button from '@/components/button'
 import IconSymbol from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
@@ -21,6 +22,8 @@ const AdminScreen = () => {
     const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
     const router = useRouter()
+
+    const handleFetchUsers = () => {}
 
     const handleLogout = () => {
         setIsUserLoggedIn(false)
@@ -44,6 +47,7 @@ const AdminScreen = () => {
             borderWidth: 2,
             marginHorizontal: 'auto',
             marginTop: 'auto',
+            minWidth: 144,
             paddingVertical: 8,
             paddingHorizontal: 24,
         },
@@ -75,6 +79,11 @@ const AdminScreen = () => {
                     Role: Admin
                 </ThemedText>
             </View>
+            <Button
+                accessibilityLabel="Refresh Users"
+                handlePress={handleFetchUsers}
+                label="Refresh"
+            />
             <Pressable
                 onPress={handleLogout}
                 accessible={true}
@@ -84,7 +93,7 @@ const AdminScreen = () => {
                     styles.button,
                 ]}
             >
-                <ThemedText>Logout</ThemedText>
+                <ThemedText center>Logout</ThemedText>
             </Pressable>
         </MainView>
     )

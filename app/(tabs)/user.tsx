@@ -43,6 +43,7 @@ const UserScreen = () => {
             borderRadius: 12,
             borderWidth: 2,
             marginHorizontal: 'auto',
+            minWidth: 144,
             paddingVertical: 8,
             paddingHorizontal: 24,
         },
@@ -76,7 +77,7 @@ const UserScreen = () => {
                     styles.button,
                 ]}
             >
-                <ThemedText>Logout</ThemedText>
+                <ThemedText center>Logout</ThemedText>
             </Pressable>
         </MainView>
     )
