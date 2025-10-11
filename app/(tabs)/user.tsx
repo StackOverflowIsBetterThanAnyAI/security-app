@@ -1,19 +1,25 @@
 import { useRouter } from 'expo-router'
-import { Pressable } from 'react-native'
+import { useContext } from 'react'
+import { Pressable, StyleSheet, View } from 'react-native'
 
+import IconSymbol from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
-import { useContext } from 'react'
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 const UserScreen = () => {
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
         throw new Error('UserScreen must be used within a ContextUser.Provider')
     }
-    const { setIsUserLoggedIn } = contextUser
+    const { setIsUserLoggedIn, userName, userRole } = contextUser
 
+    const avatarColor = useThemeColor({}, 'text')
+    const backgroundColorAvatar = useThemeColor({}, 'buttonInactive')
+    const backgroundColorButton = useThemeColor({}, 'background')
+    const borderColorButton = useThemeColor({}, 'border')
     const router = useRouter()
 
     const handleLogout = () => {
@@ -22,13 +28,61 @@ const UserScreen = () => {
         router.replace('/login')
     }
 
+    const styles = StyleSheet.create({
+        avatarContainer: {
+            alignSelf: 'center',
+            backgroundColor: backgroundColorAvatar,
+            borderColor: avatarColor,
+            borderRadius: 100,
+            borderWidth: 6,
+            padding: 8,
+        },
+        button: {
+            backgroundColor: backgroundColorButton,
+            borderColor: borderColorButton,
+            borderRadius: 12,
+            borderWidth: 2,
+            marginHorizontal: 'auto',
+            marginTop: 'auto',
+            paddingVertical: 8,
+            paddingHorizontal: 24,
+        },
+        titleContainer: {
+            flexDirection: 'column',
+            gap: 16,
+        },
+    })
+
     return (
         <MainView>
-            <ThemedText>User</ThemedText>
+            <View style={styles.titleContainer}>
+                <ThemedText center type="title">
+                    Welcome, {userName}!
+                </ThemedText>
+                <View style={styles.avatarContainer}>
+                    <IconSymbol name="person" size={128} color={avatarColor} />
+                </View>
+                <ThemedText
+                    center
+                    type="subtitle"
+                    style={{
+                        borderBottomWidth: 2,
+                        borderBottomColor: borderColorButton,
+                        marginHorizontal: 8,
+                        paddingBottom: 8,
+                    }}
+                >
+                    Role: {userRole}
+                </ThemedText>
+            </View>
             <Pressable
                 onPress={handleLogout}
                 accessible={true}
                 accessibilityRole="button"
+                style={({ pressed }) => [
+                    { opacity: pressed ? 0.75 : 1 },
+                    styles.button,
+                ]}
             >
                 <ThemedText>Logout</ThemedText>
             </Pressable>
