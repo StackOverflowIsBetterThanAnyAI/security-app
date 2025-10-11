@@ -49,14 +49,14 @@ export const handleApiFetchImages = async ({
             const message = data.error || response.statusText || 'Unknown error'
             throw new Error(`Error ${response.status}: ${message}`)
         }
-        const data: {
+        const images: {
             images: string[]
             page: number
             total_images: number
         } = await response.json()
-        setImages(data.images)
-        setPage(data.page)
-        setTotalImages(data.total_images)
+        setImages(images.images)
+        setPage(images.page)
+        setTotalImages(images.total_images)
 
         setError('')
         setRetryFn(() => {})
