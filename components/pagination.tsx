@@ -42,7 +42,7 @@ const Pagination = ({
     if (!contextUser) {
         throw new Error('HomeScreen must be used within a ContextUser.Provider')
     }
-    const { setIsUserLoggedIn, userName, userToken } = contextUser
+    const { setIsUserLoggedIn, userToken } = contextUser
 
     const backgroundColorInactive = useThemeColor({}, 'background')
 
