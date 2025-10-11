@@ -14,6 +14,7 @@ import {
 import { handleApiFetchImages } from '@/api/handleApiFetchImages'
 import Button from '@/components/button'
 import HighlightImage from '@/components/highlight-image'
+import { noFile } from '@/components/icon-symbol'
 import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
@@ -23,7 +24,6 @@ import { ITEMS_PER_PAGE, URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { noFile } from '@/icons/icons'
 
 const HomeScreen = () => {
     const contextError = useContext(ContextError)
@@ -99,9 +99,6 @@ const HomeScreen = () => {
                         Welcome, {userName}!
                     </ThemedText>
                     <ThemedText type="title">Past Recordings</ThemedText>
-                    <ThemedText type="subtitle">
-                        TODO: Filter by Date
-                    </ThemedText>
                 </View>
                 {isLoading && !images ? (
                     <View

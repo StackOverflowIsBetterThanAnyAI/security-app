@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 
+import { hidePassword, showPassword } from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
 import {
     checkForErrorConfirmPassword,
@@ -8,7 +9,6 @@ import {
     checkForErrorUserName,
 } from '@/helper/checkForError'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { hidePassword, showPassword } from '@/icons/icons'
 
 type FormInputProps = {
     error: string

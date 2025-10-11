@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SymbolWeight } from 'expo-symbols'
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
@@ -30,3 +31,27 @@ const IconSymbol = ({
 }
 
 export default IconSymbol
+
+export const showPassword = (colorInput: string) => (
+    <MaterialCommunityIcons name="eye-outline" size={24} color={colorInput} />
+)
+
+export const hidePassword = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="eye-off-outline"
+        size={24}
+        color={colorInput}
+    />
+)
+
+export const noConnection = (colorInput: string) => (
+    <MaterialCommunityIcons name="wifi-off" size={48} color={colorInput} />
+)
+
+export const noFile = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="file-alert-outline"
+        size={48}
+        color={colorInput}
+    />
+)

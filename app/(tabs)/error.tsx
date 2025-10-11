@@ -3,11 +3,11 @@ import { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import Button from '@/components/button'
+import { noConnection } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import { ContextError } from '@/context/ContextError'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { noConnection } from '@/icons/icons'
 
 const ErrorScreen = () => {
     const contextError = useContext(ContextError)
