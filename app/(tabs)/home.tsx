@@ -78,8 +78,14 @@ const HomeScreen = () => {
     }
 
     useEffect(() => {
-        setTimeout(() => handleFetchImages(), 300000)
-    }, [])
+        handleFetchImages()
+        const refresh = setInterval(() => {
+            handleFetchImages()
+        }, 300000)
+        return () => {
+            clearInterval(refresh)
+        }
+    }, [handleFetchImages])
 
     return (
         <>
