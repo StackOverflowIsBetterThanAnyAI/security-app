@@ -55,3 +55,11 @@ export const noFile = (colorInput: string) => (
         color={colorInput}
     />
 )
+
+export const noUsers = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="account-alert-outline"
+        size={48}
+        color={colorInput}
+    />
+)
