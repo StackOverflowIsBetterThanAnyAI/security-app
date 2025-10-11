@@ -49,7 +49,7 @@ const AdminScreen = () => {
         },
         titleContainer: {
             flexDirection: 'column',
-            gap: 16,
+            gap: 24,
         },
     })
 
