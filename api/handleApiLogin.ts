@@ -3,7 +3,7 @@ import { Router } from 'expo-router'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData, saveData } from '@/helper/storeData'
 
-type handleLoginProps = {
+type handleApiLoginProps = {
     isLogin?: boolean
     password: string
     router: Router
@@ -33,7 +33,7 @@ export const handleApiLogin = async ({
     setUserToken,
     url,
     userName,
-}: handleLoginProps) => {
+}: handleApiLoginProps) => {
     setIsLoading(true)
     try {
         const response = await fetch(

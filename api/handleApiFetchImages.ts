@@ -1,7 +1,7 @@
 import { clearData } from '@/helper/storeData'
 import { Router } from 'expo-router'
 
-type handleLoginProps = {
+type handleApiFetchImagesProps = {
     page: number
     router: Router
     setError: (value: React.SetStateAction<string>) => void
@@ -27,7 +27,7 @@ export const handleApiFetchImages = async ({
     setTotalImages,
     url,
     userToken,
-}: handleLoginProps) => {
+}: handleApiFetchImagesProps) => {
     setIsLoading(true)
     try {
         const response = await fetch(`${url}/images?page=${page}`, {
