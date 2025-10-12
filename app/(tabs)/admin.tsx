@@ -142,7 +142,7 @@ const AdminScreen = () => {
                     Role: Admin
                 </ThemedText>
             </View>
-            {isLoading && !users ? (
+            {isLoading && !users.length ? (
                 <View
                     style={[styles.activityLoader, { bottom: -tabBarHeight }]}
                 >
