@@ -181,9 +181,9 @@ const Form = () => {
                     (isSigningUp && errorConfirmPassword.length > 0) ||
                     errorPassword.length > 0 ||
                     errorUserName.length > 0 ||
-                    (isSigningUp && confirmPassword.length === 0) ||
-                    password.length === 0 ||
-                    userName.length === 0
+                    (isSigningUp && !confirmPassword.length) ||
+                    !password.length ||
+                    !userName.length
                 }
                 isLoading={isLoading}
                 isSigningUp={isSigningUp}

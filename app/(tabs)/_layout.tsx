@@ -46,7 +46,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Error',
                     tabBarIcon: getTabIcon('error'),
-                    href: error.length > 0 ? undefined : null,
+                    href: error.length ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -55,9 +55,7 @@ const TabLayout = () => {
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
                     href:
-                        isUserLoggedIn &&
-                        error.length === 0 &&
-                        userRole !== 'user'
+                        isUserLoggedIn && !error.length && userRole !== 'user'
                             ? undefined
                             : null,
                 }}
@@ -67,10 +65,7 @@ const TabLayout = () => {
                 options={{
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),
-                    href:
-                        !isUserLoggedIn && error.length === 0
-                            ? undefined
-                            : null,
+                    href: !isUserLoggedIn && !error.length ? undefined : null,
                 }}
             />
             <Tabs.Screen
@@ -79,9 +74,7 @@ const TabLayout = () => {
                     title: userName ?? 'Profile',
                     tabBarIcon: getTabIcon('person'),
                     href:
-                        isUserLoggedIn &&
-                        error.length === 0 &&
-                        userRole !== 'admin'
+                        isUserLoggedIn && !error.length && userRole !== 'admin'
                             ? undefined
                             : null,
                 }}
@@ -92,9 +85,7 @@ const TabLayout = () => {
                     title: userName ?? 'Profile',
                     tabBarIcon: getTabIcon('person'),
                     href:
-                        isUserLoggedIn &&
-                        error.length === 0 &&
-                        userRole === 'admin'
+                        isUserLoggedIn && !error.length && userRole === 'admin'
                             ? undefined
                             : null,
                 }}
