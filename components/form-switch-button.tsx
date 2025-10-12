@@ -33,7 +33,7 @@ const FormSwitchButton = ({
             duration: 200,
             useNativeDriver: false,
         }).start()
-    }, [isSigningUp, isSignUpField])
+    }, [animation, isSigningUp, isSignUpField])
 
     const backgroundColor = animation.interpolate({
         inputRange: [0, 1],
