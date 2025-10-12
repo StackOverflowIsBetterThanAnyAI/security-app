@@ -33,7 +33,7 @@ const ImageGridItem = ({
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColorPrimary = useThemeColor({}, 'highlight')
-    const backgroundColorSecondary = useThemeColor({}, 'backgroundSecondary')
+    const backgroundColorSecondary = useThemeColor({}, 'buttonInactive')
 
     const safeItem = encodeURI(item)
     const fullUriWithToken = `${url}${safeItem}?token=${userToken}`
