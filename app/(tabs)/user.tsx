@@ -16,7 +16,7 @@ const UserScreen = () => {
     }
     const { setIsUserLoggedIn, userName, userRole } = contextUser
 
-    const avatarColor = useThemeColor({}, 'text')
+    const avatarColor = useThemeColor({}, 'textLight')
     const backgroundColorAvatar = useThemeColor({}, 'buttonInactive')
     const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
