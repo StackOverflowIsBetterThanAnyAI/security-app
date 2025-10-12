@@ -50,10 +50,12 @@ const RootLayout = () => {
     }, [])
 
     useEffect(() => {
-        if (!isLoading && userName && userRole && userToken && isUserLoggedIn) {
-            router.replace('/(tabs)/home')
+        if (!isLoading && isUserLoggedIn) {
+            router.replace(
+                userRole === 'user' ? '/(tabs)/user' : '/(tabs)/home'
+            )
         }
-    }, [isLoading, isUserLoggedIn, router, userName, userRole, userToken])
+    }, [isLoading, isUserLoggedIn, router, userRole])
 
     const [fontsLoaded] = useFonts({
         ...MaterialCommunityIcons.font,
