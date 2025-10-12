@@ -1,8 +1,8 @@
+import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import { URL, URL_MOBILE } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 import { Router } from 'expo-router'
 import { Platform } from 'react-native'
-import { handleApiFetchUsers, UsersType } from './handleApiFetchUsers'
 
 type handleApiChangeRoleProps = {
     id: number
