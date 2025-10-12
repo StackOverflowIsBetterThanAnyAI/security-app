@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useFocusEffect, useRouter } from 'expo-router'
+import { useCallback, useContext, useState } from 'react'
 import {
     ActivityIndicator,
     Platform,
@@ -76,9 +76,11 @@ const AdminScreen = () => {
         router.replace('/login')
     }
 
-    useEffect(() => {
-        handleFetchUsers()
-    }, [handleFetchUsers])
+    useFocusEffect(
+        useCallback(() => {
+            handleFetchUsers()
+        }, [handleFetchUsers])
+    )
 
     const styles = StyleSheet.create({
         activityLoader: {

@@ -1,6 +1,6 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-import { useRouter } from 'expo-router'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useFocusEffect, useRouter } from 'expo-router'
+import { useCallback, useContext, useRef, useState } from 'react'
 import {
     ActivityIndicator,
     NativeScrollEvent,
@@ -88,15 +88,17 @@ const HomeScreen = () => {
         setIsMoveToTopVisible(offsetY > 128)
     }
 
-    useEffect(() => {
-        handleFetchImages()
-        const refresh = setInterval(() => {
+    useFocusEffect(
+        useCallback(() => {
             handleFetchImages()
-        }, 300000)
-        return () => {
-            clearInterval(refresh)
-        }
-    }, [handleFetchImages])
+            const refresh = setInterval(() => {
+                handleFetchImages()
+            }, 300000)
+            return () => {
+                clearInterval(refresh)
+            }
+        }, [handleFetchImages])
+    )
 
     return (
         <>
