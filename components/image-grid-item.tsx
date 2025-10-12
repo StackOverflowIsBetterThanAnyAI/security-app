@@ -32,7 +32,8 @@ const ImageGridItem = ({
     const [imageLoadFailed, setImageLoadFailed] = useState(false)
 
     const activityColor = useThemeColor({}, 'text')
-    const backgroundColor = useThemeColor({}, 'highlight')
+    const backgroundColorPrimary = useThemeColor({}, 'highlight')
+    const backgroundColorSecondary = useThemeColor({}, 'backgroundSecondary')
 
     const safeItem = encodeURI(item)
     const fullUriWithToken = `${url}${safeItem}?token=${userToken}`
@@ -54,7 +55,7 @@ const ImageGridItem = ({
 
     const styles = StyleSheet.create({
         imageWrapper: {
-            backgroundColor,
+            backgroundColor: backgroundColorPrimary,
         },
         image: {
             height: '100%',
@@ -63,7 +64,7 @@ const ImageGridItem = ({
         },
         loadingOverlay: {
             alignItems: 'center',
-            backgroundColor,
+            backgroundColor: backgroundColorSecondary,
             bottom: 0,
             justifyContent: 'center',
             left: 0,
