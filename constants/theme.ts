@@ -1,6 +1,7 @@
 export const Colors = {
     light: {
         background: '#F7F4F7',
+        backgroundSecondary: '#F7F4F7',
         border: '#353D42',
         buttonActive: '#F5F3FF',
         buttonInactive: '#3F3B3F',
@@ -11,10 +12,12 @@ export const Colors = {
         redInactive: '#E0C9C9',
         text: '#11181C',
         textInactive: '#11181C99',
+        textLight: '#ECEDEE',
         tint: '#0A7EA4',
     },
     dark: {
         background: '#151718',
+        backgroundSecondary: '#2D2E2E',
         border: '#D3D3D4',
         buttonActive: '#ECEDEE',
         buttonInactive: '#313432',
@@ -25,6 +28,7 @@ export const Colors = {
         redInactive: '#DFB8B8',
         text: '#ECEDEE',
         textInactive: '#ECEDEE7D',
+        textLight: '#ECEDEE',
         tint: '#F7F4F7',
     },
 }
