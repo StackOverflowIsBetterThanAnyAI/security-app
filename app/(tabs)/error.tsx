@@ -23,8 +23,8 @@ const ErrorScreen = () => {
     const { from } = useLocalSearchParams<{ from: string }>()
 
     const handleGoBack = () => {
-        setError('')
         router.replace(`/${from}` as any)
+        setError('')
     }
 
     const handleTryAgain = () => {
@@ -43,7 +43,9 @@ const ErrorScreen = () => {
                     <ThemedText center type="subtitle">
                         An Error occurred!
                     </ThemedText>
-                    {error.length && <ThemedText center>{error}</ThemedText>}
+                    {error && error.length && (
+                        <ThemedText center>{String(error)}</ThemedText>
+                    )}
                 </View>
                 {noConnection(colorInput)}
                 <View style={styles.buttonWrapper}>
