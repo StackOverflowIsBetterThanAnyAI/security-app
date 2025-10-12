@@ -48,7 +48,7 @@ export const handleApiChangeRole = async ({
                 setIsUserLoggedIn(false)
                 setError('')
                 await clearData(['authToken', 'authRole', 'authName'])
-                router.replace('/(tabs)/login')
+                router.replace('/')
                 return
             }
 

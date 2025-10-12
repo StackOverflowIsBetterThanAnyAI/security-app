@@ -55,7 +55,7 @@ export const handleApiLogin = async ({
                 setIsUserLoggedIn(false)
                 setError('')
                 await clearData(['authToken', 'authRole', 'authName'])
-                router.replace('/(tabs)/login')
+                router.replace('/')
                 return
             }
 
@@ -102,7 +102,7 @@ export const handleApiLogin = async ({
             })
             router.push({
                 pathname: '/(tabs)/error',
-                params: { from: 'login' },
+                params: { from: '' },
             })
         })
     } finally {

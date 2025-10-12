@@ -25,7 +25,7 @@ const UserScreen = () => {
     const handleLogout = () => {
         setIsUserLoggedIn(false)
         clearData(['authToken', 'authRole', 'authName'])
-        router.replace('/login')
+        router.replace('/')
     }
 
     const styles = StyleSheet.create({

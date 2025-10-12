@@ -32,7 +32,7 @@ const TabLayout = () => {
 
     return (
         <Tabs
-            initialRouteName="login"
+            initialRouteName="index"
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
@@ -61,7 +61,7 @@ const TabLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="login"
+                name="index"
                 options={{
                     title: 'Login',
                     tabBarIcon: getTabIcon('login'),

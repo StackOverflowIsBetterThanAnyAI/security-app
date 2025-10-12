@@ -73,7 +73,7 @@ const AdminScreen = () => {
     const handleLogout = () => {
         setIsUserLoggedIn(false)
         clearData(['authToken', 'authRole', 'authName'])
-        router.replace('/login')
+        router.replace('/')
     }
 
     useFocusEffect(
