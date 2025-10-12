@@ -32,7 +32,7 @@ const TabLayout = () => {
 
     return (
         <Tabs
-            initialRouteName={isUserLoggedIn ? 'home' : 'login'}
+            initialRouteName="login"
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
