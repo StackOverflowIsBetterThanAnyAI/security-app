@@ -44,6 +44,14 @@ export const hidePassword = (colorInput: string) => (
     />
 )
 
+export const memberProfile = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="account-check"
+        size={128}
+        color={colorInput}
+    />
+)
+
 export const noConnection = (colorInput: string) => (
     <MaterialCommunityIcons name="wifi-off" size={48} color={colorInput} />
 )
@@ -60,6 +68,14 @@ export const noUsers = (colorInput: string) => (
     <MaterialCommunityIcons
         name="account-alert-outline"
         size={48}
+        color={colorInput}
+    />
+)
+
+export const userProfile = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="account-search"
+        size={128}
         color={colorInput}
     />
 )

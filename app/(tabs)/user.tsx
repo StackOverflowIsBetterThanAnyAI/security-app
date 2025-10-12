@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router'
 import { useContext } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
-import IconSymbol from '@/components/icon-symbol'
+import { memberProfile, userProfile } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import { ContextUser } from '@/context/ContextUser'
@@ -60,7 +60,9 @@ const UserScreen = () => {
                     Welcome, {userName}!
                 </ThemedText>
                 <View style={styles.avatarContainer}>
-                    <IconSymbol name="person" size={128} color={avatarColor} />
+                    {userRole === 'user'
+                        ? userProfile(avatarColor)
+                        : memberProfile(avatarColor)}
                 </View>
                 <ThemedText center type="subtitle">
                     Role:{' '}
