@@ -26,7 +26,7 @@ const MoveToTop = ({ isVisible, scrollRef }: MoveToTopProps) => {
             duration: 150,
             useNativeDriver: true,
         }).start()
-    }, [isVisible])
+    }, [isVisible, opacity])
 
     const styles = StyleSheet.create({
         wrapper: {

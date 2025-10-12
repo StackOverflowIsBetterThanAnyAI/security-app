@@ -3,8 +3,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SymbolWeight } from 'expo-symbols'
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
 
-export type IconMapping = keyof typeof MAPPING
-
 const MAPPING = {
     'chevron-left': 'chevron-elft',
     'chevron-right': 'chevron-right',
@@ -14,6 +12,8 @@ const MAPPING = {
     login: 'login',
     person: 'person',
 } as const
+
+export type IconMapping = keyof typeof MAPPING
 
 const IconSymbol = ({
     name,

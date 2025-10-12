@@ -74,4 +74,6 @@ const MainView = forwardRef<ScrollView, MainViewProps>(
     }
 )
 
+MainView.displayName = 'MainView'
+
 export default MainView
