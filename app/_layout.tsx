@@ -53,7 +53,7 @@ const RootLayout = () => {
         if (!isLoading && userName && userRole && userToken && isUserLoggedIn) {
             router.replace('/(tabs)/home')
         }
-    }, [isLoading, userName, userRole, userToken, isUserLoggedIn])
+    }, [isLoading, isUserLoggedIn, router, userName, userRole, userToken])
 
     const [fontsLoaded] = useFonts({
         ...MaterialCommunityIcons.font,

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     Platform,
@@ -49,7 +49,7 @@ const AdminScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [users, setUsers] = useState<UsersType[]>([])
 
-    const handleFetchUsers = () => {
+    const handleFetchUsers = useCallback(() => {
         handleApiFetchUsers({
             router,
             setError,
@@ -60,7 +60,15 @@ const AdminScreen = () => {
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
-    }
+    }, [
+        router,
+        setError,
+        setIsLoading,
+        setIsUserLoggedIn,
+        setRetryFn,
+        setUsers,
+        userToken,
+    ])
 
     const handleLogout = () => {
         setIsUserLoggedIn(false)
@@ -70,7 +78,7 @@ const AdminScreen = () => {
 
     useEffect(() => {
         handleFetchUsers()
-    }, [])
+    }, [handleFetchUsers])
 
     const styles = StyleSheet.create({
         activityLoader: {

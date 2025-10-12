@@ -1,6 +1,6 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useRouter } from 'expo-router'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import {
     ActivityIndicator,
     NativeScrollEvent,
@@ -56,7 +56,7 @@ const HomeScreen = () => {
     const [page, setPage] = useState<number>(1)
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleFetchImages = () => {
+    const handleFetchImages = useCallback(() => {
         handleApiFetchImages({
             page,
             router,
@@ -70,7 +70,18 @@ const HomeScreen = () => {
             url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
-    }
+    }, [
+        page,
+        router,
+        setError,
+        setImages,
+        setIsLoading,
+        setIsUserLoggedIn,
+        setPage,
+        setRetryFn,
+        setTotalImages,
+        userToken,
+    ])
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y

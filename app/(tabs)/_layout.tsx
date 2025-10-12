@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+
 import { Tabs } from 'expo-router'
 import { useContext } from 'react'
 
