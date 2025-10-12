@@ -55,7 +55,11 @@ const TabLayout = () => {
                     title: 'Home',
                     tabBarIcon: getTabIcon('home'),
                     href:
-                        isUserLoggedIn && error.length === 0 ? undefined : null,
+                        isUserLoggedIn &&
+                        error.length === 0 &&
+                        userRole !== 'user'
+                            ? undefined
+                            : null,
                 }}
             />
             <Tabs.Screen
