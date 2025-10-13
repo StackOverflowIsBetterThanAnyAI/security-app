@@ -1,6 +1,7 @@
+import { StyleSheet, View } from 'react-native'
+
 import FormSwitchButton from '@/components/form-switch-button'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { StyleSheet, View } from 'react-native'
 
 type FormSwitchProps = {
     handleClick: () => void | undefined

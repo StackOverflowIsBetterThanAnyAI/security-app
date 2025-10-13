@@ -1,6 +1,7 @@
-import { useThemeColor } from '@/hooks/use-theme-color'
 import { useEffect, useRef } from 'react'
 import { Animated, Pressable, StyleSheet } from 'react-native'
+
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 type FormSwitchButtonProps = {
     handleClick: () => void | undefined

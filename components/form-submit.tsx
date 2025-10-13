@@ -1,6 +1,7 @@
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+
 import ThemedText from '@/components/themed-text'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 
 type FormSubmitProps = {
     handleSubmit: () => void
