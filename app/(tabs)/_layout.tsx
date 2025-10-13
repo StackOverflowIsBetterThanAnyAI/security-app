@@ -2,6 +2,7 @@
 
 import { Tabs } from 'expo-router'
 import { useContext } from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
@@ -24,6 +25,7 @@ const TabLayout = () => {
     const { isUserLoggedIn, userName, userRole } = contextUser
 
     const colorScheme = useColorScheme()
+    const insets = useSafeAreaInsets()
 
     const getTabIcon =
         (name: IconMapping) =>
@@ -37,7 +39,7 @@ const TabLayout = () => {
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
                 tabBarButton: HapticTab,
-                tabBarStyle: { height: 96 },
+                tabBarStyle: { height: insets.bottom + 64 },
                 tabBarLabelStyle: { margin: 2 },
             }}
         >

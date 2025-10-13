@@ -1,4 +1,3 @@
-import { useThemeColor } from '@/hooks/use-theme-color'
 import { ReactNode, forwardRef } from 'react'
 import {
     Dimensions,
@@ -7,8 +6,10 @@ import {
     ScrollViewProps,
     StyleSheet,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Svg, { Rect } from 'react-native-svg'
+
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 type MainViewProps = {
     children: ReactNode
@@ -43,6 +44,7 @@ const PatternBackground = () => {
 const MainView = forwardRef<ScrollView, MainViewProps>(
     ({ children, ...props }, ref) => {
         const backgroundColor = useThemeColor({}, 'background')
+        const insets = useSafeAreaInsets()
 
         const styles = StyleSheet.create({
             safeArea: {
@@ -53,6 +55,7 @@ const MainView = forwardRef<ScrollView, MainViewProps>(
                 flexGrow: 1,
                 gap: 16,
                 padding: 16,
+                paddingBottom: insets.bottom,
             },
         })
 
