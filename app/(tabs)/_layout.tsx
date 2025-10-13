@@ -24,6 +24,7 @@ const TabLayout = () => {
     const { isUserLoggedIn, userName, userRole } = contextUser
 
     const tabBarActiveTintColor = useThemeColor({}, 'tint')
+    const tabBarActiveBackgroundColor = useThemeColor({}, 'tabBar')
     const tabBarInactiveBackgroundColor = useThemeColor({}, 'background')
     const insets = useSafeAreaInsets()
 
@@ -42,6 +43,7 @@ const TabLayout = () => {
                 tabBarButton: HapticTab,
                 tabBarStyle: { height: insets.bottom + 64 },
                 tabBarLabelStyle: { margin: 2 },
+                tabBarActiveBackgroundColor,
                 tabBarInactiveBackgroundColor,
             }}
         >
