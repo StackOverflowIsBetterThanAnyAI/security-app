@@ -44,7 +44,7 @@ const ErrorScreen = () => {
                         An Error occurred!
                     </ThemedText>
                     {error && error.length && (
-                        <ThemedText center>{String(error)}</ThemedText>
+                        <ThemedText center>{error}</ThemedText>
                     )}
                 </View>
                 {noConnection(colorInput)}
