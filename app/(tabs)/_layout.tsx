@@ -6,10 +6,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import HapticTab from '@/components/haptic-tab'
 import IconSymbol, { IconMapping } from '@/components/icon-symbol'
-import { Colors } from '@/constants/theme'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
-import { useColorScheme } from '@/hooks/use-color-scheme'
+import { useThemeColor } from '@/hooks/use-theme-color'
 
 const TabLayout = () => {
     const contextError = useContext(ContextError)
@@ -24,7 +23,8 @@ const TabLayout = () => {
     }
     const { isUserLoggedIn, userName, userRole } = contextUser
 
-    const colorScheme = useColorScheme()
+    const tabBarActiveTintColor = useThemeColor({}, 'tint')
+    const tabBarInactiveBackgroundColor = useThemeColor({}, 'background')
     const insets = useSafeAreaInsets()
 
     const getTabIcon =
@@ -35,12 +35,14 @@ const TabLayout = () => {
     return (
         <Tabs
             initialRouteName="index"
+            backBehavior="fullHistory"
             screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+                tabBarActiveTintColor,
                 headerShown: false,
                 tabBarButton: HapticTab,
                 tabBarStyle: { height: insets.bottom + 64 },
                 tabBarLabelStyle: { margin: 2 },
+                tabBarInactiveBackgroundColor,
             }}
         >
             <Tabs.Screen
