@@ -85,7 +85,7 @@ const HomeScreen = () => {
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y
-        setIsMoveToTopVisible(offsetY > 128)
+        setIsMoveToTopVisible(offsetY > 512)
     }
 
     useFocusEffect(
