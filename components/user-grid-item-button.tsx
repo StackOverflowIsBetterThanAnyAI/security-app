@@ -18,7 +18,7 @@ const UserGridItemButton = ({
     role,
 }: UserGridItemButtonProps) => {
     const activityColor = useThemeColor({}, 'text')
-    const backgroundColor = useThemeColor({}, 'buttonInactive')
+    const backgroundColor = useThemeColor({}, 'backgroundSecondary')
     const borderColorActive = useThemeColor({}, 'border')
     const borderColorInactive = useThemeColor({}, 'textInactive')
     const borderColorRedActive = useThemeColor({}, 'red')

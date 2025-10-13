@@ -34,7 +34,7 @@ const UserGridItem = ({ item, setUsers }: UserGridItemProps) => {
     }
     const { setIsUserLoggedIn, userToken } = contextUser
 
-    const backgroundColor = useThemeColor({}, 'buttonInactive')
+    const backgroundColor = useThemeColor({}, 'backgroundSecondary')
     const router = useRouter()
 
     const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)

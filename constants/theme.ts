@@ -1,6 +1,7 @@
 export const Colors = {
     light: {
         background: '#F7F4F7',
+        backgroundSecondary: '#E9E4E9',
         border: '#353D42',
         buttonActive: '#F5F3FF',
         buttonInactive: '#3F3B3F',
@@ -16,6 +17,7 @@ export const Colors = {
     },
     dark: {
         background: '#151718',
+        backgroundSecondary: '#313432',
         border: '#D3D3D4',
         buttonActive: '#ECEDEE',
         buttonInactive: '#313432',
