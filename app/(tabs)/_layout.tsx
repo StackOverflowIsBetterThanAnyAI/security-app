@@ -41,7 +41,10 @@ const TabLayout = () => {
                 tabBarActiveTintColor,
                 headerShown: false,
                 tabBarButton: HapticTab,
-                tabBarStyle: { height: insets.bottom + 64 },
+                tabBarStyle: {
+                    height: 2 * insets.bottom + 64,
+                    marginBottom: -insets.bottom,
+                },
                 tabBarLabelStyle: { margin: 2 },
                 tabBarActiveBackgroundColor,
                 tabBarInactiveBackgroundColor,
