@@ -10,6 +10,7 @@ import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import UserGrid from '@/components/user-grid'
 import { ContextError } from '@/context/ContextError'
+import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -22,6 +23,14 @@ const AdminScreen = () => {
         )
     }
     const { setError, setRetryFn } = contextError
+
+    const contextPage = useContext(ContextPage)
+    if (!contextPage) {
+        throw new Error(
+            'AdminScreen must be used within a ContextPage.Provider'
+        )
+    }
+    const { setIsNextDisabled, setIsPreviousDisabled, setPage } = contextPage
 
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
@@ -63,7 +72,10 @@ const AdminScreen = () => {
     ])
 
     const handleLogout = () => {
+        setIsNextDisabled(true)
+        setIsPreviousDisabled(true)
         setIsUserLoggedIn(false)
+        setPage(1)
         clearData(['authToken', 'authRole', 'authName'])
         router.replace('/')
     }

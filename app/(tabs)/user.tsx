@@ -5,11 +5,18 @@ import { Pressable, StyleSheet, View } from 'react-native'
 import { memberProfile, userProfile } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
+import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const UserScreen = () => {
+    const contextPage = useContext(ContextPage)
+    if (!contextPage) {
+        throw new Error('UserScreen must be used within a ContextPage.Provider')
+    }
+    const { setIsNextDisabled, setIsPreviousDisabled, setPage } = contextPage
+
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
         throw new Error('UserScreen must be used within a ContextUser.Provider')
@@ -23,7 +30,10 @@ const UserScreen = () => {
     const router = useRouter()
 
     const handleLogout = () => {
+        setIsNextDisabled(true)
+        setIsPreviousDisabled(true)
         setIsUserLoggedIn(false)
+        setPage(1)
         clearData(['authToken', 'authRole', 'authName'])
         router.replace('/')
     }

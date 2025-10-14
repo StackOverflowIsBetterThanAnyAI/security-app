@@ -1,6 +1,6 @@
 import { Router } from 'expo-router'
 
-import { URL } from '@/constants/api'
+import { ITEMS_PER_PAGE, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchImagesProps = {
@@ -9,6 +9,8 @@ type handleApiFetchImagesProps = {
     setError: (value: React.SetStateAction<string>) => void
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
     setIsLoading: (value: React.SetStateAction<boolean>) => void
+    setIsNextDisabled: React.Dispatch<React.SetStateAction<boolean>>
+    setIsPreviousDisabled: React.Dispatch<React.SetStateAction<boolean>>
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setPage: React.Dispatch<React.SetStateAction<number>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
@@ -22,6 +24,8 @@ export const handleApiFetchImages = async ({
     setError,
     setImages,
     setIsLoading,
+    setIsNextDisabled,
+    setIsPreviousDisabled,
     setIsUserLoggedIn,
     setPage,
     setRetryFn,
@@ -54,6 +58,12 @@ export const handleApiFetchImages = async ({
             page: number
             total_images: number
         } = await response.json()
+
+        setIsNextDisabled(
+            images.page >= Math.ceil(images.total_images / ITEMS_PER_PAGE)
+        )
+        setIsPreviousDisabled(images.page <= 1)
+
         setImages(images.images)
         setPage(images.page)
         setTotalImages(images.total_images)
@@ -71,6 +81,8 @@ export const handleApiFetchImages = async ({
                     setError,
                     setImages,
                     setIsLoading,
+                    setIsNextDisabled,
+                    setIsPreviousDisabled,
                     setIsUserLoggedIn,
                     setPage,
                     setRetryFn,

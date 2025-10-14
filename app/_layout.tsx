@@ -12,6 +12,7 @@ import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
 import { ContextError } from '@/context/ContextError'
+import { ContextPage } from '@/context/ContextPage'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
 import { useColorScheme } from '@/hooks/use-color-scheme'
@@ -23,8 +24,11 @@ export const unstable_settings = {
 
 const RootLayout = () => {
     const [isLoading, setIsLoading] = useState(true)
+    const [isNextDisabled, setIsNextDisabled] = useState<boolean>(true)
+    const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(true)
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
+    const [page, setPage] = useState<number>(1)
     const [retryFn, setRetryFn] = useState<(() => void) | null>(null)
     const [userName, setUserName] = useState<string>('')
     const [userRole, setUserRole] = useState<UserRoleType>('user')
@@ -83,26 +87,37 @@ const RootLayout = () => {
             <ContextError.Provider
                 value={{ error, retryFn, setError, setRetryFn }}
             >
-                <ContextUser.Provider
+                <ContextPage.Provider
                     value={{
-                        isUserLoggedIn,
-                        setIsUserLoggedIn,
-                        userName,
-                        setUserName,
-                        userRole,
-                        setUserRole,
-                        userToken,
-                        setUserToken,
+                        isNextDisabled,
+                        isPreviousDisabled,
+                        page,
+                        setIsNextDisabled,
+                        setIsPreviousDisabled,
+                        setPage,
                     }}
                 >
-                    <Stack>
-                        <Stack.Screen
-                            name="(tabs)"
-                            options={{ headerShown: false }}
-                        />
-                    </Stack>
-                    <StatusBar style="auto" />
-                </ContextUser.Provider>
+                    <ContextUser.Provider
+                        value={{
+                            isUserLoggedIn,
+                            setIsUserLoggedIn,
+                            userName,
+                            setUserName,
+                            userRole,
+                            setUserRole,
+                            userToken,
+                            setUserToken,
+                        }}
+                    >
+                        <Stack>
+                            <Stack.Screen
+                                name="(tabs)"
+                                options={{ headerShown: false }}
+                            />
+                        </Stack>
+                        <StatusBar style="auto" />
+                    </ContextUser.Provider>
+                </ContextPage.Provider>
             </ContextError.Provider>
         </ThemeProvider>
     )

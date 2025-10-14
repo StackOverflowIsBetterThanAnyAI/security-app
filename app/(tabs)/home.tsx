@@ -21,6 +21,7 @@ import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
 import { ITEMS_PER_PAGE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
+import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
@@ -32,6 +33,13 @@ const HomeScreen = () => {
         )
     }
     const { setError, setRetryFn } = contextError
+
+    const contextPage = useContext(ContextPage)
+    if (!contextPage) {
+        throw new Error('HomeScreen must be used within a ContextPage.Provider')
+    }
+    const { page, setIsNextDisabled, setIsPreviousDisabled, setPage } =
+        contextPage
 
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
@@ -52,7 +60,6 @@ const HomeScreen = () => {
 
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [page, setPage] = useState<number>(1)
     const [totalImages, setTotalImages] = useState<number>(1)
 
     const handleFetchImages = useCallback(() => {
@@ -62,6 +69,8 @@ const HomeScreen = () => {
             setError,
             setImages,
             setIsLoading,
+            setIsNextDisabled,
+            setIsPreviousDisabled,
             setIsUserLoggedIn,
             setPage,
             setRetryFn,
@@ -74,6 +83,8 @@ const HomeScreen = () => {
         setError,
         setImages,
         setIsLoading,
+        setIsNextDisabled,
+        setIsPreviousDisabled,
         setIsUserLoggedIn,
         setPage,
         setRetryFn,
@@ -143,9 +154,7 @@ const HomeScreen = () => {
                                 )}
                                 <Pagination
                                     ITEMS_PER_PAGE={ITEMS_PER_PAGE}
-                                    page={page}
                                     router={router}
-                                    setPage={setPage}
                                     setImages={setImages}
                                     setTotalImages={setTotalImages}
                                     totalImages={totalImages}

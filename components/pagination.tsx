@@ -6,24 +6,21 @@ import { handleApiFetchImages } from '@/api/handleApiFetchImages'
 import PaginationButton from '@/components/pagination-button'
 import ThemedText from '@/components/themed-text'
 import { ContextError } from '@/context/ContextError'
+import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
     ITEMS_PER_PAGE: number
-    page: number
     router: Router
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
-    setPage: React.Dispatch<React.SetStateAction<number>>
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
     totalImages: number
 }
 
 const Pagination = ({
     ITEMS_PER_PAGE,
-    page,
     router,
-    setPage,
     setImages,
     setTotalImages,
     totalImages,
@@ -36,17 +33,28 @@ const Pagination = ({
     }
     const { setError, setRetryFn } = contextError
 
+    const contextPage = useContext(ContextPage)
+    if (!contextPage) {
+        throw new Error('Pagination must be used within a ContextPage.Provider')
+    }
+    const {
+        isNextDisabled,
+        isPreviousDisabled,
+        page,
+        setIsNextDisabled,
+        setIsPreviousDisabled,
+        setPage,
+    } = contextPage
+
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
-        throw new Error('HomeScreen must be used within a ContextUser.Provider')
+        throw new Error('Pagination must be used within a ContextUser.Provider')
     }
     const { setIsUserLoggedIn, userToken } = contextUser
 
     const backgroundColorInactive = useThemeColor({}, 'background')
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [isNextDisabled, setIsNextDisabled] = useState<boolean>(false)
-    const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(true)
 
     const handlePressNext = () => {
         const next = page + 1
@@ -63,6 +71,8 @@ const Pagination = ({
             setError,
             setImages,
             setIsLoading,
+            setIsNextDisabled,
+            setIsPreviousDisabled,
             setIsUserLoggedIn,
             setPage,
             setRetryFn,
@@ -84,6 +94,8 @@ const Pagination = ({
                 setError,
                 setImages,
                 setIsLoading,
+                setIsNextDisabled,
+                setIsPreviousDisabled,
                 setIsUserLoggedIn,
                 setPage,
                 setRetryFn,
