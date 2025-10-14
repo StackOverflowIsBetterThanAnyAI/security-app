@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef } from 'react'
+import { ReactNode, forwardRef, useContext } from 'react'
 import {
     Dimensions,
     KeyboardAvoidingView,
@@ -9,6 +9,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import Svg, { Rect } from 'react-native-svg'
 
+import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type MainViewProps = {
@@ -43,6 +44,14 @@ const PatternBackground = () => {
 
 const MainView = forwardRef<ScrollView, MainViewProps>(
     ({ children, ...props }, ref) => {
+        const contextUser = useContext(ContextUser)
+        if (!contextUser) {
+            throw new Error(
+                'MainView must be used within a ContextUser.Provider'
+            )
+        }
+        const { isUserLoggedIn } = contextUser
+
         const backgroundColor = useThemeColor({}, 'background')
         const insets = useSafeAreaInsets()
 
@@ -65,6 +74,7 @@ const MainView = forwardRef<ScrollView, MainViewProps>(
                 <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
                     <ScrollView
                         ref={ref}
+                        key={isUserLoggedIn ? 'logged-in' : 'logged-out'}
                         contentContainerStyle={styles.scrollContainer}
                         keyboardShouldPersistTaps="handled"
                         {...props}
