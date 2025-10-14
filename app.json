@@ -21,17 +21,6 @@
         "plugins": [
             "expo-router",
             [
-                "expo-system-ui",
-                {
-                    "backgroundColor": "#D4E4F1",
-                    "style": "dark",
-                    "dark": {
-                        "backgroundColor": "#101111",
-                        "style": "light"
-                    }
-                }
-            ],
-            [
                 "expo-splash-screen",
                 {
                     "image": "./assets/images/splash-icon-light.png",
