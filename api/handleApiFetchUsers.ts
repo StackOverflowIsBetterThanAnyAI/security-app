@@ -1,6 +1,8 @@
+import { Router } from 'expo-router'
+
+import { URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
-import { Router } from 'expo-router'
 
 export type UsersType = {
     id: number
@@ -15,7 +17,6 @@ type handleApiFetchUsersProps = {
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
-    url: string
     userToken: string
 }
 
@@ -26,12 +27,11 @@ export const handleApiFetchUsers = async ({
     setIsLoading,
     setIsUserLoggedIn,
     setRetryFn,
-    url,
     userToken,
 }: handleApiFetchUsersProps) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/users`, {
+        const response = await fetch(`${URL}/users`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -67,7 +67,6 @@ export const handleApiFetchUsers = async ({
                     setIsLoading,
                     setIsUserLoggedIn,
                     setRetryFn,
-                    url,
                     userToken,
                 })
             })

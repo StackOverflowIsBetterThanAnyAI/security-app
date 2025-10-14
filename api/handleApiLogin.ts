@@ -1,5 +1,6 @@
 import { Router } from 'expo-router'
 
+import { URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData, saveData } from '@/helper/storeData'
 
@@ -15,7 +16,6 @@ type handleApiLoginProps = {
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
     setUserToken: React.Dispatch<React.SetStateAction<string>>
-    url: string
     userName: string
 }
 
@@ -31,13 +31,12 @@ export const handleApiLogin = async ({
     setRetryFn,
     setUserRole,
     setUserToken,
-    url,
     userName,
 }: handleApiLoginProps) => {
     setIsLoading(true)
     try {
         const response = await fetch(
-            `${url}/${isLogin ? 'login' : 'register'}`,
+            `${URL}/${isLogin ? 'login' : 'register'}`,
             {
                 method: 'POST',
                 headers: {
@@ -96,7 +95,6 @@ export const handleApiLogin = async ({
                     setRetryFn,
                     setUserRole,
                     setUserToken,
-                    url,
                     userName,
                 })
             })

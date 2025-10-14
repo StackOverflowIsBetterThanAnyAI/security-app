@@ -1,13 +1,7 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useState } from 'react'
-import {
-    ActivityIndicator,
-    Platform,
-    Pressable,
-    StyleSheet,
-    View,
-} from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
@@ -15,7 +9,6 @@ import IconSymbol, { noUsers } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import UserGrid from '@/components/user-grid'
-import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
@@ -57,7 +50,6 @@ const AdminScreen = () => {
             setIsUserLoggedIn,
             setRetryFn,
             setUsers,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
     }, [

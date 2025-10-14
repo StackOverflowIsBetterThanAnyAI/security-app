@@ -7,6 +7,7 @@ import {
     View,
 } from 'react-native'
 
+import { URL } from '@/constants/api'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -17,13 +18,11 @@ type ImageGridItemProps = {
     item: string
     setImageHighlighted: React.Dispatch<React.SetStateAction<string | null>>
     userToken: string
-    url: string
 }
 
 const ImageGridItem = ({
     item,
     index,
-    url,
     userToken,
     setImageHighlighted,
     bottomRowIndices,
@@ -36,7 +35,7 @@ const ImageGridItem = ({
     const backgroundColorSecondary = useThemeColor({}, 'buttonInactive')
 
     const safeItem = encodeURI(item)
-    const fullUriWithToken = `${url}${safeItem}?token=${userToken}`
+    const fullUriWithToken = `${URL}${safeItem}?token=${userToken}`
 
     const imageSource = imageLoadFailed
         ? errorImageSource

@@ -17,7 +17,6 @@ type PaginationProps = {
     setPage: React.Dispatch<React.SetStateAction<number>>
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
     totalImages: number
-    url: string
 }
 
 const Pagination = ({
@@ -28,7 +27,6 @@ const Pagination = ({
     setImages,
     setTotalImages,
     totalImages,
-    url,
 }: PaginationProps) => {
     const contextError = useContext(ContextError)
     if (!contextError) {
@@ -69,7 +67,6 @@ const Pagination = ({
             setPage,
             setRetryFn,
             setTotalImages,
-            url,
             userToken,
         })
     }
@@ -91,7 +88,6 @@ const Pagination = ({
                 setPage,
                 setRetryFn,
                 setTotalImages,
-                url,
                 userToken,
             })
         }

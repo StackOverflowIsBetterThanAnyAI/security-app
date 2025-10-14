@@ -1,5 +1,7 @@
-import { clearData } from '@/helper/storeData'
 import { Router } from 'expo-router'
+
+import { URL } from '@/constants/api'
+import { clearData } from '@/helper/storeData'
 
 type handleApiFetchImagesProps = {
     page: number
@@ -11,7 +13,6 @@ type handleApiFetchImagesProps = {
     setPage: React.Dispatch<React.SetStateAction<number>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
-    url: string
     userToken: string
 }
 
@@ -25,12 +26,11 @@ export const handleApiFetchImages = async ({
     setPage,
     setRetryFn,
     setTotalImages,
-    url,
     userToken,
 }: handleApiFetchImagesProps) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/images?page=${page}`, {
+        const response = await fetch(`${URL}/images?page=${page}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -75,7 +75,6 @@ export const handleApiFetchImages = async ({
                     setPage,
                     setRetryFn,
                     setTotalImages,
-                    url,
                     userToken,
                 })
             })

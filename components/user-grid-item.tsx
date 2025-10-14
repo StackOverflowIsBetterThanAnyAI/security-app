@@ -1,13 +1,12 @@
 import { useRouter } from 'expo-router'
 import { useContext, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { handleApiChangeRole } from '@/api/handleApiChangeRole'
 import { handleApiDeleteUser } from '@/api/handleApiDeleteUser'
 import { UsersType } from '@/api/handleApiFetchUsers'
 import ThemedText from '@/components/themed-text'
 import UserGridItemButton from '@/components/user-grid-item-button'
-import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -49,7 +48,6 @@ const UserGridItem = ({ item, setUsers }: UserGridItemProps) => {
             setIsUserLoggedIn,
             setUsers,
             setRetryFn,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
     }
@@ -64,7 +62,6 @@ const UserGridItem = ({ item, setUsers }: UserGridItemProps) => {
             setIsUserLoggedIn,
             setRetryFn,
             setUsers,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
     }

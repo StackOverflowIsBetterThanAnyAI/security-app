@@ -1,8 +1,7 @@
 import { Router } from 'expo-router'
-import { Platform } from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { URL, URL_MOBILE } from '@/constants/api'
+import { URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiChangeRoleProps = {
@@ -14,7 +13,6 @@ type handleApiChangeRoleProps = {
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setUsers: React.Dispatch<React.SetStateAction<UsersType[]>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
-    url: string
     userToken: string
 }
 
@@ -27,12 +25,11 @@ export const handleApiChangeRole = async ({
     setIsUserLoggedIn,
     setUsers,
     setRetryFn,
-    url,
     userToken,
 }: handleApiChangeRoleProps) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/user/role`, {
+        const response = await fetch(`${URL}/user/role`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,7 +62,6 @@ export const handleApiChangeRole = async ({
             setIsUserLoggedIn,
             setRetryFn,
             setUsers,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
 
@@ -85,7 +81,6 @@ export const handleApiChangeRole = async ({
                     setIsUserLoggedIn,
                     setUsers,
                     setRetryFn,
-                    url,
                     userToken,
                 })
             })

@@ -5,7 +5,6 @@ import {
     ActivityIndicator,
     NativeScrollEvent,
     NativeSyntheticEvent,
-    Platform,
     ScrollView,
     StyleSheet,
     View,
@@ -20,7 +19,7 @@ import MainView from '@/components/main-view'
 import MoveToTop from '@/components/move-to-top'
 import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
-import { ITEMS_PER_PAGE, URL, URL_MOBILE } from '@/constants/api'
+import { ITEMS_PER_PAGE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -67,7 +66,6 @@ const HomeScreen = () => {
             setPage,
             setRetryFn,
             setTotalImages,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
     }, [
@@ -132,7 +130,6 @@ const HomeScreen = () => {
                         <ImageGrid
                             images={images}
                             setImageHighlighted={setImageHighlighted}
-                            url={Platform.OS === 'web' ? URL : URL_MOBILE}
                             userToken={userToken}
                         />
                         {totalImages > ITEMS_PER_PAGE && (
@@ -152,9 +149,6 @@ const HomeScreen = () => {
                                     setImages={setImages}
                                     setTotalImages={setTotalImages}
                                     totalImages={totalImages}
-                                    url={
-                                        Platform.OS === 'web' ? URL : URL_MOBILE
-                                    }
                                 />
                             </>
                         )}

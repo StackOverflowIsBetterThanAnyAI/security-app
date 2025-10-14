@@ -1,8 +1,7 @@
 import { Router } from 'expo-router'
-import { Platform } from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { URL, URL_MOBILE } from '@/constants/api'
+import { URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiDeleteUserProps = {
@@ -13,7 +12,6 @@ type handleApiDeleteUserProps = {
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setUsers: React.Dispatch<React.SetStateAction<UsersType[]>>
     setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
-    url: string
     userToken: string
 }
 
@@ -25,12 +23,11 @@ export const handleApiDeleteUser = async ({
     setIsUserLoggedIn,
     setUsers,
     setRetryFn,
-    url,
     userToken,
 }: handleApiDeleteUserProps) => {
     setIsLoading(true)
     try {
-        const response = await fetch(`${url}/user/delete`, {
+        const response = await fetch(`${URL}/user/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +59,6 @@ export const handleApiDeleteUser = async ({
             setIsUserLoggedIn,
             setRetryFn,
             setUsers,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userToken,
         })
 
@@ -81,7 +77,6 @@ export const handleApiDeleteUser = async ({
                     setIsUserLoggedIn,
                     setUsers,
                     setRetryFn,
-                    url,
                     userToken,
                 })
             })

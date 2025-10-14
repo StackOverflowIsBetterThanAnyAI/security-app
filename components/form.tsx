@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import { useContext, useMemo, useRef, useState } from 'react'
-import { Platform, TextInput, View } from 'react-native'
+import { TextInput, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
 import FormError from '@/components/form-error'
@@ -8,7 +8,6 @@ import FormInput from '@/components/form-input'
 import FormSubmit from '@/components/form-submit'
 import FormSwitch from '@/components/form-switch'
 import ThemedText from '@/components/themed-text'
-import { URL, URL_MOBILE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -68,7 +67,6 @@ const Form = () => {
             setRetryFn,
             setUserRole,
             setUserToken,
-            url: Platform.OS === 'web' ? URL : URL_MOBILE,
             userName,
         })
 

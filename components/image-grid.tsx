@@ -6,14 +6,12 @@ import { ITEMS_PER_PAGE } from '@/constants/api'
 type ImageGridProps = {
     images: string[]
     setImageHighlighted: React.Dispatch<React.SetStateAction<string | null>>
-    url: string
     userToken: string
 }
 
 const ImageGrid = ({
     images,
     setImageHighlighted,
-    url,
     userToken,
 }: ImageGridProps) => {
     return (
@@ -28,7 +26,6 @@ const ImageGrid = ({
                     index={index}
                     item={item}
                     setImageHighlighted={setImageHighlighted}
-                    url={url}
                     userToken={userToken}
                 />
             )}
