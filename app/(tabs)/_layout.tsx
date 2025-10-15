@@ -36,9 +36,10 @@ const TabLayout = () => {
                     name={name}
                     color={color}
                     style={{
-                        height: 36,
+                        height: 32,
                         margin: 'auto',
-                        width: 36,
+                        width: 32,
+                        textAlign: 'center',
                     }}
                 />
             )
@@ -69,10 +70,10 @@ const TabLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home"
+                name="live"
                 options={{
-                    title: 'Home',
-                    tabBarIcon: getTabIcon('image'),
+                    title: 'Live',
+                    tabBarIcon: getTabIcon('photo-camera'),
                     href:
                         isUserLoggedIn && !error.length && userRole !== 'user'
                             ? undefined
@@ -80,10 +81,10 @@ const TabLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="live"
+                name="gallery"
                 options={{
-                    title: 'Live',
-                    tabBarIcon: getTabIcon('photo-camera'),
+                    title: 'Gallery',
+                    tabBarIcon: getTabIcon('image'),
                     href:
                         isUserLoggedIn && !error.length && userRole !== 'user'
                             ? undefined

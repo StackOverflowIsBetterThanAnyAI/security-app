@@ -56,7 +56,7 @@ const RootLayout = () => {
     useEffect(() => {
         if (!isLoading && isUserLoggedIn) {
             router.replace(
-                userRole === 'user' ? '/(tabs)/user' : '/(tabs)/home'
+                userRole === 'user' ? '/(tabs)/user' : '/(tabs)/live'
             )
         }
     }, [isLoading, isUserLoggedIn, router, userRole])

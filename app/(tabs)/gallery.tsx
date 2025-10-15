@@ -25,25 +25,29 @@ import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
-const HomeScreen = () => {
+const GalleryScreen = () => {
     const contextError = useContext(ContextError)
     if (!contextError) {
         throw new Error(
-            'HomeScreen must be used within a ContextError.Provider'
+            'GalleryScreen must be used within a ContextError.Provider'
         )
     }
     const { setError, setRetryFn } = contextError
 
     const contextPage = useContext(ContextPage)
     if (!contextPage) {
-        throw new Error('HomeScreen must be used within a ContextPage.Provider')
+        throw new Error(
+            'GalleryScreen must be used within a ContextPage.Provider'
+        )
     }
     const { page, setIsNextDisabled, setIsPreviousDisabled, setPage } =
         contextPage
 
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
-        throw new Error('HomeScreen must be used within a ContextUser.Provider')
+        throw new Error(
+            'GalleryScreen must be used within a ContextUser.Provider'
+        )
     }
     const { setIsUserLoggedIn, userName, userToken } = contextUser
 
@@ -208,4 +212,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default HomeScreen
+export default GalleryScreen

@@ -92,7 +92,7 @@ export const handleApiFetchImages = async ({
             })
             router.push({
                 pathname: '/(tabs)/error',
-                params: { from: 'home' },
+                params: { from: 'gallery' },
             })
         })
     } finally {
