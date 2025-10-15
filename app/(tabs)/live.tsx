@@ -29,7 +29,7 @@ const LiveScreen = () => {
 const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'column',
-        gap: 24,
+        gap: 16,
     },
 })
 
