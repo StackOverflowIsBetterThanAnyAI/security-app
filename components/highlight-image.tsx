@@ -61,7 +61,7 @@ const HighlightImage = ({
         footer: {
             backgroundColor,
             paddingHorizontal: 16,
-            paddingVertical: 8,
+            paddingVertical: 12,
             width: '100%',
         },
         image: {
