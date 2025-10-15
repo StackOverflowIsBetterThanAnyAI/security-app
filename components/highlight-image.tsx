@@ -102,7 +102,7 @@ const HighlightImage = ({
                             <ThemedText>
                                 {decodeURI(imageSource.uri)
                                     .split('/image/')[1]
-                                    .replace(/\?.*$/, '')}
+                                    .replace(/\.jpg.*$/, '')}
                             </ThemedText>
                         </View>
                     </>
