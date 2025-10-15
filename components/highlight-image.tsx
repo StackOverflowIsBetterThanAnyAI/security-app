@@ -92,6 +92,9 @@ const HighlightImage = ({
                     <>
                         <Image
                             ref={imageRef}
+                            alt={decodeURI(imageSource.uri)
+                                .split('/image/')[1]
+                                .replace(/\.jpg.*$/, '')}
                             source={imageSource}
                             style={styles.image}
                             width={width}
@@ -110,6 +113,7 @@ const HighlightImage = ({
                 {imageIsLoaded && !imageIsLoadedSuccess && (
                     <Image
                         ref={imageRef}
+                        alt="Error Image"
                         source={imageSource}
                         style={styles.image}
                         width={width}
