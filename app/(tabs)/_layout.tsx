@@ -24,14 +24,24 @@ const TabLayout = () => {
     const { isUserLoggedIn, userName, userRole } = contextUser
 
     const tabBarActiveTintColor = useThemeColor({}, 'tint')
-    const tabBarActiveBackgroundColor = useThemeColor({}, 'tabBar')
-    const tabBarInactiveBackgroundColor = useThemeColor({}, 'background')
+    const tabBarColor = useThemeColor({}, 'tabBar')
     const insets = useSafeAreaInsets()
 
     const getTabIcon =
         (name: IconMapping) =>
         ({ color, focused }: { color: string; focused: boolean }) =>
-            <IconSymbol size={focused ? 30 : 28} name={name} color={color} />
+            (
+                <IconSymbol
+                    size={focused ? 32 : 28}
+                    name={name}
+                    color={color}
+                    style={{
+                        height: 36,
+                        margin: 'auto',
+                        width: 36,
+                    }}
+                />
+            )
 
     return (
         <Tabs
@@ -45,9 +55,9 @@ const TabLayout = () => {
                     height: 2 * insets.bottom + 64,
                     marginBottom: -insets.bottom,
                 },
-                tabBarLabelStyle: { margin: 2 },
-                tabBarActiveBackgroundColor,
-                tabBarInactiveBackgroundColor,
+                tabBarLabelStyle: { marginTop: 4 },
+                tabBarActiveBackgroundColor: tabBarColor,
+                tabBarInactiveBackgroundColor: tabBarColor,
             }}
         >
             <Tabs.Screen
@@ -62,7 +72,18 @@ const TabLayout = () => {
                 name="home"
                 options={{
                     title: 'Home',
-                    tabBarIcon: getTabIcon('home'),
+                    tabBarIcon: getTabIcon('image'),
+                    href:
+                        isUserLoggedIn && !error.length && userRole !== 'user'
+                            ? undefined
+                            : null,
+                }}
+            />
+            <Tabs.Screen
+                name="live"
+                options={{
+                    title: 'Live',
+                    tabBarIcon: getTabIcon('photo-camera'),
                     href:
                         isUserLoggedIn && !error.length && userRole !== 'user'
                             ? undefined
