@@ -19,7 +19,7 @@ const LiveScreen = () => {
                 <ThemedText center type="title">
                     Welcome, {userName}!
                 </ThemedText>
-                <ThemedText type="title">Live Recording</ThemedText>
+                <ThemedText type="title">Live Image</ThemedText>
             </View>
             <LiveImage />
         </MainView>
