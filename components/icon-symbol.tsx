@@ -8,9 +8,10 @@ type MAPPING = {
     'chevron-right': 'chevron-right'
     error: 'error'
     'expand-less': 'expand-less'
-    home: 'home'
+    image: 'image'
     login: 'login'
     person: 'person'
+    'photo-camera': 'photo-camera'
 }
 
 export type IconMapping = keyof MAPPING
