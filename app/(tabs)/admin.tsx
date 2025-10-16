@@ -1,7 +1,13 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback, useContext, useState } from 'react'
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
+import { useCallback, useContext, useRef, useState } from 'react'
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
@@ -13,6 +19,7 @@ import { ContextError } from '@/context/ContextError'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
+import { useScrollToTop } from '@/hooks/use-scroll-to-top'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const AdminScreen = () => {
@@ -51,6 +58,8 @@ const AdminScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [users, setUsers] = useState<UsersType[]>([])
 
+    const scrollRef = useRef<ScrollView>(null)
+
     const handleFetchUsers = useCallback(() => {
         handleApiFetchUsers({
             router,
@@ -79,6 +88,8 @@ const AdminScreen = () => {
         clearData(['authToken', 'authRole', 'authName'])
         router.replace('/')
     }
+
+    useScrollToTop(scrollRef)
 
     useFocusEffect(
         useCallback(() => {
@@ -127,7 +138,7 @@ const AdminScreen = () => {
     })
 
     return (
-        <MainView>
+        <MainView ref={scrollRef}>
             <View style={styles.titleContainer}>
                 <ThemedText center type="title">
                     Welcome, {userName}!

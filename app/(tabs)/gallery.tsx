@@ -23,6 +23,7 @@ import { ITEMS_PER_PAGE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
+import { useScrollToTop } from '@/hooks/use-scroll-to-top'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const GalleryScreen = () => {
@@ -100,6 +101,8 @@ const GalleryScreen = () => {
         const offsetY = event.nativeEvent.contentOffset.y
         setIsMoveToTopVisible(offsetY > 512)
     }
+
+    useScrollToTop(scrollRef)
 
     useFocusEffect(
         useCallback(() => {
