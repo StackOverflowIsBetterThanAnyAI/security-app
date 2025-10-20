@@ -39,6 +39,26 @@ const HighlightImage = ({
         ? { uri: imageHighlighted! }
         : errorImageSource
 
+    const formattedDate = () => {
+        if (
+            !/security_image_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.jpg/.test(
+                imageSource.uri
+            )
+        ) {
+            return ''
+        }
+
+        const date = decodeURI(imageSource.uri)
+            .replace(/(.jpg.*)$/, '')
+            .split(/security_image_/)[1]
+            .split(/_/)
+
+        const day = date[0]
+        const time = date[1].replace(/-/g, ':')
+
+        return `Recording of ${day} ${time}`
+    }
+
     const handleCloseImage = () => {
         setImageHighlighted(null)
     }
@@ -92,22 +112,20 @@ const HighlightImage = ({
                     <>
                         <Image
                             ref={imageRef}
-                            alt={decodeURI(imageSource.uri)
-                                .split('/image/')[1]
-                                .replace(/\.jpg.*$/, '')}
+                            alt={formattedDate() || 'Past Recording'}
                             source={imageSource}
                             style={styles.image}
                             width={width}
                             resizeMode="contain"
                             onError={handleErrorImage}
                         />
-                        <View style={styles.footer}>
-                            <ThemedText>
-                                {decodeURI(imageSource.uri)
-                                    .split('/image/')[1]
-                                    .replace(/\.jpg.*$/, '')}
-                            </ThemedText>
-                        </View>
+                        {formattedDate().length ? (
+                            <View style={styles.footer}>
+                                <ThemedText center>
+                                    {formattedDate()}
+                                </ThemedText>
+                            </View>
+                        ) : undefined}
                     </>
                 )}
                 {imageIsLoaded && !imageIsLoadedSuccess && (
