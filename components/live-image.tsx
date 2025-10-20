@@ -51,8 +51,12 @@ const LiveImage = () => {
         : { uri: fullUriWithToken }
 
     const formattedDate = () => {
-        if (!imageName.length) {
-            return 'Error Image'
+        if (
+            !/security_image_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}\.jpg/.test(
+                imageName
+            )
+        ) {
+            return 'Current Live Image'
         }
         const date = imageName
             .replace(/^(security_image_)/, '')
