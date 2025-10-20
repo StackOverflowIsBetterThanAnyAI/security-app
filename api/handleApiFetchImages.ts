@@ -65,7 +65,16 @@ export const handleApiFetchImages = async ({
         setIsPreviousDisabled(images.page <= 1)
 
         setImages(images.images)
-        setPage(images.page)
+
+        setPage(() => {
+            if (images.page <= 1) {
+                return 1
+            }
+            if (images.page > Math.ceil(images.total_images / ITEMS_PER_PAGE)) {
+                return Math.ceil(images.total_images / ITEMS_PER_PAGE)
+            }
+            return images.page
+        })
         setTotalImages(images.total_images)
 
         setError('')
