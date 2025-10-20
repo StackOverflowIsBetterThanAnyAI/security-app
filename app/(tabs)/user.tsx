@@ -91,6 +91,11 @@ const UserScreen = () => {
             >
                 <ThemedText center>Logout</ThemedText>
             </Pressable>
+            {userRole === 'user' && (
+                <ThemedText center>
+                    Wait for an admin to promote you to Member.
+                </ThemedText>
+            )}
         </MainView>
     )
 }
