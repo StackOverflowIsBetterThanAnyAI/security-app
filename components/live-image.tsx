@@ -21,9 +21,7 @@ const errorImageSource = require('./../assets/images/error.webp')
 const LiveImage = () => {
     const contextError = useContext(ContextError)
     if (!contextError) {
-        throw new Error(
-            'GalleryScreen must be used within a ContextError.Provider'
-        )
+        throw new Error('LiveImage must be used within a ContextError.Provider')
     }
     const { setError, setRetryFn } = contextError
 
