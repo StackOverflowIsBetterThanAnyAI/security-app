@@ -37,7 +37,14 @@ const LiveImage = () => {
         ? errorImageSource
         : { uri: fullUriWithToken }
 
-    const date = new Date(parseInt(imageSource?.uri?.split('&time=')[1]))
+    const date = (() => {
+        const time = parseInt(imageSource?.uri?.split('time=')[1])
+        if (!isNaN(time)) {
+            return new Date(time)
+        }
+        return new Date(Date.now())
+    })()
+
     const formattedDate = () => {
         const year = date.getFullYear()
         const month = formatNumber(date.getMonth() + 1)
