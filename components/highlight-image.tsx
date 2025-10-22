@@ -11,6 +11,7 @@ import {
 import ThemedText from '@/components/themed-text'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { downloadImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -67,6 +68,13 @@ const HighlightImage = ({
         setImageIsLoadedSuccess(false)
     }
 
+    const handlePress = () => {
+        const imageName = decodeURI(imageSource.uri)
+            .replace(/.*(?=security_image_)/, '')
+            .replace(/\.jpg.*$/, '.jpg')
+        downloadImage({ imageName, imageSource })
+    }
+
     useHighlightImageSize({
         height,
         imageHighlighted,
@@ -107,7 +115,10 @@ const HighlightImage = ({
             onPress={handleCloseImage}
             style={[styles.wrapper]}
         >
-            <Pressable onPress={() => {}}>
+            <Pressable
+                onPress={handlePress}
+                style={({ pressed }) => [{ opacity: pressed ? 0.75 : 1 }]}
+            >
                 {imageIsLoaded && imageIsLoadedSuccess && imageSource.uri && (
                     <>
                         <Image
