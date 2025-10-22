@@ -138,7 +138,7 @@ const GalleryScreen = () => {
                     >
                         <ActivityIndicator size="large" color={colorIcon} />
                     </View>
-                ) : images ? (
+                ) : images?.length ? (
                     <>
                         <Button
                             accessibilityLabel="Refresh Recordings"
