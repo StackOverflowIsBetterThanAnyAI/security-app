@@ -10,7 +10,7 @@
 
 4. Gain Access: An Admin must manually change your role to Member.
 
-5. View Images: Once upgraded, you can navigate to the Home tab to see the images, which are recorded on a Raspberry Pi Zero W and updated every 5 minutes.
+5. View Images: Once upgraded, you can navigate to the Gallery tab to see the images, which are recorded on a Raspberry Pi Zero W and updated every 5 minutes, or checkout the Live section to view the current camera screen.
 
 ## Backend Repository
 
