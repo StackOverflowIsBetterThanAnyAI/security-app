@@ -16,5 +16,7 @@ export const downloadImage = async ({
     )
     try {
         await shareAsync(result.uri)
-    } catch (error) {}
+    } catch (error: any) {
+        console.error('Sharing failed:', error)
+    }
 }

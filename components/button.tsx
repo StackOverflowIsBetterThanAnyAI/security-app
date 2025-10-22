@@ -25,7 +25,7 @@ const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
         setIsLoading(true)
         try {
             await handlePress()
-        } catch (error) {
+        } catch (error: any) {
             console.error('Action failed:', error)
         } finally {
             setIsLoading(false)
