@@ -30,7 +30,7 @@ export const handleApiFetchLive = async ({
             },
         })
 
-        if (!response.ok) {
+        if (!response.ok && response.status !== 404) {
             if (response.status === 403) {
                 setIsUserLoggedIn(false)
                 setError('')
@@ -45,7 +45,11 @@ export const handleApiFetchLive = async ({
         }
 
         const data: { filename: string } = await response.json()
-        setImageName(data.filename)
+        if (response.status === 404) {
+            setImageName('')
+        } else {
+            setImageName(data.filename)
+        }
 
         setError('')
         setRetryFn(() => {})
