@@ -10,11 +10,13 @@ import {
 
 import { handleApiFetchLive } from '@/api/handleApiFetchLive'
 import Button from '@/components/button'
+import { noFile } from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
 import { URL } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { downloadImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -40,6 +42,7 @@ const LiveImage = () => {
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
     const backgroundColorSecondary = useThemeColor({}, 'buttonInactive')
+    const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
 
     const fullUriWithToken = `${URL}/live?token=${userToken}&time=${refreshTime}`
@@ -67,7 +70,9 @@ const LiveImage = () => {
         return `Live Image ${day} ${time}`
     }
 
-    const handlePress = () => {}
+    const handlePress = () => {
+        downloadImage({ imageName, imageSource })
+    }
 
     const handleFetchLive = useCallback(() => {
         handleApiFetchLive({
@@ -131,49 +136,75 @@ const LiveImage = () => {
             justifyContent: 'center',
             width: '100%',
         },
+        noImagesContainer: {
+            gap: 16,
+            alignItems: 'center',
+            marginTop: 64,
+        },
     })
 
     return (
         <>
-            <Button
-                accessibilityLabel="Refresh Recordings"
-                handlePress={handleRefreshImage}
-                label="Refresh"
-            />
-            <Pressable
-                accessible={true}
-                accessibilityRole="button"
-                onPress={handlePress}
-                style={({ pressed }) => [
-                    { opacity: pressed ? 0.75 : 1 },
-                    styles.imageWrapper,
-                ]}
-            >
-                <Image
-                    alt={formattedDate()}
-                    source={imageSource}
-                    style={styles.image}
-                    resizeMode="cover"
-                    onError={() => {
-                        setImageLoadFailed(true)
-                        setImageIsLoaded(true)
-                    }}
-                    onLoad={() => setImageIsLoaded(true)}
-                />
-                {imageIsLoaded &&
-                    imageSource.uri &&
-                    imageName &&
-                    !isLoading && (
-                        <View style={styles.footer}>
-                            <ThemedText center>{formattedDate()}</ThemedText>
-                        </View>
-                    )}
-                {!imageIsLoaded && (
-                    <View style={styles.loadingOverlay}>
-                        <ActivityIndicator color={activityColor} size="large" />
-                    </View>
-                )}
-            </Pressable>
+            {imageName ? (
+                <>
+                    <Button
+                        accessibilityLabel="Refresh Recordings"
+                        handlePress={handleRefreshImage}
+                        label="Refresh"
+                    />
+                    <Pressable
+                        accessible={true}
+                        accessibilityRole="button"
+                        onPress={handlePress}
+                        style={({ pressed }) => [
+                            { opacity: pressed ? 0.75 : 1 },
+                            styles.imageWrapper,
+                        ]}
+                    >
+                        <Image
+                            alt={formattedDate()}
+                            source={imageSource}
+                            style={styles.image}
+                            resizeMode="cover"
+                            onError={() => {
+                                setImageLoadFailed(true)
+                                setImageIsLoaded(true)
+                            }}
+                            onLoad={() => setImageIsLoaded(true)}
+                        />
+                        {imageIsLoaded &&
+                            imageSource.uri &&
+                            imageName &&
+                            !isLoading && (
+                                <View style={styles.footer}>
+                                    <ThemedText center>
+                                        {formattedDate()}
+                                    </ThemedText>
+                                </View>
+                            )}
+                        {!imageIsLoaded && (
+                            <View style={styles.loadingOverlay}>
+                                <ActivityIndicator
+                                    color={activityColor}
+                                    size="large"
+                                />
+                            </View>
+                        )}
+                    </Pressable>
+                </>
+            ) : (
+                <View style={styles.noImagesContainer}>
+                    {noFile(colorIcon)}
+                    <ThemedText center>
+                        Currently, there is no Live Image available.
+                    </ThemedText>
+                    <Button
+                        accessibilityLabel="Refresh Recordings"
+                        handlePress={handleRefreshImage}
+                        label="Refresh"
+                    />
+                </View>
+            )}
         </>
     )
 }
