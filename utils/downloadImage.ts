@@ -14,5 +14,7 @@ export const downloadImage = async ({
         imageSource.uri,
         FileSystem.documentDirectory + imageName
     )
-    await shareAsync(result.uri)
+    try {
+        await shareAsync(result.uri)
+    } catch (error) {}
 }
