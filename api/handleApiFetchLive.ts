@@ -67,7 +67,7 @@ export const handleApiFetchLive = async ({
             })
             router.push({
                 pathname: '/(tabs)/error',
-                params: { from: 'gallery' },
+                params: { from: 'live' },
             })
         })
     } finally {
