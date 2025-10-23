@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native'
 
 import IconSymbol from '@/components/icon-symbol'
+import { Colors } from '@/constants/theme'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationButtonProps = {
@@ -20,7 +21,7 @@ const PaginationButton = ({
     const backgroundColorInactive = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
     const borderColorInactive = useThemeColor({}, 'textInactive')
-    const colorActive = useThemeColor({}, 'tint')
+    const colorActive = useThemeColor({ light: Colors.dark.background }, 'tint')
     const colorInative = useThemeColor({}, 'textInactive')
 
     const styles = StyleSheet.create({
