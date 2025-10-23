@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 
 import ThemedText from '@/components/themed-text'
@@ -17,12 +18,67 @@ const UserGridItemButton = ({
     handlePress,
     role,
 }: UserGridItemButtonProps) => {
+    const handleButtonText = useCallback(() => {
+        if (isDelete) {
+            return 'Delete User'
+        }
+        if (role === 'user') {
+            return 'Promote'
+        }
+        return 'Demote'
+    }, [isDelete, role])
+
+    const [buttonText, setButtonText] = useState<string>(handleButtonText())
+    const [isConfirming, setIsConfirming] = useState<boolean>(false)
+
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'backgroundSecondary')
+    const backgroundColorConfirming = useThemeColor({}, 'red')
     const borderColorActive = useThemeColor({}, 'border')
+    const borderColorConfirming = useThemeColor({}, 'red')
     const borderColorInactive = useThemeColor({}, 'textInactive')
     const borderColorRedActive = useThemeColor({}, 'red')
     const borderColorRedInactive = useThemeColor({}, 'redInactive')
+
+    const accessibilityLabel = `${
+        isDelete ? 'Delete User' : role === 'user' ? 'Promote' : 'Demote'
+    }${isLoading || role === 'admin' ? ', disabled' : ''}`
+
+    const onPress = () => {
+        if (isLoading || role === 'admin') {
+            return
+        }
+        setButtonText('Confirm')
+        setIsConfirming(true)
+
+        if (isConfirming) {
+            setIsConfirming(false)
+            handlePress()
+        }
+    }
+
+    useEffect(() => {
+        const newText = handleButtonText()
+        setButtonText(newText)
+    }, [handleButtonText])
+
+    useEffect(() => {
+        let timeoutId: number
+        const prevText = handleButtonText()
+
+        if (isConfirming) {
+            timeoutId = setTimeout(() => {
+                setIsConfirming(false)
+                setButtonText(prevText)
+            }, 3000)
+        }
+
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId)
+            }
+        }
+    }, [handleButtonText, isConfirming, setIsConfirming])
 
     const styles = StyleSheet.create({
         button: {
@@ -32,6 +88,10 @@ const UserGridItemButton = ({
             minWidth: 144,
             paddingVertical: 4,
             paddingHorizontal: 16,
+        },
+        confirming: {
+            backgroundColor: backgroundColorConfirming,
+            borderColor: borderColorConfirming,
         },
         disabledDelete: {
             borderColor: borderColorRedInactive,
@@ -47,6 +107,22 @@ const UserGridItemButton = ({
         },
     })
 
+    const buttonStyle = (() => {
+        if (isConfirming) {
+            return styles.confirming
+        }
+        if (isDelete) {
+            if (isLoading || role === 'admin') {
+                return styles.disabledDelete
+            }
+            return styles.enabledDelete
+        }
+        if (isLoading || role === 'admin') {
+            return styles.disabledRole
+        }
+        return styles.enabledRole
+    })()
+
     return (
         <Pressable
             accessible={true}
@@ -54,27 +130,15 @@ const UserGridItemButton = ({
             accessibilityState={{
                 disabled: isLoading || role === 'admin',
             }}
-            accessibilityLabel={`${
-                isDelete
-                    ? 'Delete User'
-                    : role === 'user'
-                    ? 'Promote'
-                    : 'Demote'
-            }${isLoading || role === 'admin' ? ', disabled' : ''}`}
-            onPress={isLoading || role !== 'admin' ? handlePress : undefined}
+            accessibilityLabel={accessibilityLabel}
+            onPress={onPress}
             style={({ pressed }) => [
                 {
                     opacity:
                         pressed && !isLoading && role !== 'admin' ? 0.75 : 1,
                 },
                 styles.button,
-                isDelete
-                    ? isLoading || role === 'admin'
-                        ? styles.disabledDelete
-                        : styles.enabledDelete
-                    : isLoading || role === 'admin'
-                    ? styles.disabledRole
-                    : styles.enabledRole,
+                buttonStyle,
             ]}
         >
             {isLoading ? (
@@ -88,11 +152,7 @@ const UserGridItemButton = ({
                     isDisabled={role === 'admin'}
                     style={{ height: 26 }}
                 >
-                    {isDelete
-                        ? 'Delete User'
-                        : role === 'user'
-                        ? 'Promote'
-                        : 'Demote'}
+                    {buttonText}
                 </ThemedText>
             )}
         </Pressable>
