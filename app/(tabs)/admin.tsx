@@ -15,6 +15,7 @@ import IconSymbol, { noUsers } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import UserGrid from '@/components/user-grid'
+import { Colors } from '@/constants/theme'
 import { ContextError } from '@/context/ContextError'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
@@ -47,8 +48,14 @@ const AdminScreen = () => {
     }
     const { setIsUserLoggedIn, userName, userToken } = contextUser
 
-    const avatarColor = useThemeColor({}, 'textLight')
-    const backgroundColorAvatar = useThemeColor({}, 'buttonInactive')
+    const avatarColor = useThemeColor(
+        { light: Colors.light.buttonInactive },
+        'textLight'
+    )
+    const backgroundColorAvatar = useThemeColor(
+        { light: Colors.light.textLight },
+        'buttonInactive'
+    )
     const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
     const colorIcon = useThemeColor({}, 'text')
