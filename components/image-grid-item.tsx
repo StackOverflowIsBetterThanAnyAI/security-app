@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 
 import { URL } from '@/constants/api'
+import { Colors } from '@/constants/theme'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -32,7 +33,10 @@ const ImageGridItem = ({
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColorPrimary = useThemeColor({}, 'highlight')
-    const backgroundColorSecondary = useThemeColor({}, 'buttonInactive')
+    const backgroundColorSecondary = useThemeColor(
+        { light: Colors.light.buttonActive },
+        'buttonInactive'
+    )
 
     const safeItem = encodeURI(item)
     const fullUriWithToken = `${URL}${safeItem}?token=${userToken}`

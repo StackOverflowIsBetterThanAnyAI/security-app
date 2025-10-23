@@ -14,6 +14,7 @@ import { noFile } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
 import { URL } from '@/constants/api'
+import { Colors } from '@/constants/theme'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -44,7 +45,10 @@ const LiveScreen = () => {
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
-    const backgroundColorSecondary = useThemeColor({}, 'buttonInactive')
+    const backgroundColorSecondary = useThemeColor(
+        { light: Colors.light.buttonActive },
+        'buttonInactive'
+    )
     const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
 
