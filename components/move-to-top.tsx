@@ -12,7 +12,7 @@ type MoveToTopProps = {
 const MoveToTop = ({ isVisible, scrollRef }: MoveToTopProps) => {
     const backgroundColor = useThemeColor({}, 'background')
     const borderColor = useThemeColor({}, 'border')
-    const color = useThemeColor({}, 'tint')
+    const color = useThemeColor({}, 'text')
 
     const opacity = useRef(new Animated.Value(0)).current
 
