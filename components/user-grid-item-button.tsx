@@ -1,5 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+    ActivityIndicator,
+    Animated,
+    Pressable,
+    StyleSheet,
+} from 'react-native'
 
 import ThemedText from '@/components/themed-text'
 import { UserRoleType } from '@/context/ContextUser'
@@ -40,6 +45,8 @@ const UserGridItemButton = ({
     const borderColorRedActive = useThemeColor({}, 'red')
     const borderColorRedInactive = useThemeColor({}, 'redInactive')
 
+    const fadeAnim = useRef(new Animated.Value(0)).current
+
     const accessibilityLabel = `${
         isDelete ? 'Delete User' : role === 'user' ? 'Promote' : 'Demote'
     }${isLoading || role === 'admin' ? ', disabled' : ''}`
@@ -48,19 +55,36 @@ const UserGridItemButton = ({
         if (isLoading || role === 'admin') {
             return
         }
+
+        if (isConfirming) {
+            fadeAnim.stopAnimation()
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 0,
+                useNativeDriver: false,
+            }).start(() => {
+                setIsConfirming(false)
+                handlePress()
+            })
+            return
+        }
+
         setButtonText('Confirm')
         setIsConfirming(true)
 
-        if (isConfirming) {
-            setIsConfirming(false)
-            handlePress()
-        }
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 250,
+            useNativeDriver: false,
+        }).start()
     }
 
     useEffect(() => {
         const newText = handleButtonText()
-        setButtonText(newText)
-    }, [handleButtonText])
+        if (!isConfirming) {
+            setButtonText(newText)
+        }
+    }, [handleButtonText, isConfirming])
 
     useEffect(() => {
         let timeoutId: number
@@ -68,8 +92,14 @@ const UserGridItemButton = ({
 
         if (isConfirming) {
             timeoutId = setTimeout(() => {
-                setIsConfirming(false)
-                setButtonText(prevText)
+                Animated.timing(fadeAnim, {
+                    toValue: 0,
+                    duration: 750,
+                    useNativeDriver: false,
+                }).start(() => {
+                    setIsConfirming(false)
+                    setButtonText(prevText)
+                })
             }, 3000)
         }
 
@@ -78,11 +108,18 @@ const UserGridItemButton = ({
                 clearTimeout(timeoutId)
             }
         }
-    }, [handleButtonText, isConfirming, setIsConfirming])
+    }, [fadeAnim, handleButtonText, isConfirming, setIsConfirming])
+
+    const animatedBackgroundColor = fadeAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [backgroundColor, backgroundColorConfirming],
+    })
 
     const styles = StyleSheet.create({
+        animated: {
+            borderRadius: 12,
+        },
         button: {
-            backgroundColor,
             borderRadius: 12,
             borderWidth: 2,
             minWidth: 144,
@@ -90,7 +127,6 @@ const UserGridItemButton = ({
             paddingHorizontal: 16,
         },
         confirming: {
-            backgroundColor: backgroundColorConfirming,
             borderColor: borderColorConfirming,
         },
         disabledDelete: {
@@ -124,38 +160,48 @@ const UserGridItemButton = ({
     })()
 
     return (
-        <Pressable
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityState={{
-                disabled: isLoading || role === 'admin',
-            }}
-            accessibilityLabel={accessibilityLabel}
-            onPress={onPress}
-            style={({ pressed }) => [
-                {
-                    opacity:
-                        pressed && !isLoading && role !== 'admin' ? 0.75 : 1,
-                },
-                styles.button,
+        <Animated.View
+            style={[
+                { backgroundColor: animatedBackgroundColor },
+                styles.animated,
                 buttonStyle,
             ]}
         >
-            {isLoading ? (
-                <ActivityIndicator
-                    color={activityColor}
-                    style={{ height: 26 }}
-                />
-            ) : (
-                <ThemedText
-                    center
-                    isDisabled={role === 'admin'}
-                    style={{ height: 26 }}
-                >
-                    {buttonText}
-                </ThemedText>
-            )}
-        </Pressable>
+            <Pressable
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityState={{
+                    disabled: isLoading || role === 'admin',
+                }}
+                accessibilityLabel={accessibilityLabel}
+                onPress={onPress}
+                style={({ pressed }) => [
+                    {
+                        opacity:
+                            pressed && !isLoading && role !== 'admin'
+                                ? 0.75
+                                : 1,
+                    },
+                    styles.button,
+                    buttonStyle,
+                ]}
+            >
+                {isLoading ? (
+                    <ActivityIndicator
+                        color={activityColor}
+                        style={{ height: 26 }}
+                    />
+                ) : (
+                    <ThemedText
+                        center
+                        isDisabled={role === 'admin'}
+                        style={{ height: 26 }}
+                    >
+                        {buttonText}
+                    </ThemedText>
+                )}
+            </Pressable>
+        </Animated.View>
     )
 }
 
