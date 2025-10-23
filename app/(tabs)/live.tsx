@@ -19,7 +19,7 @@ import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { downloadImage } from '@/utils/downloadImage'
 
-const errorImageSource = require('./../assets/images/error.webp')
+const errorImageSource = require('./../../assets/images/error.webp')
 
 const LiveScreen = () => {
     const contextError = useContext(ContextError)
@@ -117,6 +117,12 @@ const LiveScreen = () => {
     )
 
     const styles = StyleSheet.create({
+        activityLoader: {
+            alignItems: 'center',
+            aspectRatio: 16 / 9,
+            justifyContent: 'center',
+            width: '100%',
+        },
         footer: {
             backgroundColor,
             paddingHorizontal: 16,
@@ -158,7 +164,18 @@ const LiveScreen = () => {
                 </ThemedText>
                 <ThemedText type="title">Live Image</ThemedText>
             </View>
-            {imageName ? (
+            {isLoading && !imageName ? (
+                <>
+                    <Button
+                        accessibilityLabel="Refresh Recordings"
+                        handlePress={handleRefreshImage}
+                        label="Refresh"
+                    />
+                    <View style={[styles.activityLoader]}>
+                        <ActivityIndicator size="large" color={colorIcon} />
+                    </View>
+                </>
+            ) : imageName ? (
                 <>
                     <Button
                         accessibilityLabel="Refresh Recordings"
