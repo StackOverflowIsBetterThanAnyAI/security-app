@@ -129,7 +129,7 @@ const GalleryScreen = () => {
                     </ThemedText>
                     <ThemedText type="title">Past Recordings</ThemedText>
                 </View>
-                {isLoading && !images ? (
+                {isLoading && !images?.length ? (
                     <View
                         style={[
                             styles.activityLoader,
