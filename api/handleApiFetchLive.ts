@@ -1,6 +1,6 @@
 import { Router } from 'expo-router'
 
-import { URL } from '@/constants/api'
+import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchLiveProps = {
@@ -22,13 +22,23 @@ export const handleApiFetchLive = async ({
     setRetryFn,
     userToken,
 }: handleApiFetchLiveProps) => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const timeoutId = setTimeout(() => {
+        controller.abort()
+    }, API_TIMEOUT_MS)
+
     setIsLoading(true)
     try {
         const response = await fetch(`${URL}/live/meta`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
+            signal: signal,
         })
+
+        clearTimeout(timeoutId)
 
         if (!response.ok && response.status !== 404) {
             if (response.status === 403) {
@@ -54,7 +64,13 @@ export const handleApiFetchLive = async ({
         setError('')
         setRetryFn(() => {})
     } catch (error: any) {
-        setError(error.message)
+        clearTimeout(timeoutId)
+
+        const errorMessage =
+            error.name === 'AbortError' || error.message.includes('Aborted')
+                ? 'Response from Server took too long'
+                : error.message
+        setError(errorMessage)
         setImageName('')
 
         queueMicrotask(() => {

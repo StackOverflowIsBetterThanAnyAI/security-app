@@ -1,7 +1,7 @@
 import { Router } from 'expo-router'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { URL } from '@/constants/api'
+import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiDeleteUserProps = {
@@ -25,6 +25,13 @@ export const handleApiDeleteUser = async ({
     setRetryFn,
     userToken,
 }: handleApiDeleteUserProps) => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const timeoutId = setTimeout(() => {
+        controller.abort()
+    }, API_TIMEOUT_MS)
+
     setIsLoading(true)
     try {
         const response = await fetch(`${URL}/user/delete`, {
@@ -36,7 +43,10 @@ export const handleApiDeleteUser = async ({
             body: JSON.stringify({
                 id: id,
             }),
+            signal: signal,
         })
+
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
             if (response.status === 403) {
@@ -65,7 +75,13 @@ export const handleApiDeleteUser = async ({
         setError('')
         setRetryFn(() => {})
     } catch (error: any) {
-        setError(error.message)
+        clearTimeout(timeoutId)
+
+        const errorMessage =
+            error.name === 'AbortError' || error.message.includes('Aborted')
+                ? 'Response from Server took too long'
+                : error.message
+        setError(errorMessage)
 
         queueMicrotask(() => {
             setRetryFn(() => () => {

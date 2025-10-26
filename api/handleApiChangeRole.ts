@@ -1,7 +1,7 @@
 import { Router } from 'expo-router'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { URL } from '@/constants/api'
+import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiChangeRoleProps = {
@@ -27,6 +27,13 @@ export const handleApiChangeRole = async ({
     setRetryFn,
     userToken,
 }: handleApiChangeRoleProps) => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const timeoutId = setTimeout(() => {
+        controller.abort()
+    }, API_TIMEOUT_MS)
+
     setIsLoading(true)
     try {
         const response = await fetch(`${URL}/user/role`, {
@@ -39,7 +46,10 @@ export const handleApiChangeRole = async ({
                 id: id,
                 role: role,
             }),
+            signal: signal,
         })
+
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
             if (response.status === 403) {
@@ -68,7 +78,13 @@ export const handleApiChangeRole = async ({
         setError('')
         setRetryFn(() => {})
     } catch (error: any) {
-        setError(error.message)
+        clearTimeout(timeoutId)
+
+        const errorMessage =
+            error.name === 'AbortError' || error.message.includes('Aborted')
+                ? 'Response from Server took too long'
+                : error.message
+        setError(errorMessage)
 
         queueMicrotask(() => {
             setRetryFn(() => () => {

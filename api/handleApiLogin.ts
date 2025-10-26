@@ -1,6 +1,6 @@
 import { Router } from 'expo-router'
 
-import { URL } from '@/constants/api'
+import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData, saveData } from '@/helper/storeData'
 
@@ -33,6 +33,13 @@ export const handleApiLogin = async ({
     setUserToken,
     userName,
 }: handleApiLoginProps) => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const timeoutId = setTimeout(() => {
+        controller.abort()
+    }, API_TIMEOUT_MS)
+
     setIsLoading(true)
     try {
         const response = await fetch(
@@ -46,8 +53,11 @@ export const handleApiLogin = async ({
                     name: userName,
                     password,
                 }),
+                signal: signal,
             }
         )
+
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
             if (response.status === 403) {
@@ -77,8 +87,14 @@ export const handleApiLogin = async ({
         setIsUserLoggedIn(true)
         setPassword('')
         setRetryFn(() => {})
-    } catch (err: any) {
-        setError(err.message)
+    } catch (error: any) {
+        clearTimeout(timeoutId)
+
+        const errorMessage =
+            error.name === 'AbortError' || error.message.includes('Aborted')
+                ? 'Response from Server took too long'
+                : error.message
+        setError(errorMessage)
         setIsUserLoggedIn(false)
 
         queueMicrotask(() => {

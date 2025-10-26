@@ -1,6 +1,6 @@
 import { Router } from 'expo-router'
 
-import { ITEMS_PER_PAGE, URL } from '@/constants/api'
+import { API_TIMEOUT_MS, ITEMS_PER_PAGE, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchImagesProps = {
@@ -32,13 +32,23 @@ export const handleApiFetchImages = async ({
     setTotalImages,
     userToken,
 }: handleApiFetchImagesProps) => {
+    const controller = new AbortController()
+    const signal = controller.signal
+
+    const timeoutId = setTimeout(() => {
+        controller.abort()
+    }, API_TIMEOUT_MS)
+
     setIsLoading(true)
     try {
         const response = await fetch(`${URL}/images?page=${page}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
+            signal: signal,
         })
+
+        clearTimeout(timeoutId)
 
         if (!response.ok) {
             if (response.status === 403) {
@@ -80,7 +90,13 @@ export const handleApiFetchImages = async ({
         setError('')
         setRetryFn(() => {})
     } catch (error: any) {
-        setError(error.message)
+        clearTimeout(timeoutId)
+
+        const errorMessage =
+            error.name === 'AbortError' || error.message.includes('Aborted')
+                ? 'Response from Server took too long'
+                : error.message
+        setError(errorMessage)
 
         queueMicrotask(() => {
             setRetryFn(() => () => {
