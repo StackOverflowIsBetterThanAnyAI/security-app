@@ -4,6 +4,7 @@ import {
     ActivityIndicator,
     Image,
     Pressable,
+    RefreshControl,
     StyleSheet,
     View,
 } from 'react-native'
@@ -42,6 +43,7 @@ const LiveScreen = () => {
     const [imageLoadFailed, setImageLoadFailed] = useState(false)
     const [imageName, setImageName] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
@@ -49,7 +51,6 @@ const LiveScreen = () => {
         { light: Colors.light.buttonActive },
         'buttonInactive'
     )
-    const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
 
     const fullUriWithToken = `${URL}/live?token=${userToken}&time=${refreshTime}`
@@ -81,43 +82,56 @@ const LiveScreen = () => {
         downloadImage({ imageName, imageSource })
     }
 
-    const handleFetchLive = useCallback(() => {
-        handleApiFetchLive({
+    const handleFetchLive = useCallback(
+        (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+            handleApiFetchLive({
+                router,
+                setError,
+                setImageName,
+                setIsLoading,
+                setIsUserLoggedIn,
+                setRetryFn,
+                userToken,
+            })
+        },
+        [
             router,
             setError,
             setImageName,
-            setIsLoading,
             setIsUserLoggedIn,
             setRetryFn,
             userToken,
-        })
-    }, [
-        router,
-        setError,
-        setImageName,
-        setIsLoading,
-        setIsUserLoggedIn,
-        setRetryFn,
-        userToken,
-    ])
+        ]
+    )
 
-    const handleRefreshImage = useCallback(() => {
-        setImageLoadFailed(false)
-        setImageIsLoaded(false)
-        setRefreshTime(Date.now())
-        handleFetchLive()
-    }, [setImageLoadFailed, setImageIsLoaded, setRefreshTime, handleFetchLive])
+    const handleRefreshImage = useCallback(
+        (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+            setImageLoadFailed(false)
+            setImageIsLoaded(false)
+            setRefreshTime(Date.now())
+            handleFetchLive(setIsLoading)
+        },
+        [handleFetchLive, setImageLoadFailed, setImageIsLoaded, setRefreshTime]
+    )
+
+    const handleRefreshImageManual = useCallback(() => {
+        handleRefreshImage(setIsLoading)
+    }, [handleRefreshImage, setIsLoading])
+
+    const handleRefreshImagePull = () => {
+        handleRefreshImage(setIsLoadingPull)
+    }
 
     useFocusEffect(
         useCallback(() => {
-            handleRefreshImage()
+            handleRefreshImageManual()
             const refresh = setInterval(() => {
-                handleRefreshImage()
+                handleRefreshImageManual()
             }, 30000)
             return () => {
                 clearInterval(refresh)
             }
-        }, [handleRefreshImage])
+        }, [handleRefreshImageManual])
     )
 
     const styles = StyleSheet.create({
@@ -161,7 +175,16 @@ const LiveScreen = () => {
     })
 
     return (
-        <MainView>
+        <MainView
+            refreshControl={
+                <RefreshControl
+                    accessibilityLabel="Refreshing Live Image"
+                    refreshing={isLoadingPull}
+                    onRefresh={handleRefreshImagePull}
+                    tintColor={activityColor}
+                />
+            }
+        >
             <View style={styles.titleContainer}>
                 <ThemedText center type="title">
                     Welcome, {userName}!
@@ -171,19 +194,19 @@ const LiveScreen = () => {
             {isLoading && !imageName ? (
                 <>
                     <Button
-                        accessibilityLabel="Refresh Recordings"
-                        handlePress={handleRefreshImage}
+                        accessibilityLabel="Refresh Live Image"
+                        handlePress={handleRefreshImageManual}
                         label="Refresh"
                     />
                     <View style={[styles.activityLoader]}>
-                        <ActivityIndicator size="large" color={colorIcon} />
+                        <ActivityIndicator size="large" color={activityColor} />
                     </View>
                 </>
             ) : imageName ? (
                 <>
                     <Button
-                        accessibilityLabel="Refresh Recordings"
-                        handlePress={handleRefreshImage}
+                        accessibilityLabel="Refresh Live Image"
+                        handlePress={handleRefreshImageManual}
                         label="Refresh"
                     />
                     <Pressable
@@ -228,13 +251,13 @@ const LiveScreen = () => {
                 </>
             ) : (
                 <View style={styles.noImagesContainer}>
-                    {noFile(colorIcon)}
+                    {noFile(activityColor)}
                     <ThemedText center>
                         Currently, there is no Live Image available.
                     </ThemedText>
                     <Button
-                        accessibilityLabel="Refresh Recordings"
-                        handlePress={handleRefreshImage}
+                        accessibilityLabel="Refresh Live Image"
+                        handlePress={handleRefreshImageManual}
                         label="Refresh"
                     />
                 </View>
