@@ -161,7 +161,7 @@ const GalleryScreen = () => {
                 ) : images?.length ? (
                     <>
                         <Button
-                            accessibilityLabel="Refresh Recordings"
+                            accessibilityLabel="Refresh Past Recordings"
                             handlePress={handleFetchImagesManual}
                             label="Refresh"
                         />
@@ -174,7 +174,7 @@ const GalleryScreen = () => {
                             <>
                                 {images.length > 12 && (
                                     <Button
-                                        accessibilityLabel="Refresh Recordings"
+                                        accessibilityLabel="Refresh Past Recordings"
                                         handlePress={handleFetchImagesManual}
                                         label="Refresh"
                                     />
@@ -196,7 +196,7 @@ const GalleryScreen = () => {
                             Currently, there are no Recordings available.
                         </ThemedText>
                         <Button
-                            accessibilityLabel="Refresh Recordings"
+                            accessibilityLabel="Refresh Past Recordings"
                             handlePress={handleFetchImagesManual}
                             label="Refresh"
                         />
