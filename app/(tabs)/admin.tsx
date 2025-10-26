@@ -4,6 +4,7 @@ import { useCallback, useContext, useRef, useState } from 'react'
 import {
     ActivityIndicator,
     Pressable,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     View,
@@ -62,30 +63,34 @@ const AdminScreen = () => {
     const router = useRouter()
     const tabBarHeight = useBottomTabBarHeight()
 
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
     const [users, setUsers] = useState<UsersType[]>([])
 
     const scrollRef = useRef<ScrollView>(null)
 
-    const handleFetchUsers = useCallback(() => {
-        handleApiFetchUsers({
-            router,
-            setError,
-            setIsLoading,
-            setIsUserLoggedIn,
-            setRetryFn,
-            setUsers,
-            userToken,
-        })
-    }, [
-        router,
-        setError,
-        setIsLoading,
-        setIsUserLoggedIn,
-        setRetryFn,
-        setUsers,
-        userToken,
-    ])
+    const handleFetchUsers = useCallback(
+        (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+            handleApiFetchUsers({
+                router,
+                setError,
+                setIsLoading,
+                setIsUserLoggedIn,
+                setRetryFn,
+                setUsers,
+                userToken,
+            })
+        },
+        [router, setError, setIsUserLoggedIn, setRetryFn, setUsers, userToken]
+    )
+
+    const handleFetchUsersManual = useCallback(() => {
+        handleFetchUsers(setIsLoading)
+    }, [handleFetchUsers, setIsLoading])
+
+    const handleFetchUsersPull = () => {
+        handleFetchUsers(setIsLoadingPull)
+    }
 
     const handleLogout = () => {
         setIsNextDisabled(true)
@@ -100,8 +105,8 @@ const AdminScreen = () => {
 
     useFocusEffect(
         useCallback(() => {
-            handleFetchUsers()
-        }, [handleFetchUsers])
+            handleFetchUsersManual()
+        }, [handleFetchUsersManual])
     )
 
     const styles = StyleSheet.create({
@@ -145,7 +150,17 @@ const AdminScreen = () => {
     })
 
     return (
-        <MainView ref={scrollRef}>
+        <MainView
+            ref={scrollRef}
+            refreshControl={
+                <RefreshControl
+                    accessibilityLabel="Refreshing Users"
+                    refreshing={isLoadingPull}
+                    onRefresh={handleFetchUsersPull}
+                    tintColor={colorIcon}
+                />
+            }
+        >
             <View style={styles.titleContainer}>
                 <ThemedText center type="title">
                     Welcome, {userName}!
@@ -176,7 +191,7 @@ const AdminScreen = () => {
                 <>
                     <Button
                         accessibilityLabel="Refresh Users"
-                        handlePress={handleFetchUsers}
+                        handlePress={handleFetchUsersManual}
                         label="Refresh"
                     />
                     <UserGrid setUsers={setUsers} users={users} />
@@ -189,7 +204,7 @@ const AdminScreen = () => {
                     </ThemedText>
                     <Button
                         accessibilityLabel="Refresh Users"
-                        handlePress={handleFetchUsers}
+                        handlePress={handleFetchUsersManual}
                         label="Refresh"
                     />
                 </View>
