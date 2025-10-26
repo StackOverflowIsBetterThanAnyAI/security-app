@@ -1,6 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useContext, useState } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import {
+    ActivityIndicator,
+    RefreshControl,
+    StyleSheet,
+    View,
+} from 'react-native'
 
 import Button from '@/components/button'
 import { noConnection } from '@/components/icon-symbol'
@@ -19,9 +24,9 @@ const ErrorScreen = () => {
     const { error, retryFn, setError } = contextError
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
 
     const activityColor = useThemeColor({}, 'text')
-    const colorInput = useThemeColor({}, 'text')
     const router = useRouter()
     const { from } = useLocalSearchParams<{ from: string }>()
 
@@ -30,7 +35,10 @@ const ErrorScreen = () => {
         setError('')
     }
 
-    const handleTryAgain = async () => {
+    const handleTryAgain = async (
+        isLoading: boolean,
+        setIsLoading: (value: React.SetStateAction<boolean>) => void
+    ) => {
         if (isLoading) {
             return
         }
@@ -45,6 +53,14 @@ const ErrorScreen = () => {
                 setIsLoading(false)
             }
         }
+    }
+
+    const handleTryAgainManual = () => {
+        handleTryAgain(isLoading, setIsLoading)
+    }
+
+    const handleTryAgainPull = () => {
+        handleTryAgain(isLoadingPull, setIsLoadingPull)
     }
 
     const styles = StyleSheet.create({
@@ -69,7 +85,16 @@ const ErrorScreen = () => {
     })
 
     return (
-        <MainView>
+        <MainView
+            refreshControl={
+                <RefreshControl
+                    accessibilityLabel="Trying Again"
+                    refreshing={isLoadingPull}
+                    onRefresh={handleTryAgainPull}
+                    tintColor={activityColor}
+                />
+            }
+        >
             {isLoading ? (
                 <View style={styles.loadingOverlay}>
                     <ActivityIndicator color={activityColor} size="large" />
@@ -87,11 +112,11 @@ const ErrorScreen = () => {
                             <ThemedText center>{error}</ThemedText>
                         )}
                     </View>
-                    {noConnection(colorInput)}
+                    {noConnection(activityColor)}
                     <View style={styles.buttonWrapper}>
                         <Button
                             accessibilityLabel="Try Again"
-                            handlePress={handleTryAgain}
+                            handlePress={handleTryAgainManual}
                             label="Try Again"
                         />
                         <Button
