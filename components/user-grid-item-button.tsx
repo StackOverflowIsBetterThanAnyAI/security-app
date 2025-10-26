@@ -38,12 +38,10 @@ const UserGridItemButton = ({
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'backgroundSecondary')
-    const backgroundColorConfirming = useThemeColor({}, 'red')
     const borderColorActive = useThemeColor({}, 'border')
-    const borderColorConfirming = useThemeColor({}, 'red')
     const borderColorInactive = useThemeColor({}, 'textInactive')
-    const borderColorRedActive = useThemeColor({}, 'red')
     const borderColorRedInactive = useThemeColor({}, 'redInactive')
+    const colorRed = useThemeColor({}, 'red')
 
     const fadeAnim = useRef(new Animated.Value(0)).current
 
@@ -112,7 +110,7 @@ const UserGridItemButton = ({
 
     const animatedBackgroundColor = fadeAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: [backgroundColor, backgroundColorConfirming],
+        outputRange: [backgroundColor, colorRed],
     })
 
     const styles = StyleSheet.create({
@@ -127,7 +125,7 @@ const UserGridItemButton = ({
             paddingHorizontal: 16,
         },
         confirming: {
-            borderColor: borderColorConfirming,
+            borderColor: colorRed,
         },
         disabledDelete: {
             borderColor: borderColorRedInactive,
@@ -136,7 +134,7 @@ const UserGridItemButton = ({
             borderColor: borderColorInactive,
         },
         enabledDelete: {
-            borderColor: borderColorRedActive,
+            borderColor: colorRed,
         },
         enabledRole: {
             borderColor: borderColorActive,

@@ -53,10 +53,9 @@ const FormInput = ({
 
     const backgroundColor = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
-    const borderColorInactive = useThemeColor({}, 'textInactive')
+    const colorInactive = useThemeColor({}, 'textInactive')
     const colorRed = useThemeColor({}, 'red')
     const colorInput = useThemeColor({}, 'text')
-    const colorPlaceholder = useThemeColor({}, 'textInactive')
 
     const handleBlur = () => {
         setIsFocused(false)
@@ -109,7 +108,7 @@ const FormInput = ({
                 ? colorRed
                 : isFocused
                 ? borderColorActive
-                : borderColorInactive,
+                : colorInactive,
             borderRadius: 8,
             borderWidth: 2,
             color: colorInput,
@@ -172,7 +171,7 @@ const FormInput = ({
                     ['password', 'confirmpassword'].includes(type) &&
                     !password.isPasswordVisible
                 }
-                placeholderTextColor={colorPlaceholder}
+                placeholderTextColor={colorInactive}
                 ref={ref}
                 returnKeyType={returnKeyType}
                 onFocus={handleFocus}
