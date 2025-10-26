@@ -5,6 +5,7 @@ import {
     ActivityIndicator,
     NativeScrollEvent,
     NativeSyntheticEvent,
+    RefreshControl,
     ScrollView,
     StyleSheet,
     View,
@@ -65,15 +66,31 @@ const GalleryScreen = () => {
 
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleFetchImages = useCallback(() => {
-        handleApiFetchImages({
+    const handleFetchImages = useCallback(
+        (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+            handleApiFetchImages({
+                page,
+                router,
+                setError,
+                setImages,
+                setIsLoading,
+                setIsNextDisabled,
+                setIsPreviousDisabled,
+                setIsUserLoggedIn,
+                setPage,
+                setRetryFn,
+                setTotalImages,
+                userToken,
+            })
+        },
+        [
             page,
             router,
             setError,
             setImages,
-            setIsLoading,
             setIsNextDisabled,
             setIsPreviousDisabled,
             setIsUserLoggedIn,
@@ -81,21 +98,16 @@ const GalleryScreen = () => {
             setRetryFn,
             setTotalImages,
             userToken,
-        })
-    }, [
-        page,
-        router,
-        setError,
-        setImages,
-        setIsLoading,
-        setIsNextDisabled,
-        setIsPreviousDisabled,
-        setIsUserLoggedIn,
-        setPage,
-        setRetryFn,
-        setTotalImages,
-        userToken,
-    ])
+        ]
+    )
+
+    const handleFetchImagesManual = useCallback(() => {
+        handleFetchImages(setIsLoading)
+    }, [handleFetchImages, setIsLoading])
+
+    const handleFetchImagesPull = () => {
+        handleFetchImages(setIsLoadingPull)
+    }
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y
@@ -106,20 +118,28 @@ const GalleryScreen = () => {
 
     useFocusEffect(
         useCallback(() => {
-            handleFetchImages()
+            handleFetchImagesManual()
             const refresh = setInterval(() => {
-                handleFetchImages()
+                handleFetchImagesManual()
             }, 300000)
             return () => {
                 clearInterval(refresh)
             }
-        }, [handleFetchImages])
+        }, [handleFetchImagesManual])
     )
 
     return (
         <>
             <MainView
                 ref={scrollRef}
+                refreshControl={
+                    <RefreshControl
+                        accessibilityLabel="Refreshing Past Recordings"
+                        refreshing={isLoadingPull}
+                        onRefresh={handleFetchImagesPull}
+                        tintColor={colorIcon}
+                    />
+                }
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
             >
@@ -142,7 +162,7 @@ const GalleryScreen = () => {
                     <>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleFetchImages}
+                            handlePress={handleFetchImagesManual}
                             label="Refresh"
                         />
                         <ImageGrid
@@ -155,7 +175,7 @@ const GalleryScreen = () => {
                                 {images.length > 12 && (
                                     <Button
                                         accessibilityLabel="Refresh Recordings"
-                                        handlePress={handleFetchImages}
+                                        handlePress={handleFetchImagesManual}
                                         label="Refresh"
                                     />
                                 )}
@@ -177,7 +197,7 @@ const GalleryScreen = () => {
                         </ThemedText>
                         <Button
                             accessibilityLabel="Refresh Recordings"
-                            handlePress={handleFetchImages}
+                            handlePress={handleFetchImagesManual}
                             label="Refresh"
                         />
                     </View>
