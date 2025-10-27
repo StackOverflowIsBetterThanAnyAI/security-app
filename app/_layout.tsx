@@ -34,9 +34,10 @@ const RootLayout = () => {
     const [userRole, setUserRole] = useState<UserRoleType>('user')
     const [userToken, setUserToken] = useState<string>('')
 
-    const colorScheme = useColorScheme()
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
+    const colorScheme = useColorScheme()
+    const headerColor = useThemeColor({}, 'tabBar')
     const router = useRouter()
 
     useEffect(() => {
@@ -113,6 +114,18 @@ const RootLayout = () => {
                             <Stack.Screen
                                 name="(tabs)"
                                 options={{ headerShown: false }}
+                            />
+                            <Stack.Screen
+                                name="(modals)/license"
+                                options={{
+                                    animation: 'slide_from_right',
+                                    headerStyle: {
+                                        backgroundColor: headerColor,
+                                    },
+                                    headerTintColor: activityColor,
+                                    presentation: 'transparentModal',
+                                    title: 'License',
+                                }}
                             />
                         </Stack>
                         <StatusBar style="auto" />
