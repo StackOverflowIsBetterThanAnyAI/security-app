@@ -1,10 +1,12 @@
 import { useRouter } from 'expo-router'
 import { useContext } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
+import Button from '@/components/button'
 import { memberProfile, userProfile } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
+import { Colors } from '@/constants/theme'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { clearData } from '@/helper/storeData'
@@ -23,9 +25,14 @@ const UserScreen = () => {
     }
     const { setIsUserLoggedIn, userName, userRole } = contextUser
 
-    const avatarColor = useThemeColor({}, 'textLight')
-    const backgroundColorAvatar = useThemeColor({}, 'buttonInactive')
-    const backgroundColorButton = useThemeColor({}, 'background')
+    const avatarColor = useThemeColor(
+        { light: Colors.light.buttonInactive },
+        'textLight'
+    )
+    const backgroundColorAvatar = useThemeColor(
+        { light: Colors.light.textLight },
+        'buttonInactive'
+    )
     const borderColorButton = useThemeColor({}, 'border')
     const router = useRouter()
 
@@ -38,6 +45,10 @@ const UserScreen = () => {
         router.replace('/')
     }
 
+    const handleOpenLicense = () => {
+        router.push('/(modals)/license')
+    }
+
     const styles = StyleSheet.create({
         avatarContainer: {
             alignSelf: 'center',
@@ -47,15 +58,14 @@ const UserScreen = () => {
             borderWidth: 6,
             padding: 8,
         },
-        button: {
-            backgroundColor: backgroundColorButton,
-            borderColor: borderColorButton,
-            borderRadius: 12,
-            borderWidth: 2,
-            marginHorizontal: 'auto',
-            minWidth: 144,
-            paddingVertical: 8,
-            paddingHorizontal: 24,
+        border: {
+            borderBottomWidth: 2,
+            borderBottomColor: borderColorButton,
+            borderTopWidth: 2,
+            borderTopColor: borderColorButton,
+            marginHorizontal: 8,
+            paddingBottom: 24,
+            paddingTop: 16,
         },
         titleContainer: {
             flexDirection: 'column',
@@ -80,22 +90,23 @@ const UserScreen = () => {
                         userRole.substring(1)}
                 </ThemedText>
             </View>
-            <Pressable
-                onPress={handleLogout}
-                accessible={true}
-                accessibilityRole="button"
-                style={({ pressed }) => [
-                    { opacity: pressed ? 0.75 : 1 },
-                    styles.button,
-                ]}
-            >
-                <ThemedText center>Logout</ThemedText>
-            </Pressable>
             {userRole === 'user' && (
                 <ThemedText center>
                     Wait for an admin to promote you to Member.
                 </ThemedText>
             )}
+            <View style={styles.border}>
+                <Button
+                    accessibilityLabel="License"
+                    handlePress={handleOpenLicense}
+                    label="License"
+                />
+            </View>
+            <Button
+                accessibilityLabel="Logout"
+                handlePress={handleLogout}
+                label="Logout"
+            />
         </MainView>
     )
 }

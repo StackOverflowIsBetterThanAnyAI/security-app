@@ -3,7 +3,6 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useRef, useState } from 'react'
 import {
     ActivityIndicator,
-    Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
@@ -57,7 +56,6 @@ const AdminScreen = () => {
         { light: Colors.light.textLight },
         'buttonInactive'
     )
-    const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
     const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
@@ -101,6 +99,10 @@ const AdminScreen = () => {
         router.replace('/')
     }
 
+    const handleOpenLicense = () => {
+        router.push('/(modals)/license')
+    }
+
     useScrollToTop(scrollRef)
 
     useFocusEffect(
@@ -111,13 +113,12 @@ const AdminScreen = () => {
 
     const styles = StyleSheet.create({
         activityLoader: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10,
+            left: 0,
+            position: 'absolute',
+            right: 0,
+            top: 0,
         },
         avatarContainer: {
             alignSelf: 'center',
@@ -127,21 +128,25 @@ const AdminScreen = () => {
             borderWidth: 6,
             padding: 8,
         },
-        button: {
-            backgroundColor: backgroundColorButton,
-            borderColor: borderColorButton,
-            borderRadius: 12,
-            borderWidth: 2,
-            marginHorizontal: 'auto',
-            marginTop: 'auto',
-            minWidth: 144,
-            paddingVertical: 8,
-            paddingHorizontal: 24,
+        border: {
+            borderBottomWidth: 2,
+            borderBottomColor: borderColorButton,
+            borderTopWidth: 2,
+            borderTopColor: borderColorButton,
+            marginHorizontal: 8,
+            paddingBottom: 24,
+            paddingTop: 16,
+        },
+        borderBottom: {
+            borderBottomWidth: 2,
+            borderBottomColor: borderColorButton,
+            marginHorizontal: 8,
+            paddingBottom: 16,
         },
         noUsersContainer: {
-            gap: 16,
             alignItems: 'center',
-            marginTop: 24,
+            gap: 16,
+            paddingBottom: 8,
         },
         titleContainer: {
             flexDirection: 'column',
@@ -168,16 +173,7 @@ const AdminScreen = () => {
                 <View style={styles.avatarContainer}>
                     <IconSymbol name="person" size={128} color={avatarColor} />
                 </View>
-                <ThemedText
-                    center
-                    type="subtitle"
-                    style={{
-                        borderBottomWidth: 2,
-                        borderBottomColor: borderColorButton,
-                        marginHorizontal: 8,
-                        paddingBottom: 8,
-                    }}
-                >
+                <ThemedText center type="subtitle" style={styles.borderBottom}>
                     Role: Admin
                 </ThemedText>
             </View>
@@ -209,17 +205,22 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
-            <Pressable
-                onPress={handleLogout}
-                accessible={true}
-                accessibilityRole="button"
-                style={({ pressed }) => [
-                    { opacity: pressed ? 0.75 : 1 },
-                    styles.button,
-                ]}
-            >
-                <ThemedText center>Logout</ThemedText>
-            </Pressable>
+            {!(isLoading && !users.length) && (
+                <>
+                    <View style={styles.border}>
+                        <Button
+                            accessibilityLabel="License"
+                            handlePress={handleOpenLicense}
+                            label="License"
+                        />
+                    </View>
+                    <Button
+                        accessibilityLabel="Logout"
+                        handlePress={handleLogout}
+                        label="Logout"
+                    />
+                </>
+            )}
         </MainView>
     )
 }
