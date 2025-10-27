@@ -3,7 +3,6 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useRef, useState } from 'react'
 import {
     ActivityIndicator,
-    Pressable,
     RefreshControl,
     ScrollView,
     StyleSheet,
@@ -101,6 +100,10 @@ const AdminScreen = () => {
         router.replace('/')
     }
 
+    const handleOpenLicense = () => {
+        router.push('/(modals)/license')
+    }
+
     useScrollToTop(scrollRef)
 
     useFocusEffect(
@@ -126,6 +129,12 @@ const AdminScreen = () => {
             borderRadius: 100,
             borderWidth: 6,
             padding: 8,
+        },
+        borderBottom: {
+            borderBottomWidth: 2,
+            borderBottomColor: borderColorButton,
+            marginHorizontal: 8,
+            paddingBottom: 16,
         },
         button: {
             backgroundColor: backgroundColorButton,
@@ -168,16 +177,7 @@ const AdminScreen = () => {
                 <View style={styles.avatarContainer}>
                     <IconSymbol name="person" size={128} color={avatarColor} />
                 </View>
-                <ThemedText
-                    center
-                    type="subtitle"
-                    style={{
-                        borderBottomWidth: 2,
-                        borderBottomColor: borderColorButton,
-                        marginHorizontal: 8,
-                        paddingBottom: 8,
-                    }}
-                >
+                <ThemedText center type="subtitle" style={styles.borderBottom}>
                     Role: Admin
                 </ThemedText>
             </View>
@@ -209,17 +209,18 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
-            <Pressable
-                onPress={handleLogout}
-                accessible={true}
-                accessibilityRole="button"
-                style={({ pressed }) => [
-                    { opacity: pressed ? 0.75 : 1 },
-                    styles.button,
-                ]}
-            >
-                <ThemedText center>Logout</ThemedText>
-            </Pressable>
+            <View style={[styles.borderBottom, { paddingBottom: 24 }]}>
+                <Button
+                    accessibilityLabel="License"
+                    handlePress={handleOpenLicense}
+                    label="License"
+                />
+            </View>
+            <Button
+                accessibilityLabel="Logout"
+                handlePress={handleLogout}
+                label="Logout"
+            />
         </MainView>
     )
 }
