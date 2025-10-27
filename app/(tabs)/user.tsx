@@ -33,7 +33,6 @@ const UserScreen = () => {
         { light: Colors.light.textLight },
         'buttonInactive'
     )
-    const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
     const router = useRouter()
 
@@ -65,18 +64,8 @@ const UserScreen = () => {
             borderTopWidth: 2,
             borderTopColor: borderColorButton,
             marginHorizontal: 8,
-            paddingBottom: 16,
-            paddingTop: 8,
-        },
-        button: {
-            backgroundColor: backgroundColorButton,
-            borderColor: borderColorButton,
-            borderRadius: 12,
-            borderWidth: 2,
-            marginHorizontal: 'auto',
-            minWidth: 144,
-            paddingVertical: 8,
-            paddingHorizontal: 24,
+            paddingBottom: 24,
+            paddingTop: 16,
         },
         titleContainer: {
             flexDirection: 'column',
