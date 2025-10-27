@@ -18,10 +18,10 @@ const UserGrid = ({ setUsers, users }: UserGridProps) => {
             keyExtractor={(item) => item.id.toString()}
             scrollEnabled={false}
             style={{
-                paddingVertical: 8,
                 borderBottomWidth: 2,
                 borderBottomColor: borderColor,
                 marginHorizontal: 8,
+                paddingVertical: 8,
             }}
             renderItem={({ item }) => (
                 <UserGridItem item={item} setUsers={setUsers} />
