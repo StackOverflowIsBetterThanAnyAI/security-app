@@ -56,7 +56,6 @@ const AdminScreen = () => {
         { light: Colors.light.textLight },
         'buttonInactive'
     )
-    const backgroundColorButton = useThemeColor({}, 'background')
     const borderColorButton = useThemeColor({}, 'border')
     const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
@@ -114,13 +113,12 @@ const AdminScreen = () => {
 
     const styles = StyleSheet.create({
         activityLoader: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10,
+            left: 0,
+            position: 'absolute',
+            right: 0,
+            top: 0,
         },
         avatarContainer: {
             alignSelf: 'center',
@@ -130,27 +128,25 @@ const AdminScreen = () => {
             borderWidth: 6,
             padding: 8,
         },
+        border: {
+            borderBottomWidth: 2,
+            borderBottomColor: borderColorButton,
+            borderTopWidth: 2,
+            borderTopColor: borderColorButton,
+            marginHorizontal: 8,
+            paddingBottom: 24,
+            paddingTop: 16,
+        },
         borderBottom: {
             borderBottomWidth: 2,
             borderBottomColor: borderColorButton,
             marginHorizontal: 8,
             paddingBottom: 16,
         },
-        button: {
-            backgroundColor: backgroundColorButton,
-            borderColor: borderColorButton,
-            borderRadius: 12,
-            borderWidth: 2,
-            marginHorizontal: 'auto',
-            marginTop: 'auto',
-            minWidth: 144,
-            paddingVertical: 8,
-            paddingHorizontal: 24,
-        },
         noUsersContainer: {
-            gap: 16,
             alignItems: 'center',
-            marginTop: 24,
+            gap: 16,
+            paddingBottom: 8,
         },
         titleContainer: {
             flexDirection: 'column',
@@ -209,18 +205,22 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
-            <View style={[styles.borderBottom, { paddingBottom: 24 }]}>
-                <Button
-                    accessibilityLabel="License"
-                    handlePress={handleOpenLicense}
-                    label="License"
-                />
-            </View>
-            <Button
-                accessibilityLabel="Logout"
-                handlePress={handleLogout}
-                label="Logout"
-            />
+            {!(isLoading && !users.length) && (
+                <>
+                    <View style={styles.border}>
+                        <Button
+                            accessibilityLabel="License"
+                            handlePress={handleOpenLicense}
+                            label="License"
+                        />
+                    </View>
+                    <Button
+                        accessibilityLabel="Logout"
+                        handlePress={handleLogout}
+                        label="Logout"
+                    />
+                </>
+            )}
         </MainView>
     )
 }
