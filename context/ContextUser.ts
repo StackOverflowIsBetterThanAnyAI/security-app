@@ -2,7 +2,7 @@ import { createContext } from 'react'
 
 export type UserRoleType = 'user' | 'member' | 'admin'
 
-export type UserContextType = {
+type UserContextType = {
     isUserLoggedIn: boolean
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
 
