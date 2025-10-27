@@ -6,7 +6,7 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 import IconSymbol, { memberProfile, userProfile } from './icon-symbol'
 import ThemedText from './themed-text'
 
-export type UserHeaderProps = {
+type UserHeaderProps = {
     userName: string
     userRole: UserRoleType
 }
