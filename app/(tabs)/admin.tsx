@@ -1,18 +1,12 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useRef, useState } from 'react'
-import {
-    ActivityIndicator,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    View,
-} from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
 import { noUsers } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
+import SkeletonUserGrid from '@/components/skeleton-user-grid'
 import ThemedText from '@/components/themed-text'
 import UserGrid from '@/components/user-grid'
 import UserHeader from '@/components/user-header'
@@ -41,7 +35,6 @@ const AdminScreen = () => {
 
     const colorIcon = useThemeColor({}, 'text')
     const router = useRouter()
-    const tabBarHeight = useBottomTabBarHeight()
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
@@ -109,12 +102,8 @@ const AdminScreen = () => {
             }
         >
             <UserHeader userName={userName} userRole="admin" />
-            {isLoading && !users.length ? (
-                <View
-                    style={[styles.activityLoader, { bottom: -tabBarHeight }]}
-                >
-                    <ActivityIndicator size="large" color={colorIcon} />
-                </View>
+            {isLoading ? (
+                <SkeletonUserGrid />
             ) : users.length ? (
                 <>
                     <Button
@@ -137,7 +126,7 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
-            {!(isLoading && !users.length) && <UserSettings />}
+            <UserSettings />
         </MainView>
     )
 }
