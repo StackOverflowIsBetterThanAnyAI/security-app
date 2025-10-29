@@ -72,6 +72,7 @@ export const handleApiLogin = async ({
             const message = data.error || response.statusText || 'Unknown error'
             throw new Error(`Error ${response.status}: ${message}`)
         }
+
         const data: { token: string; role: UserRoleType } =
             await response.json()
         await saveData({
