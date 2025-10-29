@@ -102,7 +102,7 @@ const AdminScreen = () => {
             }
         >
             <UserHeader userName={userName} userRole="admin" />
-            {isLoading ? (
+            {isLoading && !users.length ? (
                 <SkeletonUserGrid />
             ) : users.length ? (
                 <>

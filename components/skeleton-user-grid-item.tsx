@@ -34,7 +34,7 @@ const SkeletonUserGridItem = ({ opacity }: SkeletonUserGridItemProps) => {
             borderRadius: 8,
             flexDirection: 'column',
             gap: 12,
-            height: 96,
+            height: 98,
             justifyContent: 'space-between',
             marginBottom: 12,
             paddingHorizontal: 12,

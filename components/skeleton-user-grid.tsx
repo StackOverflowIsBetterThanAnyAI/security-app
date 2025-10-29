@@ -34,7 +34,7 @@ const SkeletonUserGrid = () => {
             borderColor,
             borderRadius: 12,
             borderWidth: 2,
-            height: 48,
+            height: 46,
             marginHorizontal: 'auto',
             marginTop: 8,
             paddingVertical: 8,
