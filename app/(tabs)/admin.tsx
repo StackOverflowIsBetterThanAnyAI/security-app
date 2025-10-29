@@ -126,7 +126,7 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
-            <UserSettings />
+            <UserSettings handleFetchUserRole={undefined} />
         </MainView>
     )
 }
