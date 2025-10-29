@@ -8,7 +8,9 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 import { useRouter } from 'expo-router'
 import { useContext } from 'react'
 
-const UserSettings = () => {
+type UserSettingsPropS = { handleFetchUserRole: (() => void) | undefined }
+
+const UserSettings = ({ handleFetchUserRole }: UserSettingsPropS) => {
     const contextPage = useContext(ContextPage)
     if (!contextPage) {
         throw new Error(
@@ -23,7 +25,7 @@ const UserSettings = () => {
             'UserSettings must be used within a ContextUser.Provider'
         )
     }
-    const { setIsUserLoggedIn } = contextUser
+    const { userRole, setIsUserLoggedIn } = contextUser
 
     const borderColorButton = useThemeColor({}, 'border')
     const router = useRouter()
@@ -43,18 +45,26 @@ const UserSettings = () => {
 
     const styles = StyleSheet.create({
         border: {
-            borderBottomWidth: 2,
             borderBottomColor: borderColorButton,
             borderTopWidth: 2,
             borderTopColor: borderColorButton,
+            marginBottom: -8,
             marginHorizontal: 8,
-            paddingBottom: 24,
-            paddingTop: 16,
+            paddingVertical: 16,
         },
     })
 
     return (
         <>
+            {userRole === 'user' && handleFetchUserRole && (
+                <View style={styles.border}>
+                    <Button
+                        handlePress={handleFetchUserRole}
+                        accessibilityLabel="Refresh Role Status"
+                        label="Refresh"
+                    />
+                </View>
+            )}
             <View style={styles.border}>
                 <Button
                     accessibilityLabel="License"
@@ -62,11 +72,13 @@ const UserSettings = () => {
                     label="License"
                 />
             </View>
-            <Button
-                accessibilityLabel="Logout"
-                handlePress={handleLogout}
-                label="Logout"
-            />
+            <View style={styles.border}>
+                <Button
+                    accessibilityLabel="Logout"
+                    handlePress={handleLogout}
+                    label="Logout"
+                />
+            </View>
         </>
     )
 }

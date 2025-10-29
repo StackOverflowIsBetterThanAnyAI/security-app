@@ -4,35 +4,25 @@ import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData, saveData } from '@/helper/storeData'
 
-type handleApiLoginProps = {
-    isLogin?: boolean
-    password: string
+type handleApiFetchRoleProps = {
     router: Router
-    setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
     setError: (value: React.SetStateAction<string>) => void
-    setIsLoading: (value: React.SetStateAction<boolean>) => void
+    setIsLoading: ((value: React.SetStateAction<boolean>) => void) | undefined
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
-    setPassword: React.Dispatch<React.SetStateAction<string>>
-    setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
     setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
-    setUserToken: React.Dispatch<React.SetStateAction<string>>
-    userName: string
+    setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
+    userToken: string
 }
 
-export const handleApiLogin = async ({
-    isLogin = false,
-    password,
+export const handleApiFetchRole = async ({
     router,
-    setConfirmPassword,
     setError,
     setIsLoading,
     setIsUserLoggedIn,
-    setPassword,
-    setRetryFn,
     setUserRole,
-    setUserToken,
-    userName,
-}: handleApiLoginProps) => {
+    setRetryFn,
+    userToken,
+}: handleApiFetchRoleProps) => {
     const controller = new AbortController()
     const signal = controller.signal
 
@@ -40,22 +30,16 @@ export const handleApiLogin = async ({
         controller.abort()
     }, API_TIMEOUT_MS)
 
-    setIsLoading(true)
+    setIsLoading && setIsLoading(true)
     try {
-        const response = await fetch(
-            `${URL}/${isLogin ? 'login' : 'register'}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: userName,
-                    password,
-                }),
-                signal: signal,
-            }
-        )
+        const response = await fetch(`${URL}/user/role`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userToken}`,
+            },
+            signal: signal,
+        })
 
         clearTimeout(timeoutId)
 
@@ -73,20 +57,13 @@ export const handleApiLogin = async ({
             throw new Error(`Error ${response.status}: ${message}`)
         }
 
-        const data: { token: string; role: UserRoleType } =
-            await response.json()
+        const data: { role: UserRoleType } = await response.json()
         await saveData({
-            authName: userName,
             authRole: data.role,
-            authToken: data.token,
         })
         setUserRole(data.role)
-        setUserToken(data.token)
 
-        setConfirmPassword('')
         setError('')
-        setIsUserLoggedIn(true)
-        setPassword('')
         setRetryFn(() => {})
     } catch (error: any) {
         clearTimeout(timeoutId)
@@ -96,31 +73,25 @@ export const handleApiLogin = async ({
                 ? 'Response from Server took too long'
                 : error.message
         setError(errorMessage)
-        setIsUserLoggedIn(false)
 
         queueMicrotask(() => {
             setRetryFn(() => () => {
-                handleApiLogin({
-                    isLogin,
-                    password,
+                handleApiFetchRole({
                     router,
-                    setConfirmPassword,
                     setError,
                     setIsLoading,
                     setIsUserLoggedIn,
-                    setPassword,
-                    setRetryFn,
                     setUserRole,
-                    setUserToken,
-                    userName,
+                    setRetryFn,
+                    userToken,
                 })
             })
             router.push({
                 pathname: '/(tabs)/error',
-                params: { from: '' },
+                params: { from: 'user' },
             })
         })
     } finally {
-        setIsLoading(false)
+        setIsLoading && setIsLoading(false)
     }
 }
