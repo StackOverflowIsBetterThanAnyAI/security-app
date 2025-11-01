@@ -37,6 +37,7 @@ const AdminScreen = () => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
     const [users, setUsers] = useState<UsersType[]>([])
 
@@ -59,7 +60,8 @@ const AdminScreen = () => {
 
     const handleFetchUsersManual = useCallback(() => {
         handleFetchUsers(setIsLoading)
-    }, [handleFetchUsers, setIsLoading])
+        setIsLoadingInitially(false)
+    }, [handleFetchUsers, setIsLoading, setIsLoadingInitially])
 
     const handleFetchUsersPull = () => {
         handleFetchUsers(setIsLoadingPull)
@@ -102,7 +104,7 @@ const AdminScreen = () => {
             }
         >
             <UserHeader userName={userName} userRole="admin" />
-            {isLoading && !users.length ? (
+            {isLoading && isLoadingInitially && !users.length ? (
                 <SkeletonUserGrid />
             ) : users.length ? (
                 <>
