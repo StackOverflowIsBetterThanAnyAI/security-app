@@ -66,6 +66,7 @@ const GalleryScreen = () => {
 
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
     const [totalImages, setTotalImages] = useState<number>(1)
 
@@ -103,7 +104,8 @@ const GalleryScreen = () => {
 
     const handleFetchImagesManual = useCallback(() => {
         handleFetchImages(setIsLoading)
-    }, [handleFetchImages, setIsLoading])
+        setIsLoadingInitially(false)
+    }, [handleFetchImages, setIsLoading, setIsLoadingInitially])
 
     const handleFetchImagesPull = () => {
         handleFetchImages(setIsLoadingPull)
@@ -149,7 +151,7 @@ const GalleryScreen = () => {
                     </ThemedText>
                     <ThemedText type="title">Past Recordings</ThemedText>
                 </View>
-                {isLoading && !images?.length ? (
+                {isLoading && isLoadingInitially && !images?.length ? (
                     <View
                         style={[
                             styles.activityLoader,
