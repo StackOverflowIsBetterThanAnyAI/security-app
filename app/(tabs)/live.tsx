@@ -43,6 +43,7 @@ const LiveScreen = () => {
     const [imageLoadFailed, setImageLoadFailed] = useState(false)
     const [imageName, setImageName] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
 
     const activityColor = useThemeColor({}, 'text')
@@ -116,7 +117,8 @@ const LiveScreen = () => {
 
     const handleRefreshImageManual = useCallback(() => {
         handleRefreshImage(setIsLoading)
-    }, [handleRefreshImage, setIsLoading])
+        setIsLoadingInitially(false)
+    }, [handleRefreshImage, setIsLoading, setIsLoadingInitially])
 
     const handleRefreshImagePull = () => {
         handleRefreshImage(setIsLoadingPull)
@@ -191,7 +193,7 @@ const LiveScreen = () => {
                 </ThemedText>
                 <ThemedText type="title">Live Image</ThemedText>
             </View>
-            {isLoading && !imageName ? (
+            {isLoading && isLoadingInitially && !imageName ? (
                 <>
                     <Button
                         accessibilityLabel="Refresh Live Image"
