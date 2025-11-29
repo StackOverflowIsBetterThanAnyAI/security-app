@@ -16,8 +16,7 @@
             },
             "edgeToEdgeEnabled": true,
             "predictiveBackGestureEnabled": false,
-            "package": "com.muenzi01.securityapp",
-            "usesCleartextTraffic": true
+            "package": "com.muenzi01.securityapp"
         },
         "plugins": [
             "expo-router",
@@ -31,6 +30,14 @@
                     "dark": {
                         "image": "./assets/images/splash-icon-dark.png",
                         "backgroundColor": "#151718"
+                    }
+                }
+            ],
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "usesCleartextTraffic": true
                     }
                 }
             ]
