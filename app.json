@@ -16,7 +16,8 @@
             },
             "edgeToEdgeEnabled": true,
             "predictiveBackGestureEnabled": false,
-            "package": "com.muenzi01.securityapp"
+            "package": "com.muenzi01.securityapp",
+            "usesCleartextTraffic": true
         },
         "plugins": [
             "expo-router",
