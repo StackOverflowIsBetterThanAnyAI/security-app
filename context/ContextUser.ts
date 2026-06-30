@@ -1,19 +1,19 @@
-import { createContext } from 'react'
+import { createContext, Dispatch, SetStateAction } from 'react'
 
 export type UserRoleType = 'user' | 'member' | 'admin'
 
 type UserContextType = {
     isUserLoggedIn: boolean
-    setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+    setIsUserLoggedIn: Dispatch<SetStateAction<boolean>>
 
     userName: string
-    setUserName: React.Dispatch<React.SetStateAction<string>>
+    setUserName: Dispatch<SetStateAction<string>>
 
     userRole: UserRoleType
-    setUserRole: React.Dispatch<React.SetStateAction<UserRoleType>>
+    setUserRole: Dispatch<SetStateAction<UserRoleType>>
 
     userToken: string
-    setUserToken: React.Dispatch<React.SetStateAction<string>>
+    setUserToken: Dispatch<SetStateAction<string>>
 }
 
 export const ContextUser = createContext<UserContextType | undefined>(undefined)

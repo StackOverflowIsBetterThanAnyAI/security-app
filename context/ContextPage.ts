@@ -2,10 +2,10 @@ import { createContext, Dispatch, SetStateAction } from 'react'
 
 type ContextPageType = {
     isNextDisabled: boolean
-    setIsNextDisabled: Dispatch<React.SetStateAction<boolean>>
+    setIsNextDisabled: Dispatch<SetStateAction<boolean>>
 
     isPreviousDisabled: boolean
-    setIsPreviousDisabled: Dispatch<React.SetStateAction<boolean>>
+    setIsPreviousDisabled: Dispatch<SetStateAction<boolean>>
 
     page: number
     setPage: Dispatch<SetStateAction<number>>

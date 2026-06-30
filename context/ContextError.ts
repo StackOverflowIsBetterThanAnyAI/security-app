@@ -1,10 +1,10 @@
-import { createContext } from 'react'
+import { createContext, Dispatch, SetStateAction } from 'react'
 
 type ContextErrorType = {
     error: string
-    setError: React.Dispatch<React.SetStateAction<string>>
+    setError: Dispatch<SetStateAction<string>>
     retryFn: (() => void) | null
-    setRetryFn: React.Dispatch<React.SetStateAction<(() => void) | null>>
+    setRetryFn: Dispatch<SetStateAction<(() => void) | null>>
 }
 
 export const ContextError = createContext<ContextErrorType | undefined>(
