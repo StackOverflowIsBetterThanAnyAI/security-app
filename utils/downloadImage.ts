@@ -13,24 +13,46 @@ export const downloadImage = async ({
     imageSource,
     imageRotation,
 }: downloadImageProps) => {
-    try {
-        const result = await FileSystem.downloadAsync(
-            imageSource.uri,
-            FileSystem.documentDirectory + imageName
-        )
+    const tempDownloadUri =
+        FileSystem.cacheDirectory + 'raw_download_' + imageName
+    const finalTargetUri = FileSystem.cacheDirectory + imageName
 
-        let finalUri = result.uri
+    try {
+        const checkTarget = await FileSystem.getInfoAsync(finalTargetUri)
+        if (checkTarget.exists) {
+            await FileSystem.deleteAsync(finalTargetUri, { idempotent: true })
+        }
+
+        await FileSystem.downloadAsync(imageSource.uri, tempDownloadUri)
 
         if (imageRotation) {
             const manipulatedImage = await manipulateAsync(
-                result.uri,
+                tempDownloadUri,
                 [{ rotate: imageRotation }],
                 { compress: 1, format: SaveFormat.JPEG }
             )
-            finalUri = manipulatedImage.uri
+
+            await FileSystem.copyAsync({
+                from: manipulatedImage.uri,
+                to: finalTargetUri,
+            })
+
+            await FileSystem.deleteAsync(manipulatedImage.uri, {
+                idempotent: true,
+            })
+        } else {
+            await FileSystem.copyAsync({
+                from: tempDownloadUri,
+                to: finalTargetUri,
+            })
         }
 
-        await shareAsync(finalUri)
+        await FileSystem.deleteAsync(tempDownloadUri, { idempotent: true })
+
+        await shareAsync(finalTargetUri, {
+            mimeType: 'image/jpeg',
+            dialogTitle: imageName,
+        })
     } catch (error: any) {
         console.error('Download/Processing failed:', error)
     }
