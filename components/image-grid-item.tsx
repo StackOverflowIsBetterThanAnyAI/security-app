@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     Image,
@@ -9,6 +9,7 @@ import {
 
 import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
+import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -28,6 +29,14 @@ const ImageGridItem = ({
     setImageHighlighted,
     bottomRowIndices,
 }: ImageGridItemProps) => {
+    const contextImageRotation = useContext(ContextImageRotation)
+    if (!contextImageRotation) {
+        throw new Error(
+            'ImageGridItem must be used within a ContextImageRotation.Provider'
+        )
+    }
+    const { imageRotation } = contextImageRotation
+
     const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
     const [imageLoadFailed, setImageLoadFailed] = useState(false)
 
@@ -63,6 +72,7 @@ const ImageGridItem = ({
         image: {
             height: '100%',
             opacity: imageIsLoaded ? 1 : 0,
+            transform: imageRotation,
             width: '100%',
         },
         loadingOverlay: {

@@ -22,6 +22,7 @@ import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
 import { ITEMS_PER_PAGE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
+import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useScrollToTop } from '@/hooks/use-scroll-to-top'
@@ -35,6 +36,14 @@ const GalleryScreen = () => {
         )
     }
     const { setError, setRetryFn } = contextError
+
+    const contextImageRotation = useContext(ContextImageRotation)
+    if (!contextImageRotation) {
+        throw new Error(
+            'GalleryScreen must be used within a ContextImageRotation.Provider'
+        )
+    }
+    const { imageRotation, setImageRotation } = contextImageRotation
 
     const contextPage = useContext(ContextPage)
     if (!contextPage) {
@@ -111,6 +120,14 @@ const GalleryScreen = () => {
         handleFetchImages(setIsLoadingPull)
     }
 
+    const handleRotateImage = () => {
+        if (!imageRotation.length) {
+            setImageRotation('rotate(180deg)')
+        } else {
+            setImageRotation('')
+        }
+    }
+
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetY = event.nativeEvent.contentOffset.y
         setIsMoveToTopVisible(offsetY > 512)
@@ -171,6 +188,11 @@ const GalleryScreen = () => {
                             images={images}
                             setImageHighlighted={setImageHighlighted}
                             userToken={userToken}
+                        />
+                        <Button
+                            accessibilityLabel="Rotate Live Image"
+                            handlePress={handleRotateImage}
+                            label="Rotate"
                         />
                         {totalImages > ITEMS_PER_PAGE && (
                             <>

@@ -17,6 +17,7 @@ import ThemedText from '@/components/themed-text'
 import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
 import { ContextError } from '@/context/ContextError'
+import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { downloadImage } from '@/utils/downloadImage'
@@ -31,6 +32,14 @@ const LiveScreen = () => {
         )
     }
     const { setError, setRetryFn } = contextError
+
+    const contextImageRotation = useContext(ContextImageRotation)
+    if (!contextImageRotation) {
+        throw new Error(
+            'LiveScreen must be used within a ContextImageRotation.Provider'
+        )
+    }
+    const { imageRotation, setImageRotation } = contextImageRotation
 
     const contextUser = useContext(ContextUser)
     if (!contextUser) {
@@ -120,6 +129,14 @@ const LiveScreen = () => {
         setIsLoadingInitially(false)
     }, [handleRefreshImage, setIsLoading, setIsLoadingInitially])
 
+    const handleRotateImage = () => {
+        if (!imageRotation.length) {
+            setImageRotation('rotate(180deg)')
+        } else {
+            setImageRotation('')
+        }
+    }
+
     const handleRefreshImagePull = () => {
         handleRefreshImage(setIsLoadingPull)
     }
@@ -152,6 +169,7 @@ const LiveScreen = () => {
         image: {
             height: '100%',
             opacity: imageIsLoaded ? 1 : 0,
+            transform: imageRotation,
             width: '100%',
         },
         imageWrapper: {
@@ -250,6 +268,11 @@ const LiveScreen = () => {
                             </View>
                         )}
                     </Pressable>
+                    <Button
+                        accessibilityLabel="Rotate Live Image"
+                        handlePress={handleRotateImage}
+                        label="Rotate"
+                    />
                 </>
             ) : (
                 <View style={styles.noImagesContainer}>

@@ -12,6 +12,7 @@ import { ActivityIndicator, View } from 'react-native'
 import 'react-native-reanimated'
 
 import { ContextError } from '@/context/ContextError'
+import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData } from '@/helper/storeData'
@@ -28,6 +29,7 @@ const RootLayout = () => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(true)
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
+    const [imageRotation, setImageRotation] = useState<string>('')
     const [page, setPage] = useState<number>(1)
     const [retryFn, setRetryFn] = useState<(() => void) | null>(null)
     const [userName, setUserName] = useState<string>('')
@@ -88,49 +90,53 @@ const RootLayout = () => {
             <ContextError.Provider
                 value={{ error, retryFn, setError, setRetryFn }}
             >
-                <ContextPage.Provider
-                    value={{
-                        isNextDisabled,
-                        isPreviousDisabled,
-                        page,
-                        setIsNextDisabled,
-                        setIsPreviousDisabled,
-                        setPage,
-                    }}
+                <ContextImageRotation.Provider
+                    value={{ imageRotation, setImageRotation }}
                 >
-                    <ContextUser.Provider
+                    <ContextPage.Provider
                         value={{
-                            isUserLoggedIn,
-                            setIsUserLoggedIn,
-                            userName,
-                            setUserName,
-                            userRole,
-                            setUserRole,
-                            userToken,
-                            setUserToken,
+                            isNextDisabled,
+                            isPreviousDisabled,
+                            page,
+                            setIsNextDisabled,
+                            setIsPreviousDisabled,
+                            setPage,
                         }}
                     >
-                        <Stack>
-                            <Stack.Screen
-                                name="(tabs)"
-                                options={{ headerShown: false }}
-                            />
-                            <Stack.Screen
-                                name="(modals)/license"
-                                options={{
-                                    animation: 'slide_from_right',
-                                    headerStyle: {
-                                        backgroundColor: headerColor,
-                                    },
-                                    headerTintColor: activityColor,
-                                    presentation: 'transparentModal',
-                                    title: 'License',
-                                }}
-                            />
-                        </Stack>
-                        <StatusBar style="auto" />
-                    </ContextUser.Provider>
-                </ContextPage.Provider>
+                        <ContextUser.Provider
+                            value={{
+                                isUserLoggedIn,
+                                setIsUserLoggedIn,
+                                userName,
+                                setUserName,
+                                userRole,
+                                setUserRole,
+                                userToken,
+                                setUserToken,
+                            }}
+                        >
+                            <Stack>
+                                <Stack.Screen
+                                    name="(tabs)"
+                                    options={{ headerShown: false }}
+                                />
+                                <Stack.Screen
+                                    name="(modals)/license"
+                                    options={{
+                                        animation: 'slide_from_right',
+                                        headerStyle: {
+                                            backgroundColor: headerColor,
+                                        },
+                                        headerTintColor: activityColor,
+                                        presentation: 'transparentModal',
+                                        title: 'License',
+                                    }}
+                                />
+                            </Stack>
+                            <StatusBar style="auto" />
+                        </ContextUser.Provider>
+                    </ContextPage.Provider>
+                </ContextImageRotation.Provider>
             </ContextError.Provider>
         </ThemeProvider>
     )
