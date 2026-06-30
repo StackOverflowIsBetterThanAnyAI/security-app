@@ -175,6 +175,7 @@ const LiveScreen = () => {
         imageWrapper: {
             aspectRatio: 16 / 9,
             backgroundColor,
+            paddingBottom: 32,
         },
         loadingOverlay: {
             position: 'absolute',
