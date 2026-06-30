@@ -175,29 +175,52 @@ const GalleryScreen = () => {
                     </View>
                 ) : images?.length ? (
                     <>
-                        <Button
-                            accessibilityLabel="Refresh Past Recordings"
-                            handlePress={handleFetchImagesManual}
-                            label="Refresh"
-                        />
+                        <View
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Button
+                                accessibilityLabel="Refresh Past Recordings"
+                                handlePress={handleFetchImagesManual}
+                                label="Refresh"
+                            />
+                            <Button
+                                accessibilityLabel="Rotate Live Image"
+                                handlePress={handleRotateImage}
+                                label="Rotate"
+                            />
+                        </View>
                         <ImageGrid
                             images={images}
                             setImageHighlighted={setImageHighlighted}
                             userToken={userToken}
                         />
-                        <Button
-                            accessibilityLabel="Rotate Live Image"
-                            handlePress={handleRotateImage}
-                            label="Rotate"
-                        />
                         {totalImages > ITEMS_PER_PAGE && (
                             <>
                                 {images.length > 12 && (
-                                    <Button
-                                        accessibilityLabel="Refresh Past Recordings"
-                                        handlePress={handleFetchImagesManual}
-                                        label="Refresh"
-                                    />
+                                    <View
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <Button
+                                            accessibilityLabel="Refresh Past Recordings"
+                                            handlePress={
+                                                handleFetchImagesManual
+                                            }
+                                            label="Refresh"
+                                        />
+                                        <Button
+                                            accessibilityLabel="Rotate Live Image"
+                                            handlePress={handleRotateImage}
+                                            label="Rotate"
+                                        />
+                                    </View>
                                 )}
                                 <Pagination
                                     ITEMS_PER_PAGE={ITEMS_PER_PAGE}
