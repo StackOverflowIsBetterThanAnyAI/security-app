@@ -72,7 +72,7 @@ const ImageGridItem = ({
         image: {
             height: '100%',
             opacity: imageIsLoaded ? 1 : 0,
-            transform: imageRotation,
+            transform: [{ rotate: `${imageRotation}deg` }],
             width: '100%',
         },
         loadingOverlay: {

@@ -1,8 +1,8 @@
 import { createContext, Dispatch, SetStateAction } from 'react'
 
 type ContextImageRotationType = {
-    imageRotation: string
-    setImageRotation: Dispatch<SetStateAction<string>>
+    imageRotation: number
+    setImageRotation: Dispatch<SetStateAction<number>>
 }
 
 export const ContextImageRotation = createContext<

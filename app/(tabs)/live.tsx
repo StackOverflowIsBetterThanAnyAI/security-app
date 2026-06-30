@@ -89,7 +89,7 @@ const LiveScreen = () => {
     }
 
     const handlePress = () => {
-        downloadImage({ imageName, imageSource })
+        downloadImage({ imageName, imageSource, imageRotation })
     }
 
     const handleFetchLive = useCallback(
@@ -130,11 +130,7 @@ const LiveScreen = () => {
     }, [handleRefreshImage, setIsLoading, setIsLoadingInitially])
 
     const handleRotateImage = () => {
-        if (!imageRotation.length) {
-            setImageRotation('rotate(180deg)')
-        } else {
-            setImageRotation('')
-        }
+        setImageRotation((prev) => (prev + 180) % 360)
     }
 
     const handleRefreshImagePull = () => {
@@ -169,7 +165,7 @@ const LiveScreen = () => {
         image: {
             height: '100%',
             opacity: imageIsLoaded ? 1 : 0,
-            transform: imageRotation,
+            transform: [{ rotate: `${imageRotation}deg` }],
             width: '100%',
         },
         imageWrapper: {

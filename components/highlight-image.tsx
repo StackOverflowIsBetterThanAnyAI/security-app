@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import {
     ActivityIndicator,
     Dimensions,
@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 import ThemedText from '@/components/themed-text'
+import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { downloadImage } from '@/utils/downloadImage'
@@ -24,6 +25,14 @@ const HighlightImage = ({
     imageHighlighted,
     setImageHighlighted,
 }: ImageGridProps) => {
+    const contextImageRotation = useContext(ContextImageRotation)
+    if (!contextImageRotation) {
+        throw new Error(
+            'HighlightImage must be used within a ContextImageRotation.Provider'
+        )
+    }
+    const { imageRotation } = contextImageRotation
+
     const { width, height } = Dimensions.get('window')
 
     const activityColor = useThemeColor({}, 'text')
@@ -72,7 +81,7 @@ const HighlightImage = ({
         const imageName = decodeURI(imageSource.uri)
             .replace(/.*(?=security_image_)/, '')
             .replace(/\.jpg.*$/, '.jpg')
-        downloadImage({ imageName, imageSource })
+        downloadImage({ imageName, imageSource, imageRotation })
     }
 
     useHighlightImageSize({
@@ -95,6 +104,7 @@ const HighlightImage = ({
         image: {
             backgroundColor,
             height: imageHeight,
+            transform: [{ rotate: `${imageRotation}deg` }],
         },
         wrapper: {
             backgroundColor: highlightColor,

@@ -121,11 +121,7 @@ const GalleryScreen = () => {
     }
 
     const handleRotateImage = () => {
-        if (!imageRotation.length) {
-            setImageRotation('rotate(180deg)')
-        } else {
-            setImageRotation('')
-        }
+        setImageRotation((prev) => (prev + 180) % 360)
     }
 
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

@@ -29,7 +29,7 @@ const RootLayout = () => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(true)
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(false)
     const [error, setError] = useState<string>('')
-    const [imageRotation, setImageRotation] = useState<string>('')
+    const [imageRotation, setImageRotation] = useState<number>(0)
     const [page, setPage] = useState<number>(1)
     const [retryFn, setRetryFn] = useState<(() => void) | null>(null)
     const [userName, setUserName] = useState<string>('')
