@@ -1,7 +1,7 @@
 {
     "name": "security-app",
     "main": "expo-router/entry",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "scripts": {
         "start": "expo start",
         "android": "expo start --android",
@@ -22,6 +22,7 @@
         "expo-font": "^14.0.12",
         "expo-haptics": "^15.0.8",
         "expo-image": "^3.0.11",
+        "expo-image-manipulator": "~14.0.8",
         "expo-linking": "^8.0.12",
         "expo-router": "^6.0.24",
         "expo-sharing": "^14.0.8",
