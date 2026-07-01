@@ -145,6 +145,12 @@ const Pagination = ({
     }
 
     const styles = StyleSheet.create({
+        pageText: { textAlign: 'center', width: 40 },
+        subWrapper: {
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 24,
+        },
         wrapper: {
             alignItems: 'center',
             backgroundColor: backgroundColorInactive,
@@ -153,13 +159,7 @@ const Pagination = ({
             flexDirection: 'row',
             gap: 32,
             height: 48,
-            justifyContent: 'center',
             marginHorizontal: 'auto',
-        },
-        subWrapper: {
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 24,
         },
     })
 
@@ -179,7 +179,7 @@ const Pagination = ({
                     icon="chevron-left"
                 />
             </View>
-            <ThemedText>{page}</ThemedText>
+            <ThemedText style={styles.pageText}>{page}</ThemedText>
             <View style={styles.subWrapper}>
                 <PaginationButton
                     handlePress={handlePressNext}
