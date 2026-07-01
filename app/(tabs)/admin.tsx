@@ -1,6 +1,6 @@
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback, useContext, useRef, useState } from 'react'
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
+import { useCallback, useContext, useState } from 'react'
+import { RefreshControl, StyleSheet, View } from 'react-native'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
@@ -13,7 +13,6 @@ import UserHeader from '@/components/user-header'
 import UserSettings from '@/components/user-settings'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
-import { useScrollToTop } from '@/hooks/use-scroll-to-top'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const AdminScreen = () => {
@@ -41,8 +40,6 @@ const AdminScreen = () => {
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
     const [users, setUsers] = useState<UsersType[]>([])
 
-    const scrollRef = useRef<ScrollView>(null)
-
     const handleFetchUsers = useCallback(
         (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
             handleApiFetchUsers({
@@ -66,8 +63,6 @@ const AdminScreen = () => {
     const handleFetchUsersPull = () => {
         handleFetchUsers(setIsLoadingPull)
     }
-
-    useScrollToTop(scrollRef)
 
     useFocusEffect(
         useCallback(() => {
@@ -93,7 +88,6 @@ const AdminScreen = () => {
 
     return (
         <MainView
-            ref={scrollRef}
             refreshControl={
                 <RefreshControl
                     accessibilityLabel="Refreshing Users"

@@ -1,12 +1,9 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback, useContext, useRef, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import {
     ActivityIndicator,
-    NativeScrollEvent,
-    NativeSyntheticEvent,
     RefreshControl,
-    ScrollView,
     StyleSheet,
     View,
 } from 'react-native'
@@ -17,7 +14,6 @@ import HighlightImage from '@/components/highlight-image'
 import { noFile } from '@/components/icon-symbol'
 import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
-import MoveToTop from '@/components/move-to-top'
 import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
 import { ITEMS_PER_PAGE } from '@/constants/api'
@@ -25,7 +21,6 @@ import { ContextError } from '@/context/ContextError'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
-import { useScrollToTop } from '@/hooks/use-scroll-to-top'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 const GalleryScreen = () => {
@@ -66,12 +61,9 @@ const GalleryScreen = () => {
     const router = useRouter()
     const tabBarHeight = useBottomTabBarHeight()
 
-    const scrollRef = useRef<ScrollView>(null)
-
     const [imageHighlighted, setImageHighlighted] = useState<string | null>(
         null
     )
-    const [isMoveToTopVisible, setIsMoveToTopVisible] = useState<boolean>(false)
 
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -124,13 +116,6 @@ const GalleryScreen = () => {
         setImageRotation((prev) => (prev + 180) % 360)
     }
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const offsetY = event.nativeEvent.contentOffset.y
-        setIsMoveToTopVisible(offsetY > 512)
-    }
-
-    useScrollToTop(scrollRef)
-
     useFocusEffect(
         useCallback(() => {
             handleFetchImagesManual()
@@ -146,7 +131,6 @@ const GalleryScreen = () => {
     return (
         <>
             <MainView
-                ref={scrollRef}
                 refreshControl={
                     <RefreshControl
                         accessibilityLabel="Refreshing Past Recordings"
@@ -155,8 +139,6 @@ const GalleryScreen = () => {
                         tintColor={colorIcon}
                     />
                 }
-                onScroll={handleScroll}
-                scrollEventThrottle={16}
             >
                 <View style={styles.titleContainer}>
                     <ThemedText center type="title">
@@ -252,7 +234,6 @@ const GalleryScreen = () => {
                     setImageHighlighted={setImageHighlighted}
                 />
             )}
-            <MoveToTop isVisible={isMoveToTopVisible} scrollRef={scrollRef} />
         </>
     )
 }
