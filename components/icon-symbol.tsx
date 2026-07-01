@@ -33,6 +33,22 @@ const IconSymbol = ({
 
 export default IconSymbol
 
+export const chevronDoubleLeft = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="chevron-double-left"
+        size={28}
+        color={colorInput}
+    />
+)
+
+export const chevronDoubleRight = (colorInput: string) => (
+    <MaterialCommunityIcons
+        name="chevron-double-right"
+        size={28}
+        color={colorInput}
+    />
+)
+
 export const showPassword = (colorInput: string) => (
     <MaterialCommunityIcons name="eye-outline" size={24} color={colorInput} />
 )
