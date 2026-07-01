@@ -56,6 +56,45 @@ const Pagination = ({
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
+    const handlePressFirst = () => {
+        setIsPreviousDisabled(true)
+        setPage(1)
+        handleApiFetchImages({
+            page: 1,
+            router,
+            setError,
+            setImages,
+            setIsLoading,
+            setIsNextDisabled,
+            setIsPreviousDisabled,
+            setIsUserLoggedIn,
+            setPage,
+            setRetryFn,
+            setTotalImages,
+            userToken,
+        })
+    }
+
+    const handlePressLast = () => {
+        const lastPage = Math.ceil(totalImages / ITEMS_PER_PAGE)
+        setIsNextDisabled(true)
+        setPage(lastPage)
+        handleApiFetchImages({
+            page: lastPage,
+            router,
+            setError,
+            setImages,
+            setIsLoading,
+            setIsNextDisabled,
+            setIsPreviousDisabled,
+            setIsUserLoggedIn,
+            setPage,
+            setRetryFn,
+            setTotalImages,
+            userToken,
+        })
+    }
+
     const handlePressNext = () => {
         const next = page + 1
         if (next >= Math.ceil(totalImages / ITEMS_PER_PAGE)) {
@@ -117,23 +156,44 @@ const Pagination = ({
             justifyContent: 'center',
             marginHorizontal: 'auto',
         },
+        subWrapper: {
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 24,
+        },
     })
 
     return (
         <View style={styles.wrapper}>
-            <PaginationButton
-                handlePress={handlePressPrevious}
-                isDisabled={isPreviousDisabled}
-                isLoading={isLoading}
-                isNext={false}
-            />
+            <View style={styles.subWrapper}>
+                <PaginationButton
+                    handlePress={handlePressFirst}
+                    isDisabled={isPreviousDisabled}
+                    isLoading={isLoading}
+                    icon="chevron-double-left"
+                />
+                <PaginationButton
+                    handlePress={handlePressPrevious}
+                    isDisabled={isPreviousDisabled}
+                    isLoading={isLoading}
+                    icon="chevron-left"
+                />
+            </View>
             <ThemedText>{page}</ThemedText>
-            <PaginationButton
-                handlePress={handlePressNext}
-                isDisabled={isNextDisabled}
-                isLoading={isLoading}
-                isNext={true}
-            />
+            <View style={styles.subWrapper}>
+                <PaginationButton
+                    handlePress={handlePressNext}
+                    isDisabled={isNextDisabled}
+                    isLoading={isLoading}
+                    icon="chevron-right"
+                />
+                <PaginationButton
+                    handlePress={handlePressLast}
+                    isDisabled={isNextDisabled}
+                    isLoading={isLoading}
+                    icon="chevron-double-right"
+                />
+            </View>
         </View>
     )
 }

@@ -1,6 +1,9 @@
 import { Pressable, StyleSheet } from 'react-native'
 
-import IconSymbol from '@/components/icon-symbol'
+import IconSymbol, {
+    chevronDoubleLeft,
+    chevronDoubleRight,
+} from '@/components/icon-symbol'
 import { Colors } from '@/constants/theme'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
@@ -8,14 +11,18 @@ type PaginationButtonProps = {
     handlePress: () => void
     isDisabled: boolean
     isLoading: boolean
-    isNext?: boolean
+    icon:
+        | 'chevron-left'
+        | 'chevron-right'
+        | 'chevron-double-left'
+        | 'chevron-double-right'
 }
 
 const PaginationButton = ({
     handlePress,
     isDisabled,
     isLoading,
-    isNext = false,
+    icon,
 }: PaginationButtonProps) => {
     const backgroundColorActive = useThemeColor({}, 'red')
     const backgroundColorInactive = useThemeColor({}, 'background')
@@ -51,7 +58,7 @@ const PaginationButton = ({
             accessible={true}
             accessibilityRole="button"
             accessibilityState={{ disabled: isDisabled || isLoading }}
-            accessibilityLabel={`Go to ${isNext ? 'next' : 'previous'} Page${
+            accessibilityLabel={`Go to ${icon === 'chevron-double-left' ? 'first' : icon === 'chevron-double-right' ? 'last' : icon === 'chevron-left' ? 'previous' : 'next'} Page${
                 isDisabled || isLoading ? ', disabled' : ''
             }`}
             style={({ pressed }) => [
@@ -65,11 +72,23 @@ const PaginationButton = ({
             ]}
             onPress={!isDisabled && !isLoading ? handlePress : undefined}
         >
-            <IconSymbol
-                size={28}
-                name={isNext ? 'chevron-right' : 'chevron-left'}
-                color={isDisabled || isLoading ? colorInactive : colorActive}
-            />
+            {icon === 'chevron-double-left' ? (
+                chevronDoubleLeft(
+                    isDisabled || isLoading ? colorInactive : colorActive
+                )
+            ) : icon === 'chevron-double-right' ? (
+                chevronDoubleRight(
+                    isDisabled || isLoading ? colorInactive : colorActive
+                )
+            ) : (
+                <IconSymbol
+                    size={28}
+                    name={icon}
+                    color={
+                        isDisabled || isLoading ? colorInactive : colorActive
+                    }
+                />
+            )}
         </Pressable>
     )
 }
