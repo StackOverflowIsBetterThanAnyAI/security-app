@@ -43,7 +43,7 @@ const GalleryScreen = () => {
             'GalleryScreen must be used within a ContextImageRotation.Provider'
         )
     }
-    const { imageRotation, setImageRotation } = contextImageRotation
+    const { setImageRotation } = contextImageRotation
 
     const contextPage = useContext(ContextPage)
     if (!contextPage) {
