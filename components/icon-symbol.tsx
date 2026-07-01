@@ -4,7 +4,7 @@ import { SymbolWeight } from 'expo-symbols'
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native'
 
 type MAPPING = {
-    'chevron-left': 'chevron-elft'
+    'chevron-left': 'chevron-left'
     'chevron-right': 'chevron-right'
     error: 'error'
     'expand-less': 'expand-less'
