@@ -45,7 +45,7 @@
         "eslint": "^9.39.4",
         "eslint-config-expo": "^10.0.0",
         "prettier-es5": "^0.0.4",
-        "typescript": "^5.9.3"
+        "typescript": "^7.0.2"
     },
     "private": true
 }
