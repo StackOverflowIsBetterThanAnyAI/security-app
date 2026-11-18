@@ -3,6 +3,7 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     ScrollView,
+    ScrollViewInstance,
     ScrollViewProps,
     StyleSheet,
 } from 'react-native'
@@ -42,7 +43,7 @@ const PatternBackground = () => {
     )
 }
 
-const MainView = forwardRef<ScrollView, MainViewProps>(
+const MainView = forwardRef<ScrollViewInstance, MainViewProps>(
     ({ children, ...props }, ref) => {
         const contextUser = useContext(ContextUser)
         if (!contextUser) {

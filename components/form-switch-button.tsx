@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Animated, Pressable, StyleSheet } from 'react-native'
 
 import { useThemeColor } from '@/hooks/use-theme-color'
@@ -24,9 +24,9 @@ const FormSwitchButton = ({
     const textColorActive = useThemeColor({}, 'buttonActive')
     const textColorInactive = useThemeColor({}, 'buttonInactive')
 
-    const animation = useRef(
-        new Animated.Value(isSignUpField === isSigningUp ? 1 : 0)
-    ).current
+    const [animation] = useState(
+        () => new Animated.Value(isSignUpField === isSigningUp ? 1 : 0)
+    )
 
     useEffect(() => {
         Animated.timing(animation, {

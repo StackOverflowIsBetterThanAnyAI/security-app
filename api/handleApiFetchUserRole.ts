@@ -1,11 +1,11 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { clearData, saveData } from '@/helper/storeData'
 
 type handleApiFetchRoleProps = {
-    router: Router
+    router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
     setIsLoading: ((value: React.SetStateAction<boolean>) => void) | undefined
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>

@@ -1,10 +1,10 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchLiveProps = {
-    router: Router
+    router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
     setImageName: React.Dispatch<React.SetStateAction<string>>
     setIsLoading: (value: React.SetStateAction<boolean>) => void

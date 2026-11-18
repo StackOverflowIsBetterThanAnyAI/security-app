@@ -1,10 +1,10 @@
 import SkeletonUserGridItem from '@/components/skeleton-user-grid-item'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { Animated, FlatList, StyleSheet } from 'react-native'
 
 const SkeletonUserGrid = () => {
-    const fadeAnim = useRef(new Animated.Value(0.6)).current
+    const [fadeAnim] = useState(() => new Animated.Value(0.6))
 
     const backgroundColor = useThemeColor({}, 'background')
     const borderColor = useThemeColor({}, 'border')

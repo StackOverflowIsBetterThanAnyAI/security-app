@@ -1,4 +1,4 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
@@ -11,7 +11,7 @@ export type UsersType = {
 }
 
 type handleApiFetchUsersProps = {
-    router: Router
+    router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
     setUsers: (value: React.SetStateAction<UsersType[]>) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void

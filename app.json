@@ -7,14 +7,12 @@
         "icon": "./assets/images/icon.png",
         "scheme": "securityapp",
         "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundImage": "./assets/images/android-icon-background.png",
                 "monochromeImage": "./assets/images/adaptive-icon.png"
             },
-            "edgeToEdgeEnabled": true,
             "predictiveBackGestureEnabled": false,
             "package": "com.muenzi01.securityapp"
         },

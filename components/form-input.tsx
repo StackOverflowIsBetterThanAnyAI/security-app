@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Pressable, StyleSheet, TextInput, View } from 'react-native'
+import {
+    Pressable,
+    StyleSheet,
+    TextInput,
+    TextInputInstance,
+    View,
+} from 'react-native'
 
 import { hidePassword, showPassword } from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
@@ -24,7 +30,7 @@ type FormInputProps = {
     }
     pattern: RegExp
     placeholder: string
-    ref: React.RefObject<TextInput | null>
+    ref: React.RefObject<TextInputInstance | null>
     returnKeyType: 'done' | 'next'
     setError: React.Dispatch<React.SetStateAction<string>>
     setValue: React.Dispatch<React.SetStateAction<string>>

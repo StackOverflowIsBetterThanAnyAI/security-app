@@ -16,6 +16,80 @@
 
 7. View Images: Once upgraded, you can navigate to the Gallery tab to see the images, which are recorded on a Raspberry Pi Zero W and updated every 5 minutes, or checkout the Live section to view the current camera screen.
 
+## Development Setup
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 24 (same version as the CI workflow) and npm
+- An Android smartphone with [Expo Go](https://play.google.com/store/apps/details?id=host.exp.exponent) installed. The project uses **Expo SDK 58**, which requires the current Expo Go version from the Play Store.
+- The [backend](https://github.com/StackOverflowIsBetterThanAnyAI/security-backend) running on the Raspberry Pi
+- Smartphone, development machine and Raspberry Pi in the same network
+
+### Installation
+
+```sh
+git clone https://github.com/StackOverflowIsBetterThanAnyAI/security-app.git
+cd security-app
+npm ci
+```
+
+### Backend Address
+
+The app talks to the backend via plain HTTP. The address is configured in [`constants/api.ts`](constants/api.ts):
+
+```ts
+export const URL = 'http://192.168.178.87:5000'
+```
+
+Change it to the IP address and port of your Raspberry Pi. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
+
+### Start the App
+
+**Option A: Expo Go** (quickest, no build required)
+
+```sh
+npm start
+```
+
+Scan the QR code shown in the terminal with the Expo Go app. If the phone cannot reach your machine (e.g. because of a firewall or a guest network), use `npx expo start --go --tunnel`.
+
+**Option B: Development Build** (own app with `expo-dev-client`)
+
+```sh
+npx eas build --profile development --platform android
+```
+
+Install the resulting APK on the phone, then run `npx expo start --dev-client` and open the project from the installed development app.
+
+### Checks
+
+```sh
+npm run lint                 # ESLint (incl. React Compiler rules)
+npx tsc --noEmit             # TypeScript
+npx expo-doctor              # Expo project health check
+npx expo install --check     # dependency versions match the Expo SDK
+```
+
+The last two checks also run in the GitHub workflow on every push and pull request.
+
+### Upgrading the Expo SDK
+
+```sh
+npm install expo@^<version>
+npx expo install --fix
+npx expo-doctor
+```
+
+### Building a Release APK
+
+```sh
+npm install -g eas-cli
+eas login
+npx eas build --platform android --profile production
+```
+
+The `production` profile in [`eas.json`](eas.json) builds an installable APK and increments the version code automatically.
+
 ## Backend Repository
 
 [Backend Repository](https://github.com/StackOverflowIsBetterThanAnyAI/security-backend)

@@ -3,6 +3,7 @@ import {
     ActivityIndicator,
     Dimensions,
     Image,
+    ImageInstance,
     Pressable,
     StyleSheet,
     View,
@@ -39,7 +40,7 @@ const HighlightImage = ({
     const backgroundColor = useThemeColor({}, 'background')
     const highlightColor = useThemeColor({}, 'highlight')
 
-    const imageRef = useRef<Image>(null)
+    const imageRef = useRef<ImageInstance>(null)
     const [imageHeight, setImageHeight] = useState<number>(256)
     const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
     const [imageIsLoadedSuccess, setImageIsLoadedSuccess] =

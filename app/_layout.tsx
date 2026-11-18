@@ -1,11 +1,12 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { useFonts } from 'expo-font'
 import {
     DarkTheme,
     DefaultTheme,
+    Stack,
     ThemeProvider,
-} from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import { Stack, useRouter } from 'expo-router'
+    useRouter,
+} from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
