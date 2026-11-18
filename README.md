@@ -70,26 +70,6 @@ npx expo-doctor              # Expo project health check
 npx expo install --check     # dependency versions match the Expo SDK
 ```
 
-The last two checks also run in the GitHub workflow on every push and pull request.
-
-### Upgrading the Expo SDK
-
-```sh
-npm install expo@^<version>
-npx expo install --fix
-npx expo-doctor
-```
-
-### Building a Release APK
-
-```sh
-npm install -g eas-cli
-eas login
-npx eas build --platform android --profile production
-```
-
-The `production` profile in [`eas.json`](eas.json) builds an installable APK and increments the version code automatically.
-
 ## Backend Repository
 
 [Backend Repository](https://github.com/StackOverflowIsBetterThanAnyAI/security-backend)
