@@ -7,7 +7,6 @@ const subscribe = () => () => {}
  * To support static rendering, this value needs to be re-calculated on the client side for web
  */
 export const useColorScheme = () => {
-    // false during static rendering / hydration, true on the client afterwards
     const hasHydrated = useSyncExternalStore(
         subscribe,
         () => true,
