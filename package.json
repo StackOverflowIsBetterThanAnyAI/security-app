@@ -1,7 +1,7 @@
 {
     "name": "security-app",
     "main": "expo-router/entry",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "scripts": {
         "start": "expo start --go",
         "android": "expo start --android",
@@ -44,5 +44,10 @@
         "prettier-es5": "^0.0.4",
         "typescript": "~6.0.3"
     },
-    "private": true
+    "private": true,
+    "overrides": {
+        "@expo/fingerprint": {
+            "minimatch": "^11.0.1"
+        }
+    }
 }
