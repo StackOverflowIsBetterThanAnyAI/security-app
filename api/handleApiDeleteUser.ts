@@ -1,4 +1,4 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
@@ -6,7 +6,7 @@ import { clearData } from '@/helper/storeData'
 
 type handleApiDeleteUserProps = {
     id: number
-    router: Router
+    router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void
     setIsUserLoggedIn: React.Dispatch<React.SetStateAction<boolean>>

@@ -2,6 +2,7 @@
 
 import { Tabs } from 'expo-router'
 import { useContext } from 'react'
+import { type ColorValue } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import HapticTab from '@/components/haptic-tab'
@@ -29,12 +30,12 @@ const TabLayout = () => {
 
     const getTabIcon =
         (name: IconMapping) =>
-        ({ color, focused }: { color: string; focused: boolean }) =>
+        ({ color, focused }: { color: ColorValue; focused: boolean }) =>
             (
                 <IconSymbol
                     size={focused ? 32 : 28}
                     name={name}
-                    color={color}
+                    color={color as string}
                     style={{
                         height: 32,
                         margin: 'auto',
@@ -46,7 +47,6 @@ const TabLayout = () => {
 
     return (
         <Tabs
-            initialRouteName="index"
             backBehavior="fullHistory"
             screenOptions={{
                 tabBarActiveTintColor,

@@ -1,4 +1,4 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 import { useContext, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
@@ -12,7 +12,7 @@ import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
     ITEMS_PER_PAGE: number
-    router: Router
+    router: ImperativeRouter
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
     setTotalImages: React.Dispatch<React.SetStateAction<number>>
     totalImages: number

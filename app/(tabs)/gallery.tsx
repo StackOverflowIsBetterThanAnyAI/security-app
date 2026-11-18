@@ -1,4 +1,4 @@
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { useBottomTabBarHeight } from 'expo-router/tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useState } from 'react'
 import {

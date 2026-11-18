@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router'
 import { useContext, useMemo, useRef, useState } from 'react'
-import { TextInput, View } from 'react-native'
+import { TextInputInstance, View } from 'react-native'
 
 import { handleApiLogin } from '@/api/handleApiLogin'
 import FormError from '@/components/form-error'
@@ -50,9 +50,9 @@ const LoginScreen = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const userNameRef = useRef<TextInput>(null)
-    const passwordRef = useRef<TextInput>(null)
-    const confirmPasswordRef = useRef<TextInput>(null)
+    const userNameRef = useRef<TextInputInstance>(null)
+    const passwordRef = useRef<TextInputInstance>(null)
+    const confirmPasswordRef = useRef<TextInputInstance>(null)
 
     const color = useThemeColor({}, 'red')
 

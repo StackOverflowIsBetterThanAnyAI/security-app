@@ -1,4 +1,4 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
@@ -7,7 +7,7 @@ import { clearData, saveData } from '@/helper/storeData'
 type handleApiLoginProps = {
     isLogin?: boolean
     password: string
-    router: Router
+    router: ImperativeRouter
     setConfirmPassword: React.Dispatch<React.SetStateAction<string>>
     setError: (value: React.SetStateAction<string>) => void
     setIsLoading: (value: React.SetStateAction<boolean>) => void

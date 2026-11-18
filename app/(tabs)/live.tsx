@@ -47,7 +47,9 @@ const LiveScreen = () => {
     }
     const { setIsUserLoggedIn, userName, userToken } = contextUser
 
-    const [refreshTime, setRefreshTime] = useState<number | null>(Date.now())
+    const [refreshTime, setRefreshTime] = useState<number | null>(() =>
+        Date.now()
+    )
     const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
     const [imageLoadFailed, setImageLoadFailed] = useState(false)
     const [imageName, setImageName] = useState<string>('')

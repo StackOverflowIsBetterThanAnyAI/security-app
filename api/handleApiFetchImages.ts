@@ -1,11 +1,11 @@
-import { Router } from 'expo-router'
+import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, ITEMS_PER_PAGE, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchImagesProps = {
     page: number
-    router: Router
+    router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
     setIsLoading: (value: React.SetStateAction<boolean>) => void

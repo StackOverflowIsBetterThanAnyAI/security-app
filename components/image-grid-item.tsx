@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import {
     ActivityIndicator,
     Image,
@@ -54,10 +54,14 @@ const ImageGridItem = ({
         ? errorImageSource
         : { uri: fullUriWithToken }
 
-    useEffect(() => {
+    // reset the loading state during render when the item changes
+    // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+    const [prevItem, setPrevItem] = useState(item)
+    if (item !== prevItem) {
+        setPrevItem(item)
         setImageIsLoaded(false)
         setImageLoadFailed(false)
-    }, [item])
+    }
 
     const handlePress = () => {
         if (imageIsLoaded) {

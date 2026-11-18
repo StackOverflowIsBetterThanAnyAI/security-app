@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     Animated,
@@ -33,8 +33,8 @@ const UserGridItemButton = ({
         return 'Demote'
     }, [isDelete, role])
 
-    const [buttonText, setButtonText] = useState<string>(handleButtonText())
     const [isConfirming, setIsConfirming] = useState<boolean>(false)
+    const buttonText = isConfirming ? 'Confirm' : handleButtonText()
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'backgroundSecondary')
@@ -43,7 +43,7 @@ const UserGridItemButton = ({
     const borderColorRedInactive = useThemeColor({}, 'redInactive')
     const colorRed = useThemeColor({}, 'red')
 
-    const fadeAnim = useRef(new Animated.Value(0)).current
+    const [fadeAnim] = useState(() => new Animated.Value(0))
 
     const accessibilityLabel = `${
         isDelete ? 'Delete User' : role === 'user' ? 'Promote' : 'Demote'
@@ -67,7 +67,6 @@ const UserGridItemButton = ({
             return
         }
 
-        setButtonText('Confirm')
         setIsConfirming(true)
 
         Animated.timing(fadeAnim, {
@@ -78,15 +77,7 @@ const UserGridItemButton = ({
     }
 
     useEffect(() => {
-        const newText = handleButtonText()
-        if (!isConfirming) {
-            setButtonText(newText)
-        }
-    }, [handleButtonText, isConfirming])
-
-    useEffect(() => {
         let timeoutId: number
-        const prevText = handleButtonText()
 
         if (isConfirming) {
             timeoutId = setTimeout(() => {
@@ -96,7 +87,6 @@ const UserGridItemButton = ({
                     useNativeDriver: false,
                 }).start(() => {
                     setIsConfirming(false)
-                    setButtonText(prevText)
                 })
             }, 3000)
         }
@@ -106,7 +96,7 @@ const UserGridItemButton = ({
                 clearTimeout(timeoutId)
             }
         }
-    }, [fadeAnim, handleButtonText, isConfirming, setIsConfirming])
+    }, [fadeAnim, isConfirming])
 
     const animatedBackgroundColor = fadeAnim.interpolate({
         inputRange: [0, 1],
