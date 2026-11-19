@@ -1,11 +1,6 @@
+import { Image } from 'expo-image'
 import { useContext, useState } from 'react'
-import {
-    ActivityIndicator,
-    Image,
-    Pressable,
-    StyleSheet,
-    View,
-} from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 
 import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
@@ -48,11 +43,11 @@ const ImageGridItem = ({
     )
 
     const safeItem = encodeURI(item)
-    const fullUriWithToken = `${URL}${safeItem}?token=${userToken}`
+    const fullUri = `${URL}${safeItem}`
 
     const imageSource = imageLoadFailed
         ? errorImageSource
-        : { uri: fullUriWithToken }
+        : { uri: fullUri, headers: { Authorization: `Bearer ${userToken}` } }
 
     const [prevItem, setPrevItem] = useState(item)
     if (item !== prevItem) {
@@ -63,7 +58,7 @@ const ImageGridItem = ({
 
     const handlePress = () => {
         if (imageIsLoaded) {
-            setImageHighlighted(fullUriWithToken)
+            setImageHighlighted(fullUri)
         }
     }
 
@@ -116,7 +111,7 @@ const ImageGridItem = ({
                     alt={item}
                     source={imageSource}
                     style={styles.image}
-                    resizeMode="cover"
+                    contentFit="cover"
                     onError={() => {
                         setImageLoadFailed(true)
                         setImageIsLoaded(true)

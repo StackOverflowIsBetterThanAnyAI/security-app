@@ -1,8 +1,8 @@
+import { Image } from 'expo-image'
 import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useState } from 'react'
 import {
     ActivityIndicator,
-    Image,
     Pressable,
     RefreshControl,
     StyleSheet,
@@ -65,11 +65,11 @@ const LiveScreen = () => {
     )
     const router = useRouter()
 
-    const fullUriWithToken = `${URL}/live?token=${userToken}&time=${refreshTime}`
+    const fullUri = `${URL}/live?time=${refreshTime}`
 
     const imageSource = imageLoadFailed
         ? errorImageSource
-        : { uri: fullUriWithToken }
+        : { uri: fullUri, headers: { Authorization: `Bearer ${userToken}` } }
 
     const formattedDate = () => {
         if (
@@ -241,7 +241,9 @@ const LiveScreen = () => {
                             alt={formattedDate()}
                             source={imageSource}
                             style={styles.image}
-                            resizeMode="cover"
+                            contentFit="cover"
+                            // every refresh has a new URL, so don't fill the disk cache
+                            cachePolicy="none"
                             onError={() => {
                                 setImageLoadFailed(true)
                                 setImageIsLoaded(true)
