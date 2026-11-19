@@ -11,6 +11,7 @@ import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
 type PaginationProps = {
+    day: string
     ITEMS_PER_PAGE: number
     router: ImperativeRouter
     setImages: React.Dispatch<React.SetStateAction<string[] | null>>
@@ -19,6 +20,7 @@ type PaginationProps = {
 }
 
 const Pagination = ({
+    day,
     ITEMS_PER_PAGE,
     router,
     setImages,
@@ -60,6 +62,7 @@ const Pagination = ({
         setIsPreviousDisabled(true)
         setPage(1)
         handleApiFetchImages({
+            day,
             page: 1,
             router,
             setError,
@@ -80,6 +83,7 @@ const Pagination = ({
         setIsNextDisabled(true)
         setPage(lastPage)
         handleApiFetchImages({
+            day,
             page: lastPage,
             router,
             setError,
@@ -105,6 +109,7 @@ const Pagination = ({
         setPage(next)
         setIsPreviousDisabled(false)
         handleApiFetchImages({
+            day,
             page: next,
             router,
             setError,
@@ -128,6 +133,7 @@ const Pagination = ({
             setPage(prev)
             setIsNextDisabled(false)
             handleApiFetchImages({
+                day,
                 page: prev,
                 router,
                 setError,

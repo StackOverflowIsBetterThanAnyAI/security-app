@@ -1,15 +1,18 @@
-import { useBottomTabBarHeight } from 'expo-router/tabs'
 import { useFocusEffect, useRouter } from 'expo-router'
+import { useBottomTabBarHeight } from 'expo-router/tabs'
 import { useCallback, useContext, useState } from 'react'
 import {
     ActivityIndicator,
+    BackHandler,
     RefreshControl,
     StyleSheet,
     View,
 } from 'react-native'
 
+import { handleApiFetchDays, RecordingDay } from '@/api/handleApiFetchDays'
 import { handleApiFetchImages } from '@/api/handleApiFetchImages'
 import Button from '@/components/button'
+import DayGrid from '@/components/day-grid'
 import HighlightImage from '@/components/highlight-image'
 import { noFile } from '@/components/icon-symbol'
 import ImageGrid from '@/components/image-grid'
@@ -22,6 +25,7 @@ import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { formatDay } from '@/utils/formatDay'
 
 const GalleryScreen = () => {
     const contextError = useContext(ContextError)
@@ -65,68 +69,131 @@ const GalleryScreen = () => {
         null
     )
 
+    const [days, setDays] = useState<RecordingDay[] | null>(null)
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
+    const [selectedDay, setSelectedDay] = useState<string | null>(null)
     const [totalImages, setTotalImages] = useState<number>(1)
 
-    const handleFetchImages = useCallback(
+    const handleFetch = useCallback(
         (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
-            handleApiFetchImages({
-                page,
-                router,
-                setError,
-                setImages,
-                setIsLoading,
-                setIsNextDisabled,
-                setIsPreviousDisabled,
-                setIsUserLoggedIn,
-                setPage,
-                setRetryFn,
-                setTotalImages,
-                userToken,
-            })
+            if (selectedDay) {
+                handleApiFetchImages({
+                    day: selectedDay,
+                    page,
+                    router,
+                    setError,
+                    setImages,
+                    setIsLoading,
+                    setIsNextDisabled,
+                    setIsPreviousDisabled,
+                    setIsUserLoggedIn,
+                    setPage,
+                    setRetryFn,
+                    setTotalImages,
+                    userToken,
+                })
+            } else {
+                handleApiFetchDays({
+                    router,
+                    setDays,
+                    setError,
+                    setIsLoading,
+                    setIsUserLoggedIn,
+                    setRetryFn,
+                    userToken,
+                })
+            }
         },
         [
             page,
             router,
+            selectedDay,
             setError,
-            setImages,
             setIsNextDisabled,
             setIsPreviousDisabled,
             setIsUserLoggedIn,
             setPage,
             setRetryFn,
-            setTotalImages,
             userToken,
         ]
     )
 
-    const handleFetchImagesManual = useCallback(() => {
-        handleFetchImages(setIsLoading)
-        setIsLoadingInitially(false)
-    }, [handleFetchImages, setIsLoading, setIsLoadingInitially])
+    const handleFetchManual = useCallback(() => {
+        handleFetch(setIsLoading)
+    }, [handleFetch])
 
-    const handleFetchImagesPull = () => {
-        handleFetchImages(setIsLoadingPull)
+    const handleFetchPull = () => {
+        handleFetch(setIsLoadingPull)
     }
 
     const handleRotateImage = () => {
         setImageRotation((prev) => (prev + 180) % 360)
     }
 
+    const handleSelectDay = (date: string) => {
+        setImages(null)
+        setPage(1)
+        setIsPreviousDisabled(true)
+        setSelectedDay(date)
+    }
+
+    const handleShowDays = useCallback(() => {
+        setImageHighlighted(null)
+        setImages(null)
+        setSelectedDay(null)
+    }, [])
+
     useFocusEffect(
         useCallback(() => {
-            handleFetchImagesManual()
+            handleFetchManual()
             const refresh = setInterval(() => {
-                handleFetchImagesManual()
+                handleFetchManual()
             }, 300000)
             return () => {
                 clearInterval(refresh)
             }
-        }, [handleFetchImagesManual])
+        }, [handleFetchManual])
     )
+
+    useFocusEffect(
+        useCallback(() => {
+            const subscription = BackHandler.addEventListener(
+                'hardwareBackPress',
+                () => {
+                    if (imageHighlighted) {
+                        setImageHighlighted(null)
+                        return true
+                    }
+                    if (selectedDay) {
+                        handleShowDays()
+                        return true
+                    }
+                    return false
+                }
+            )
+            return () => subscription.remove()
+        }, [handleShowDays, imageHighlighted, selectedDay])
+    )
+
+    const actions = (
+        <View style={styles.actions}>
+            <Button
+                accessibilityLabel="Refresh Past Recordings"
+                handlePress={handleFetchManual}
+                label="Refresh"
+            />
+            <Button
+                accessibilityLabel="Rotate Images"
+                handlePress={handleRotateImage}
+                label="Rotate"
+            />
+        </View>
+    )
+
+    const isEmpty = selectedDay ? !images?.length : !days?.length
+    const isLoadingFirst = isLoading && (selectedDay ? !images : !days)
 
     return (
         <>
@@ -135,7 +202,7 @@ const GalleryScreen = () => {
                     <RefreshControl
                         accessibilityLabel="Refreshing Past Recordings"
                         refreshing={isLoadingPull}
-                        onRefresh={handleFetchImagesPull}
+                        onRefresh={handleFetchPull}
                         tintColor={colorIcon}
                     />
                 }
@@ -144,9 +211,20 @@ const GalleryScreen = () => {
                     <ThemedText center type="title">
                         Welcome, {userName}!
                     </ThemedText>
-                    <ThemedText type="title">Past Recordings</ThemedText>
+                    <ThemedText type="title">
+                        {selectedDay
+                            ? formatDay(selectedDay)
+                            : 'Past Recordings'}
+                    </ThemedText>
+                    {selectedDay && (
+                        <Button
+                            accessibilityLabel="Show all Days"
+                            handlePress={handleShowDays}
+                            label="All Days"
+                        />
+                    )}
                 </View>
-                {isLoading && isLoadingInitially && !images?.length ? (
+                {isLoadingFirst ? (
                     <View
                         style={[
                             styles.activityLoader,
@@ -155,26 +233,21 @@ const GalleryScreen = () => {
                     >
                         <ActivityIndicator size="large" color={colorIcon} />
                     </View>
-                ) : images?.length ? (
+                ) : isEmpty ? (
+                    <View style={styles.noImagesContainer}>
+                        {noFile(colorIcon)}
+                        <ThemedText center>
+                            Currently, there are no Recordings available.
+                        </ThemedText>
+                        <Button
+                            accessibilityLabel="Refresh Past Recordings"
+                            handlePress={handleFetchManual}
+                            label="Refresh"
+                        />
+                    </View>
+                ) : selectedDay && images ? (
                     <>
-                        <View
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}
-                        >
-                            <Button
-                                accessibilityLabel="Refresh Past Recordings"
-                                handlePress={handleFetchImagesManual}
-                                label="Refresh"
-                            />
-                            <Button
-                                accessibilityLabel="Rotate Live Image"
-                                handlePress={handleRotateImage}
-                                label="Rotate"
-                            />
-                        </View>
+                        {actions}
                         <ImageGrid
                             images={images}
                             setImageHighlighted={setImageHighlighted}
@@ -182,29 +255,9 @@ const GalleryScreen = () => {
                         />
                         {totalImages > ITEMS_PER_PAGE && (
                             <>
-                                {images.length > 12 && (
-                                    <View
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                        }}
-                                    >
-                                        <Button
-                                            accessibilityLabel="Refresh Past Recordings"
-                                            handlePress={
-                                                handleFetchImagesManual
-                                            }
-                                            label="Refresh"
-                                        />
-                                        <Button
-                                            accessibilityLabel="Rotate Live Image"
-                                            handlePress={handleRotateImage}
-                                            label="Rotate"
-                                        />
-                                    </View>
-                                )}
+                                {images.length > 12 && actions}
                                 <Pagination
+                                    day={selectedDay}
                                     ITEMS_PER_PAGE={ITEMS_PER_PAGE}
                                     router={router}
                                     setImages={setImages}
@@ -215,17 +268,16 @@ const GalleryScreen = () => {
                         )}
                     </>
                 ) : (
-                    <View style={styles.noImagesContainer}>
-                        {noFile(colorIcon)}
-                        <ThemedText center>
-                            Currently, there are no Recordings available.
-                        </ThemedText>
-                        <Button
-                            accessibilityLabel="Refresh Past Recordings"
-                            handlePress={handleFetchImagesManual}
-                            label="Refresh"
-                        />
-                    </View>
+                    days && (
+                        <>
+                            {actions}
+                            <DayGrid
+                                days={days}
+                                handleSelectDay={handleSelectDay}
+                                userToken={userToken}
+                            />
+                        </>
+                    )
                 )}
             </MainView>
             {imageHighlighted && (
@@ -239,6 +291,11 @@ const GalleryScreen = () => {
 }
 
 const styles = StyleSheet.create({
+    actions: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     activityLoader: {
         position: 'absolute',
         top: 0,

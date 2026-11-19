@@ -4,6 +4,7 @@ import { API_TIMEOUT_MS, ITEMS_PER_PAGE, URL } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
 
 type handleApiFetchImagesProps = {
+    day: string
     page: number
     router: ImperativeRouter
     setError: (value: React.SetStateAction<string>) => void
@@ -19,6 +20,7 @@ type handleApiFetchImagesProps = {
 }
 
 export const handleApiFetchImages = async ({
+    day,
     page,
     router,
     setError,
@@ -41,7 +43,7 @@ export const handleApiFetchImages = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/images?page=${page}`, {
+        const response = await fetch(`${URL}/images?day=${day}&page=${page}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -101,6 +103,7 @@ export const handleApiFetchImages = async ({
         queueMicrotask(() => {
             setRetryFn(() => () => {
                 handleApiFetchImages({
+                    day,
                     page,
                     router,
                     setError,
