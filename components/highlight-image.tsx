@@ -1,9 +1,8 @@
-import { useContext, useRef, useState } from 'react'
+import { Image } from 'expo-image'
+import { useContext, useMemo, useState } from 'react'
 import {
     ActivityIndicator,
     Dimensions,
-    Image,
-    ImageInstance,
     Pressable,
     StyleSheet,
     View,
@@ -11,6 +10,7 @@ import {
 
 import ThemedText from '@/components/themed-text'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
+import { ContextUser } from '@/context/ContextUser'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { downloadImage } from '@/utils/downloadImage'
@@ -34,20 +34,32 @@ const HighlightImage = ({
     }
     const { imageRotation } = contextImageRotation
 
+    const contextUser = useContext(ContextUser)
+    if (!contextUser) {
+        throw new Error(
+            'HighlightImage must be used within a ContextUser.Provider'
+        )
+    }
+    const { userToken } = contextUser
+
+    const imageHeaders = useMemo(
+        () => ({ Authorization: `Bearer ${userToken}` }),
+        [userToken]
+    )
+
     const { width, height } = Dimensions.get('window')
 
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
     const highlightColor = useThemeColor({}, 'highlight')
 
-    const imageRef = useRef<ImageInstance>(null)
     const [imageHeight, setImageHeight] = useState<number>(256)
     const [imageIsLoaded, setImageIsLoaded] = useState<boolean>(false)
     const [imageIsLoadedSuccess, setImageIsLoadedSuccess] =
         useState<boolean>(false)
 
     const imageSource = imageIsLoadedSuccess
-        ? { uri: imageHighlighted! }
+        ? { uri: imageHighlighted!, headers: imageHeaders }
         : errorImageSource
 
     const formattedDate = () => {
@@ -88,6 +100,7 @@ const HighlightImage = ({
     useHighlightImageSize({
         height,
         imageHighlighted,
+        imageHeaders,
         setImageHeight,
         setImageIsLoaded,
         setImageIsLoadedSuccess,
@@ -106,6 +119,7 @@ const HighlightImage = ({
             backgroundColor,
             height: imageHeight,
             transform: [{ rotate: `${imageRotation}deg` }],
+            width,
         },
         wrapper: {
             backgroundColor: highlightColor,
@@ -133,12 +147,10 @@ const HighlightImage = ({
                 {imageIsLoaded && imageIsLoadedSuccess && imageSource.uri && (
                     <>
                         <Image
-                            ref={imageRef}
                             alt={formattedDate() || 'Past Recording'}
                             source={imageSource}
                             style={styles.image}
-                            width={width}
-                            resizeMode="contain"
+                            contentFit="contain"
                             onError={handleErrorImage}
                         />
                         {formattedDate().length ? (
@@ -152,12 +164,10 @@ const HighlightImage = ({
                 )}
                 {imageIsLoaded && !imageIsLoadedSuccess && (
                     <Image
-                        ref={imageRef}
                         alt="Error Image"
                         source={imageSource}
                         style={styles.image}
-                        width={width}
-                        resizeMode="contain"
+                        contentFit="contain"
                         onError={handleErrorImage}
                     />
                 )}
