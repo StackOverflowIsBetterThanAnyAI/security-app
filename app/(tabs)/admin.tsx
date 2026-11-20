@@ -2,11 +2,14 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import { useCallback, useContext, useState } from 'react'
 import { RefreshControl, StyleSheet, View } from 'react-native'
 
+import { handleApiFetchStats, SystemStatsType } from '@/api/handleApiFetchStats'
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
 import { noUsers } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
+import ShutdownButton from '@/components/shutdown-button'
 import SkeletonUserGrid from '@/components/skeleton-user-grid'
+import SystemStats from '@/components/system-stats'
 import ThemedText from '@/components/themed-text'
 import UserGrid from '@/components/user-grid'
 import UserHeader from '@/components/user-header'
@@ -38,7 +41,22 @@ const AdminScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
+    const [stats, setStats] = useState<SystemStatsType | null>(null)
+    const [statsFailed, setStatsFailed] = useState<boolean>(false)
+    const [statsUpdatedAt, setStatsUpdatedAt] = useState<Date | null>(null)
     const [users, setUsers] = useState<UsersType[]>([])
+
+    const handleFetchStats = useCallback(() => {
+        handleApiFetchStats({
+            router,
+            setError,
+            setIsUserLoggedIn,
+            setStats,
+            setStatsFailed,
+            setStatsUpdatedAt,
+            userToken,
+        })
+    }, [router, setError, setIsUserLoggedIn, userToken])
 
     const handleFetchUsers = useCallback(
         (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -62,12 +80,23 @@ const AdminScreen = () => {
 
     const handleFetchUsersPull = () => {
         handleFetchUsers(setIsLoadingPull)
+        handleFetchStats()
     }
 
     useFocusEffect(
         useCallback(() => {
             handleFetchUsersManual()
         }, [handleFetchUsersManual])
+    )
+
+    useFocusEffect(
+        useCallback(() => {
+            handleFetchStats()
+            const refresh = setInterval(handleFetchStats, 30000)
+            return () => {
+                clearInterval(refresh)
+            }
+        }, [handleFetchStats])
     )
 
     const styles = StyleSheet.create({
@@ -122,7 +151,13 @@ const AdminScreen = () => {
                     />
                 </View>
             )}
+            <SystemStats
+                stats={stats}
+                statsFailed={statsFailed}
+                statsUpdatedAt={statsUpdatedAt}
+            />
             <UserSettings handleFetchUserRole={undefined} />
+            <ShutdownButton />
         </MainView>
     )
 }
