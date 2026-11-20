@@ -1,6 +1,7 @@
 import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
 
 export type RecordingDay = {
@@ -66,10 +67,7 @@ export const handleApiFetchDays = async ({
     } catch (error: any) {
         clearTimeout(timeoutId)
 
-        const errorMessage =
-            error.name === 'AbortError' || error.message.includes('Aborted')
-                ? 'Response from Server took too long'
-                : error.message
+        const errorMessage = getErrorMessage(error)
         setError(errorMessage)
 
         queueMicrotask(() => {

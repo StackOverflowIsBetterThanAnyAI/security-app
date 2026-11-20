@@ -2,6 +2,7 @@ import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
+import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData, saveData } from '@/helper/storeData'
 
 type handleApiFetchRoleProps = {
@@ -68,10 +69,7 @@ export const handleApiFetchRole = async ({
     } catch (error: any) {
         clearTimeout(timeoutId)
 
-        const errorMessage =
-            error.name === 'AbortError' || error.message.includes('Aborted')
-                ? 'Response from Server took too long'
-                : error.message
+        const errorMessage = getErrorMessage(error)
         setError(errorMessage)
 
         queueMicrotask(() => {

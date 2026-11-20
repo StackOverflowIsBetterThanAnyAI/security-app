@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import {
     ActivityIndicator,
     RefreshControl,
@@ -30,8 +30,22 @@ const ErrorScreen = () => {
     const router = useRouter()
     const { from } = useLocalSearchParams<{ from: string }>()
 
+    const goBackTo = useRef<string | null>(null)
+
+    useEffect(() => {
+        if (goBackTo.current === null || error.length) {
+            return
+        }
+        router.replace(`/${goBackTo.current}` as any)
+        goBackTo.current = null
+    }, [error, router])
+
     const handleGoBack = () => {
-        router.replace(`/${from}` as any)
+        if (!error.length) {
+            router.replace(`/${from ?? ''}` as any)
+            return
+        }
+        goBackTo.current = from ?? ''
         setError('')
     }
 
