@@ -10,8 +10,10 @@ type MAPPING = {
     'expand-less': 'expand-less'
     image: 'image'
     login: 'login'
+    pause: 'pause'
     person: 'person'
     'photo-camera': 'photo-camera'
+    'play-arrow': 'play-arrow'
 }
 
 export type IconMapping = keyof MAPPING

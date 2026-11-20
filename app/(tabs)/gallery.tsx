@@ -19,6 +19,7 @@ import ImageGrid from '@/components/image-grid'
 import MainView from '@/components/main-view'
 import Pagination from '@/components/pagination'
 import ThemedText from '@/components/themed-text'
+import TimelapsePlayer from '@/components/timelapse-player'
 import { ITEMS_PER_PAGE } from '@/constants/api'
 import { ContextError } from '@/context/ContextError'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
@@ -247,6 +248,15 @@ const GalleryScreen = () => {
                     </View>
                 ) : selectedDay && images ? (
                     <>
+                        <TimelapsePlayer
+                            key={selectedDay}
+                            day={selectedDay}
+                            thumbnail={
+                                days?.find((day) => day.date === selectedDay)
+                                    ?.thumbnail
+                            }
+                            userToken={userToken}
+                        />
                         {actions}
                         <ImageGrid
                             images={images}
