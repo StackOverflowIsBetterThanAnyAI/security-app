@@ -1,6 +1,7 @@
 import { ImperativeRouter } from 'expo-router'
 
 import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
 
 type handleApiShutdownProps = {
@@ -45,9 +46,7 @@ export const handleApiShutdown = async ({
 
         return null
     } catch (error: any) {
-        return error.name === 'AbortError' || error.message.includes('Aborted')
-            ? 'Response from Server took too long'
-            : error.message
+        return getErrorMessage(error)
     } finally {
         clearTimeout(timeoutId)
     }
