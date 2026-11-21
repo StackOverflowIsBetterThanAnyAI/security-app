@@ -8,12 +8,13 @@ import {
     View,
 } from 'react-native'
 
+import Button from '@/components/button'
 import ThemedText from '@/components/themed-text'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextUser } from '@/context/ContextUser'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { downloadImage } from '@/utils/downloadImage'
+import { saveImage, shareImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -90,12 +91,17 @@ const HighlightImage = ({
         setImageIsLoadedSuccess(false)
     }
 
-    const handlePress = () => {
-        const imageName = decodeURI(imageSource.uri)
+    const imageProps = () => ({
+        imageName: decodeURI(imageSource.uri)
             .replace(/.*(?=security_image_)/, '')
-            .replace(/\.jpg.*$/, '.jpg')
-        downloadImage({ imageName, imageSource, imageRotation })
-    }
+            .replace(/\.jpg.*$/, '.jpg'),
+        imageRotation,
+        imageSource,
+    })
+
+    const handlePress = () => shareImage(imageProps())
+
+    const handleSave = () => saveImage(imageProps())
 
     useHighlightImageSize({
         height,
@@ -109,6 +115,10 @@ const HighlightImage = ({
 
     const styles = StyleSheet.create({
         activity: { backgroundColor, height: imageHeight },
+        buttons: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        },
         footer: {
             backgroundColor,
             paddingHorizontal: 16,
@@ -153,13 +163,25 @@ const HighlightImage = ({
                             contentFit="contain"
                             onError={handleErrorImage}
                         />
-                        {formattedDate().length ? (
-                            <View style={styles.footer}>
+                        <View style={styles.footer}>
+                            {formattedDate().length ? (
                                 <ThemedText center>
                                     {formattedDate()}
                                 </ThemedText>
+                            ) : undefined}
+                            <View style={styles.buttons}>
+                                <Button
+                                    accessibilityLabel="Save Image to Gallery"
+                                    handlePress={handleSave}
+                                    label="Save"
+                                />
+                                <Button
+                                    accessibilityLabel="Share Image"
+                                    handlePress={handlePress}
+                                    label="Share"
+                                />
                             </View>
-                        ) : undefined}
+                        </View>
                     </>
                 )}
                 {imageIsLoaded && !imageIsLoadedSuccess && (
