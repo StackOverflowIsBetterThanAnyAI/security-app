@@ -16,7 +16,7 @@ import { ContextError } from '@/context/ContextError'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser, UserRoleType } from '@/context/ContextUser'
-import { loadData } from '@/helper/storeData'
+import { loadData, saveData } from '@/helper/storeData'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useThemeColor } from '@/hooks/use-theme-color'
 
@@ -45,7 +45,16 @@ const RootLayout = () => {
 
     useEffect(() => {
         const autoLogin = async () => {
-            const data = await loadData(['authName', 'authRole', 'authToken'])
+            const data = await loadData([
+                'authName',
+                'authRole',
+                'authToken',
+                'imageRotation',
+            ])
+            const storedRotation = Number(data?.imageRotation)
+            if (storedRotation === 0 || storedRotation === 180) {
+                setImageRotation(storedRotation)
+            }
             if (data?.authToken && data?.authName && data?.authRole) {
                 setIsUserLoggedIn(true)
                 setUserName(data.authName)
@@ -56,6 +65,12 @@ const RootLayout = () => {
         }
         autoLogin()
     }, [])
+
+    useEffect(() => {
+        if (!isLoading) {
+            saveData({ imageRotation: `${imageRotation}` })
+        }
+    }, [imageRotation, isLoading])
 
     useEffect(() => {
         if (!isLoading && isUserLoggedIn) {
