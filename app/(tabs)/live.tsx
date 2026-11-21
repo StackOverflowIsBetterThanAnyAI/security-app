@@ -20,7 +20,7 @@ import { ContextError } from '@/context/ContextError'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
-import { downloadImage } from '@/utils/downloadImage'
+import { saveImage, shareImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../../assets/images/error.webp')
 
@@ -91,8 +91,11 @@ const LiveScreen = () => {
     }
 
     const handlePress = () => {
-        downloadImage({ imageName, imageSource, imageRotation })
+        shareImage({ imageName, imageSource, imageRotation })
     }
+
+    const handleSave = () =>
+        saveImage({ imageName, imageSource, imageRotation })
 
     const handleFetchLive = useCallback(
         (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -152,6 +155,10 @@ const LiveScreen = () => {
     )
 
     const styles = StyleSheet.create({
+        actions: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        },
         activityLoader: {
             alignItems: 'center',
             aspectRatio: 16 / 9,
@@ -269,11 +276,18 @@ const LiveScreen = () => {
                             </View>
                         )}
                     </Pressable>
-                    <Button
-                        accessibilityLabel="Rotate Live Image"
-                        handlePress={handleRotateImage}
-                        label="Rotate"
-                    />
+                    <View style={styles.actions}>
+                        <Button
+                            accessibilityLabel="Rotate Live Image"
+                            handlePress={handleRotateImage}
+                            label="Rotate"
+                        />
+                        <Button
+                            accessibilityLabel="Save Live Image to Gallery"
+                            handlePress={handleSave}
+                            label="Save"
+                        />
+                    </View>
                 </>
             ) : (
                 <View style={styles.noImagesContainer}>
