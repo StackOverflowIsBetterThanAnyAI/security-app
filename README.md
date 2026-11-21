@@ -35,13 +35,13 @@ npm ci
 
 ### Backend Address
 
-The app talks to the backend via plain HTTP. The address is configured in [`constants/api.ts`](constants/api.ts):
+The app talks to the backend via plain HTTP. The address is read from `EXPO_PUBLIC_API_URL` in a local `.env` file, which is git-ignored. Copy [`.env.example`](.env.example) to `.env` and set the IP address and port of your Raspberry Pi:
 
-```ts
-export const URL = 'http://192.168.178.87:5000'
+```
+EXPO_PUBLIC_API_URL=http://100.x.x.x:5000
 ```
 
-Change it to the IP address and port of your Raspberry Pi. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
+Restart the dev server after changing `.env`. Use the Pi's [Tailscale](https://tailscale.com) address, so the app reaches the Pi at home and on the go as long as Tailscale is active on the phone. The value is built into the app bundle, so it is configuration, not a secret. The traffic is encrypted by Tailscale, which is why plain HTTP is fine here. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
 
 ### Start the App
 
