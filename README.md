@@ -41,7 +41,7 @@ The app talks to the backend via plain HTTP. The address is read from `EXPO_PUBL
 EXPO_PUBLIC_API_URL=http://100.x.x.x:5000
 ```
 
-Restart the dev server after changing `.env`. Use the Pi's [Tailscale](https://tailscale.com) address, so the app reaches the Pi at home and on the go as long as Tailscale is active on the phone. The value is built into the app bundle, so it is configuration, not a secret. The traffic is encrypted by Tailscale, which is why plain HTTP is fine here. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
+Restart the dev server after changing `.env`. EAS builds do not see the git-ignored `.env`, so set the variable once per EAS environment as well, for example `eas env:create --name EXPO_PUBLIC_API_URL --value http://100.x.x.x:5000 --environment production --visibility plaintext`. The build profiles in [`eas.json`](eas.json) use the environment of the same name. Use the Pi's [Tailscale](https://tailscale.com) address, so the app reaches the Pi at home and on the go as long as Tailscale is active on the phone. The value is built into the app bundle, so it is configuration, not a secret. The traffic is encrypted by Tailscale, which is why plain HTTP is fine here. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
 
 ### Start the App
 
