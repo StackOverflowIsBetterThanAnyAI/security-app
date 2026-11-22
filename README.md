@@ -1,5 +1,11 @@
 # Security App
 
+<p>
+    <img src="docs/screenshots/live.jpg" alt="Live image" width="250" />
+    <img src="docs/screenshots/gallery.jpg" alt="Gallery" width="250" />
+    <img src="docs/screenshots/admin.jpg" alt="System status for admins" width="250" />
+</p>
+
 ## Usage Guide
 
 1. Install eas-cli: `npm install -g eas-cli`
