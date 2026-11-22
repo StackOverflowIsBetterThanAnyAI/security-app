@@ -8,6 +8,7 @@ import { URL } from '@/constants/api'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
 import { formatDay } from '@/utils/formatDay'
+import { thumbnailPath } from '@/utils/thumbnailPath'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -46,7 +47,7 @@ const DayGridItem = ({
     const imageSource = imageLoadFailed
         ? errorImageSource
         : {
-              uri: `${URL}${encodeURI(day.thumbnail)}`,
+              uri: `${URL}${encodeURI(thumbnailPath(day.thumbnail))}`,
               headers: { Authorization: `Bearer ${userToken}` },
           }
 
@@ -95,7 +96,7 @@ const DayGridItem = ({
                     alt={label}
                     source={imageSource}
                     style={styles.image}
-                    contentFit="cover"
+                    contentFit="fill"
                     onError={() => setImageLoadFailed(true)}
                 />
                 <View style={styles.text}>

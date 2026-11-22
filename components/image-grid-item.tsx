@@ -6,6 +6,7 @@ import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { thumbnailPath } from '@/utils/thumbnailPath'
 
 const errorImageSource = require('./../assets/images/error.webp')
 
@@ -42,12 +43,15 @@ const ImageGridItem = ({
         'buttonInactive'
     )
 
-    const safeItem = encodeURI(item)
-    const fullUri = `${URL}${safeItem}`
+    const fullUri = `${URL}${encodeURI(item)}`
+    const thumbnailUri = `${URL}${encodeURI(thumbnailPath(item))}`
 
     const imageSource = imageLoadFailed
         ? errorImageSource
-        : { uri: fullUri, headers: { Authorization: `Bearer ${userToken}` } }
+        : {
+              uri: thumbnailUri,
+              headers: { Authorization: `Bearer ${userToken}` },
+          }
 
     const [prevItem, setPrevItem] = useState(item)
     if (item !== prevItem) {
@@ -111,7 +115,7 @@ const ImageGridItem = ({
                     alt={item}
                     source={imageSource}
                     style={styles.image}
-                    contentFit="cover"
+                    contentFit="fill"
                     onError={() => {
                         setImageLoadFailed(true)
                         setImageIsLoaded(true)
