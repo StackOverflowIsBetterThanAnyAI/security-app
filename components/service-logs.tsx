@@ -1,7 +1,5 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import {
-    NativeScrollEvent,
-    NativeSyntheticEvent,
     Platform,
     ScrollView,
     ScrollViewInstance,
@@ -37,21 +35,26 @@ const ServiceLogs = ({
     const warningColor = useThemeColor({}, 'red')
 
     const scrollRef = useRef<ScrollViewInstance>(null)
-    const isAtEnd = useRef<boolean>(true)
+    const newestEntry = logs?.length ? logs[logs.length - 1] : null
+    const newestKey = newestEntry
+        ? `${newestEntry.time}-${newestEntry.message}`
+        : null
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const { contentOffset, contentSize, layoutMeasurement } =
-            event.nativeEvent
-        isAtEnd.current =
-            contentOffset.y + layoutMeasurement.height >=
-            contentSize.height - 24
+    const scrollToEnd = () => {
+        scrollRef.current?.scrollToEnd({ animated: true })
     }
 
-    const handleContentSizeChange = () => {
-        if (isAtEnd.current) {
-            scrollRef.current?.scrollToEnd({ animated: false })
+    useEffect(() => {
+        if (!newestKey) {
+            return
         }
-    }
+        const frame = requestAnimationFrame(() => {
+            scrollRef.current?.scrollToEnd({ animated: true })
+        })
+        return () => {
+            cancelAnimationFrame(frame)
+        }
+    }, [newestKey])
 
     const styles = StyleSheet.create({
         border: {
@@ -67,7 +70,7 @@ const ServiceLogs = ({
             height: 360,
         },
         consoleContent: {
-            gap: 4,
+            gap: 10,
             padding: 8,
         },
         entry: {
@@ -107,10 +110,8 @@ const ServiceLogs = ({
                         accessibilityLabel="Service logs"
                         contentContainerStyle={styles.consoleContent}
                         nestedScrollEnabled={true}
-                        onContentSizeChange={handleContentSizeChange}
-                        onScroll={handleScroll}
+                        onContentSizeChange={scrollToEnd}
                         ref={scrollRef}
-                        scrollEventThrottle={100}
                         style={styles.console}
                     >
                         {logs.length ? (
