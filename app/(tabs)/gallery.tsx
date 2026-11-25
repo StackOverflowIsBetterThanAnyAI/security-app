@@ -26,6 +26,7 @@ import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextPage } from '@/context/ContextPage'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { downloadDay } from '@/utils/downloadDay'
 import { formatDay } from '@/utils/formatDay'
 
 const GalleryScreen = () => {
@@ -71,6 +72,7 @@ const GalleryScreen = () => {
     )
 
     const [days, setDays] = useState<RecordingDay[] | null>(null)
+    const [downloadedBytes, setDownloadedBytes] = useState<number>(0)
     const [images, setImages] = useState<string[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
@@ -127,6 +129,18 @@ const GalleryScreen = () => {
 
     const handleFetchPull = () => {
         handleFetch(setIsLoadingPull)
+    }
+
+    const handleDownloadDay = async () => {
+        if (!selectedDay) {
+            return
+        }
+        setDownloadedBytes(0)
+        await downloadDay({
+            day: selectedDay,
+            onProgress: setDownloadedBytes,
+            userToken,
+        })
     }
 
     const handleRotateImage = () => {
@@ -256,6 +270,12 @@ const GalleryScreen = () => {
                                     ?.thumbnail
                             }
                             userToken={userToken}
+                        />
+                        <Button
+                            accessibilityLabel={`Download all Recordings of ${formatDay(selectedDay)} as ZIP`}
+                            handlePress={handleDownloadDay}
+                            label="Download Day"
+                            loadingLabel={`${(downloadedBytes / 1024 ** 2).toFixed(1)} MB`}
                         />
                         {actions}
                         <ImageGrid
