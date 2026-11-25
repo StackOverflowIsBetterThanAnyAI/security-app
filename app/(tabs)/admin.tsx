@@ -1,12 +1,14 @@
 import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useRef, useState } from 'react'
 import { RefreshControl, StyleSheet, View } from 'react-native'
 
+import { handleApiFetchLogs, LogEntryType } from '@/api/handleApiFetchLogs'
 import { handleApiFetchStats, SystemStatsType } from '@/api/handleApiFetchStats'
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
 import Button from '@/components/button'
 import { noUsers } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
+import ServiceLogs from '@/components/service-logs'
 import ShutdownButton from '@/components/shutdown-button'
 import SkeletonUserGrid from '@/components/skeleton-user-grid'
 import SystemStats from '@/components/system-stats'
@@ -17,6 +19,8 @@ import UserSettings from '@/components/user-settings'
 import { ContextError } from '@/context/ContextError'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
+
+const LOGS_REFRESH_MS = 5000
 
 const AdminScreen = () => {
     const contextError = useContext(ContextError)
@@ -41,6 +45,9 @@ const AdminScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoadingInitially, setIsLoadingInitially] = useState<boolean>(true)
     const [isLoadingPull, setIsLoadingPull] = useState<boolean>(false)
+    const [logs, setLogs] = useState<LogEntryType[] | null>(null)
+    const [logsFailed, setLogsFailed] = useState<boolean>(false)
+    const [logsUpdatedAt, setLogsUpdatedAt] = useState<Date | null>(null)
     const [stats, setStats] = useState<SystemStatsType | null>(null)
     const [statsFailed, setStatsFailed] = useState<boolean>(false)
     const [statsUpdatedAt, setStatsUpdatedAt] = useState<Date | null>(null)
@@ -56,6 +63,28 @@ const AdminScreen = () => {
             setStatsUpdatedAt,
             userToken,
         })
+    }, [router, setError, setIsUserLoggedIn, userToken])
+
+    const isFetchingLogs = useRef<boolean>(false)
+
+    const handleFetchLogs = useCallback(async () => {
+        if (isFetchingLogs.current) {
+            return
+        }
+        isFetchingLogs.current = true
+        try {
+            await handleApiFetchLogs({
+                router,
+                setError,
+                setIsUserLoggedIn,
+                setLogs,
+                setLogsFailed,
+                setLogsUpdatedAt,
+                userToken,
+            })
+        } finally {
+            isFetchingLogs.current = false
+        }
     }, [router, setError, setIsUserLoggedIn, userToken])
 
     const handleFetchUsers = useCallback(
@@ -81,7 +110,18 @@ const AdminScreen = () => {
     const handleFetchUsersPull = () => {
         handleFetchUsers(setIsLoadingPull)
         handleFetchStats()
+        handleFetchLogs()
     }
+
+    useFocusEffect(
+        useCallback(() => {
+            handleFetchLogs()
+            const refresh = setInterval(handleFetchLogs, LOGS_REFRESH_MS)
+            return () => {
+                clearInterval(refresh)
+            }
+        }, [handleFetchLogs])
+    )
 
     useFocusEffect(
         useCallback(() => {
@@ -155,6 +195,12 @@ const AdminScreen = () => {
                 stats={stats}
                 statsFailed={statsFailed}
                 statsUpdatedAt={statsUpdatedAt}
+            />
+            <ServiceLogs
+                handleRefresh={handleFetchLogs}
+                logs={logs}
+                logsFailed={logsFailed}
+                logsUpdatedAt={logsUpdatedAt}
             />
             <UserSettings handleFetchUserRole={undefined} />
             <ShutdownButton />
