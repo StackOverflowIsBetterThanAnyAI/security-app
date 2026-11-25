@@ -8,9 +8,15 @@ type ButtonProps = {
     accessibilityLabel: string
     handlePress: () => Promise<void> | void
     label: string
+    loadingLabel?: string
 }
 
-const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
+const Button = ({
+    accessibilityLabel,
+    handlePress,
+    label,
+    loadingLabel,
+}: ButtonProps) => {
     const activityColor = useThemeColor({}, 'text')
     const backgroundColor = useThemeColor({}, 'background')
     const borderColorActive = useThemeColor({}, 'border')
@@ -69,7 +75,11 @@ const Button = ({ accessibilityLabel, handlePress, label }: ButtonProps) => {
             ]}
             onPress={!isLoading ? handleButtonPress : undefined}
         >
-            {isLoading ? (
+            {isLoading && loadingLabel ? (
+                <ThemedText center style={{ height: 26 }}>
+                    {loadingLabel}
+                </ThemedText>
+            ) : isLoading ? (
                 <ActivityIndicator
                     color={activityColor}
                     style={{ height: 26 }}
