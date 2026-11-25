@@ -1,7 +1,8 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 export type LogEntryType = {
     message: string
@@ -34,7 +35,7 @@ export const handleApiFetchLogs = async ({
     }, API_TIMEOUT_MS)
 
     try {
-        const response = await fetch(`${URL}/admin/logs`, {
+        const response = await apiFetch(`/admin/logs`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

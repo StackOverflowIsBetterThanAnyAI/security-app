@@ -12,10 +12,11 @@ import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 
 import IconSymbol from '@/components/icon-symbol'
 import ThemedText from '@/components/themed-text'
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { Colors } from '@/constants/theme'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { apiFetch, getApiUrl, imageCacheKey, useApiUrl } from '@/utils/apiUrl'
 import { formatDay } from '@/utils/formatDay'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -46,10 +47,10 @@ const fetchDayImages = async (day: string, headers: Record<string, string>) => {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT_MS)
         try {
-            const response = await fetch(
-                `${URL}/images?day=${day}&page=${page}`,
-                { headers, signal: controller.signal }
-            )
+            const response = await apiFetch(`/images?day=${day}&page=${page}`, {
+                headers,
+                signal: controller.signal,
+            })
             if (!response.ok) {
                 throw new Error(`Error ${response.status}`)
             }
@@ -66,7 +67,7 @@ const fetchDayImages = async (day: string, headers: Record<string, string>) => {
         }
     }
 
-    return paths.map((path) => `${URL}${encodeURI(path)}`)
+    return paths.map((path) => `${getApiUrl()}${encodeURI(path)}`)
 }
 
 const TimelapsePlayer = ({
@@ -201,11 +202,20 @@ const TimelapsePlayer = ({
         }
     }
 
+    const apiUrl = useApiUrl()
     const showFrames = frames.length > 0 && status !== 'error'
     const imageSource = showFrames
-        ? { uri: frames[index], headers }
+        ? {
+              uri: frames[index],
+              headers,
+              cacheKey: imageCacheKey(frames[index]),
+          }
         : thumbnail && !thumbnailFailed
-          ? { uri: `${URL}${encodeURI(thumbnail)}`, headers }
+          ? {
+                uri: `${apiUrl}${encodeURI(thumbnail)}`,
+                headers,
+                cacheKey: imageCacheKey(encodeURI(thumbnail)),
+            }
           : errorImageSource
 
     const isBuffering =

@@ -1,8 +1,9 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 export type RecordingDay = {
     count: number
@@ -36,7 +37,7 @@ export const handleApiFetchDays = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/days`, {
+        const response = await apiFetch(`/days`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

@@ -1,7 +1,8 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type ImageFolderStats = {
     count: number
@@ -54,7 +55,7 @@ export const handleApiFetchStats = async ({
     }, API_TIMEOUT_MS)
 
     try {
-        const response = await fetch(`${URL}/admin/stats`, {
+        const response = await apiFetch(`/admin/stats`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

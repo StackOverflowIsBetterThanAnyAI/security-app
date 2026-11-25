@@ -1,9 +1,10 @@
 import { ImperativeRouter } from 'expo-router'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiChangeRoleProps = {
     id: number
@@ -37,7 +38,7 @@ export const handleApiChangeRole = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/user/role`, {
+        const response = await apiFetch(`/user/role`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

@@ -14,12 +14,12 @@ import Button from '@/components/button'
 import { noFile } from '@/components/icon-symbol'
 import MainView from '@/components/main-view'
 import ThemedText from '@/components/themed-text'
-import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
 import { ContextError } from '@/context/ContextError'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextUser } from '@/context/ContextUser'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { useApiUrl } from '@/utils/apiUrl'
 import { saveImage, shareImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../../assets/images/error.webp')
@@ -65,7 +65,8 @@ const LiveScreen = () => {
     )
     const router = useRouter()
 
-    const fullUri = `${URL}/live?time=${refreshTime}`
+    const apiUrl = useApiUrl()
+    const fullUri = `${apiUrl}/live?time=${refreshTime}`
 
     const imageSource = imageLoadFailed
         ? errorImageSource

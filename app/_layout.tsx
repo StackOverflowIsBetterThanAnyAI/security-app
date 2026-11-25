@@ -19,6 +19,7 @@ import { ContextUser, UserRoleType } from '@/context/ContextUser'
 import { loadData, saveData } from '@/helper/storeData'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { resolveApiUrl, useApiUrlMonitor } from '@/utils/apiUrl'
 
 export const unstable_settings = {
     anchor: '(tabs)',
@@ -43,13 +44,18 @@ const RootLayout = () => {
     const headerColor = useThemeColor({}, 'tabBar')
     const router = useRouter()
 
+    useApiUrlMonitor()
+
     useEffect(() => {
         const autoLogin = async () => {
-            const data = await loadData([
-                'authName',
-                'authRole',
-                'authToken',
-                'imageRotation',
+            const [data] = await Promise.all([
+                loadData([
+                    'authName',
+                    'authRole',
+                    'authToken',
+                    'imageRotation',
+                ]),
+                resolveApiUrl(),
             ])
             const storedRotation = Number(data?.imageRotation)
             if (storedRotation === 0 || storedRotation === 180) {
