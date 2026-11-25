@@ -1,9 +1,10 @@
 import { ImperativeRouter } from 'expo-router'
 
 import { handleApiFetchUsers, UsersType } from '@/api/handleApiFetchUsers'
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiDeleteUserProps = {
     id: number
@@ -35,7 +36,7 @@ export const handleApiDeleteUser = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/user/delete`, {
+        const response = await apiFetch(`/user/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

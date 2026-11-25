@@ -1,9 +1,10 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 export type UsersType = {
     id: number
@@ -39,7 +40,7 @@ export const handleApiFetchUsers = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/users`, {
+        const response = await apiFetch(`/users`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

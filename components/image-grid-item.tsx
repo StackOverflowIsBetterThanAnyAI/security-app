@@ -2,10 +2,10 @@ import { Image } from 'expo-image'
 import { useContext, useState } from 'react'
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native'
 
-import { URL } from '@/constants/api'
 import { Colors } from '@/constants/theme'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { useApiUrl } from '@/utils/apiUrl'
 import { thumbnailPath } from '@/utils/thumbnailPath'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -43,14 +43,16 @@ const ImageGridItem = ({
         'buttonInactive'
     )
 
-    const fullUri = `${URL}${encodeURI(item)}`
-    const thumbnailUri = `${URL}${encodeURI(thumbnailPath(item))}`
+    const apiUrl = useApiUrl()
+    const fullUri = `${apiUrl}${encodeURI(item)}`
+    const thumbnailPathEncoded = encodeURI(thumbnailPath(item))
 
     const imageSource = imageLoadFailed
         ? errorImageSource
         : {
-              uri: thumbnailUri,
+              uri: `${apiUrl}${thumbnailPathEncoded}`,
               headers: { Authorization: `Bearer ${userToken}` },
+              cacheKey: thumbnailPathEncoded,
           }
 
     const [prevItem, setPrevItem] = useState(item)

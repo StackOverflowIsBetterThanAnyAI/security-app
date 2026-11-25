@@ -1,9 +1,10 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData, saveData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiLoginProps = {
     isLogin?: boolean
@@ -43,20 +44,17 @@ export const handleApiLogin = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(
-            `${URL}/${isLogin ? 'login' : 'register'}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: userName,
-                    password,
-                }),
-                signal: signal,
-            }
-        )
+        const response = await apiFetch(`/${isLogin ? 'login' : 'register'}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: userName,
+                password,
+            }),
+            signal: signal,
+        })
 
         clearTimeout(timeoutId)
 

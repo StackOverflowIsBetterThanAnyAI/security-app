@@ -2,8 +2,8 @@ import { File, Paths } from 'expo-file-system'
 import { shareAsync } from 'expo-sharing'
 import { Alert } from 'react-native'
 
-import { URL } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
+import { getApiUrl } from '@/utils/apiUrl'
 
 type downloadDayProps = {
     day: string
@@ -20,7 +20,7 @@ export const downloadDay = async ({
 
     try {
         const file = await File.downloadFileAsync(
-            `${URL}/days/${day}/zip`,
+            `${getApiUrl()}/days/${day}/zip`,
             target,
             {
                 headers: { Authorization: `Bearer ${userToken}` },

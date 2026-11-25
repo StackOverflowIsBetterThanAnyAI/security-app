@@ -14,6 +14,7 @@ import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { ContextUser } from '@/context/ContextUser'
 import { useHighlightImageSize } from '@/hooks/use-highlight-image-size'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { imageCacheKey } from '@/utils/apiUrl'
 import { saveImage, shareImage } from '@/utils/downloadImage'
 
 const errorImageSource = require('./../assets/images/error.webp')
@@ -60,7 +61,11 @@ const HighlightImage = ({
         useState<boolean>(false)
 
     const imageSource = imageIsLoadedSuccess
-        ? { uri: imageHighlighted!, headers: imageHeaders }
+        ? {
+              uri: imageHighlighted!,
+              headers: imageHeaders,
+              cacheKey: imageCacheKey(imageHighlighted!),
+          }
         : errorImageSource
 
     const formattedDate = () => {

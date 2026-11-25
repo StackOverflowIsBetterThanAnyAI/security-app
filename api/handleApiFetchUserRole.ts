@@ -1,9 +1,10 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { UserRoleType } from '@/context/ContextUser'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData, saveData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiFetchRoleProps = {
     router: ImperativeRouter
@@ -33,7 +34,7 @@ export const handleApiFetchRole = async ({
 
     setIsLoading && setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/user/role`, {
+        const response = await apiFetch(`/user/role`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

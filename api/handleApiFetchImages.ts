@@ -1,8 +1,9 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, ITEMS_PER_PAGE, URL } from '@/constants/api'
+import { API_TIMEOUT_MS, ITEMS_PER_PAGE } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiFetchImagesProps = {
     day: string
@@ -44,7 +45,7 @@ export const handleApiFetchImages = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/images?day=${day}&page=${page}`, {
+        const response = await apiFetch(`/images?day=${day}&page=${page}`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

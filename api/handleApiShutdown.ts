@@ -1,8 +1,9 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiShutdownProps = {
     router: ImperativeRouter
@@ -23,7 +24,7 @@ export const handleApiShutdown = async ({
     }, API_TIMEOUT_MS)
 
     try {
-        const response = await fetch(`${URL}/admin/shutdown`, {
+        const response = await apiFetch(`/admin/shutdown`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${userToken}`,

@@ -1,8 +1,9 @@
 import { ImperativeRouter } from 'expo-router'
 
-import { API_TIMEOUT_MS, URL } from '@/constants/api'
+import { API_TIMEOUT_MS } from '@/constants/api'
 import { getErrorMessage } from '@/helper/getErrorMessage'
 import { clearData } from '@/helper/storeData'
+import { apiFetch } from '@/utils/apiUrl'
 
 type handleApiFetchLiveProps = {
     router: ImperativeRouter
@@ -32,7 +33,7 @@ export const handleApiFetchLive = async ({
 
     setIsLoading(true)
     try {
-        const response = await fetch(`${URL}/live/meta`, {
+        const response = await apiFetch(`/live/meta`, {
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },

@@ -49,6 +49,14 @@ EXPO_PUBLIC_API_URL=http://100.x.x.x:5000
 
 Restart the dev server after changing `.env`. EAS builds do not see the git-ignored `.env`, so set the variable once per EAS environment as well, for example `eas env:create --name EXPO_PUBLIC_API_URL --value http://100.x.x.x:5000 --environment production --visibility plaintext`. The build profiles in [`eas.json`](eas.json) use the environment of the same name. Use the Pi's [Tailscale](https://tailscale.com) address, so the app reaches the Pi at home and on the go as long as Tailscale is active on the phone. The value is built into the app bundle, so it is configuration, not a secret. The traffic is encrypted by Tailscale, which is why plain HTTP is fine here. Cleartext HTTP is explicitly allowed for Android builds via `usesCleartextTraffic` in [`app.json`](app.json).
 
+Optionally, set the Pi's address in the home network as well, so the app also works at home without Tailscale. Reserve this address for the Pi in the router, so it does not change:
+
+```
+EXPO_PUBLIC_API_URL_LOCAL=http://192.168.x.x:5000
+```
+
+On start, when it returns to the foreground, every 30 seconds and whenever a request fails, the app checks within 1.5 seconds whether `/health` of the home address answers as the backend. If so, it uses the home address, otherwise the Tailscale address. The check sends no login token, so a foreign device that happens to have the same address in another network never receives it. In the home network, the traffic is not encrypted by Tailscale, so it is only as private as the Wi-Fi itself. For EAS builds, set `EXPO_PUBLIC_API_URL_LOCAL` per environment like `EXPO_PUBLIC_API_URL`.
+
 ### Start the App
 
 **Option A: Expo Go** (quickest, no build required)

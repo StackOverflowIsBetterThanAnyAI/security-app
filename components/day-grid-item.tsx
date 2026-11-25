@@ -4,9 +4,9 @@ import { Pressable, StyleSheet, View } from 'react-native'
 
 import { RecordingDay } from '@/api/handleApiFetchDays'
 import ThemedText from '@/components/themed-text'
-import { URL } from '@/constants/api'
 import { ContextImageRotation } from '@/context/ContextImageRotation'
 import { useThemeColor } from '@/hooks/use-theme-color'
+import { useApiUrl } from '@/utils/apiUrl'
 import { formatDay } from '@/utils/formatDay'
 import { thumbnailPath } from '@/utils/thumbnailPath'
 
@@ -44,10 +44,13 @@ const DayGridItem = ({
     const label = formatDay(day.date)
     const recordings = `${day.count} Recording${day.count === 1 ? '' : 's'}`
 
+    const apiUrl = useApiUrl()
+
     const imageSource = imageLoadFailed
         ? errorImageSource
         : {
-              uri: `${URL}${encodeURI(thumbnailPath(day.thumbnail))}`,
+              uri: `${apiUrl}${encodeURI(thumbnailPath(day.thumbnail))}`,
+              cacheKey: encodeURI(thumbnailPath(day.thumbnail)),
               headers: { Authorization: `Bearer ${userToken}` },
           }
 
